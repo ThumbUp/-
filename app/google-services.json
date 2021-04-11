@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "266375781174",
+    "project_id": "thumbup-3da26",
+    "storage_bucket": "thumbup-3da26.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:266375781174:android:c10ab0dfa0c0f7255bb197",
+        "android_client_info": {
+          "package_name": "com.example.thumbup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "266375781174-9aoc0vfpqdf45068idtum0cmkici1f11.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.thumbup",
+            "certificate_hash": "9c728db6d000c488ab1bfdcf4577f2ee9408c67c"
+          }
+        },
+        {
+          "client_id": "266375781174-7temi5buh4ci8nv77qqck6e4o48kcpk9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPAmgLs4o4FkJq47N3MV5T1hmghY0KX0Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "266375781174-7temi5buh4ci8nv77qqck6e4o48kcpk9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
