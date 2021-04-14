@@ -26,7 +26,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "GoogleActivity";
-    private static final int RC_SIGN_IN = 10;
+    private static final int RC_SIGN_IN = 9001;
 
     private FirebaseAuth mAuth;
 
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("266375781174-9aoc0vfpqdf45068idtum0cmkici1f11.apps.googleusercontent.com")
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
