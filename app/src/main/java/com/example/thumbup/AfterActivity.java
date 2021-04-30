@@ -1,15 +1,19 @@
 package com.example.thumbup;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 public class AfterActivity extends AppCompatActivity implements View.OnClickListener {
-    Button btnRevoke, btnLogout;
+    ImageButton btnRevoke, btnLogout;
+    TextView nameText, emailText;
     private FirebaseAuth mAuth ;
 
     @Override
@@ -17,13 +21,18 @@ public class AfterActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_after_login);
 
-        btnLogout = (Button)findViewById(R.id.btn_logout);
-        btnRevoke = (Button)findViewById(R.id.btn_revoke);
+        btnLogout = (ImageButton)findViewById(R.id.btn_logout);
+        nameText = (TextView)findViewById(R.id.myPage_nameText);
+        emailText = (TextView)findViewById(R.id.myPage_emailText);
+        //btnRevoke = (Button)findViewById(R.id.btn_revoke);
 
         mAuth = FirebaseAuth.getInstance();
 
         btnLogout.setOnClickListener(this);
-        btnRevoke.setOnClickListener(this);
+        //btnRevoke.setOnClickListener(this);
+
+        nameText.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        emailText.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
     }
 
     private void signOut() {
@@ -39,12 +48,14 @@ public class AfterActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.btn_logout:
                 signOut();
-                finishAffinity();
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
                 break;
-            case R.id.btn_revoke:
-                revokeAccess();
-                finishAffinity();
-                break;
+//            case R.id.btn_revoke:
+//                revokeAccess();
+//                finishAffinity();
+//                break;
         }
     }
 }

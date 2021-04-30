@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
-
     private CallbackManager mFBCallbackManger;
 
     @Override
@@ -92,8 +91,6 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
-
-
     }
 
     @Override
