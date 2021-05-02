@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:id="@+id/top">
+
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/chevron_big_left"
+            android:layout_alignParentLeft="true" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="스모프"
+            android:textColor="#000000"
+            android:textSize="22dp"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="28dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/meet">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/meet_name">
+
+            <TextView
+                android:id="@+id/meet_name1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="#000000"
+                android:text="# " />
+
+            <TextView
+                android:id="@+id/meet_name2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="#000000"
+                android:text="정기 모임"
+                android:layout_toRightOf="@id/meet_name1"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:id="@+id/meet_personnel">
+
+            <TextView
+                android:id="@+id/meet_personnel1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="참여 : "
+                android:textColor="#000000"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/meet_personnel2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="#000000"
+                android:text="5"
+                android:layout_toRightOf="@id/meet_personnel1"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E2E2E2"
+        android:layout_marginVertical="25dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="152dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/my"
+        android:id="@+id/my">
+
+        <TextView
+            android:id="@+id/my_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="나의 정보"
+            android:textStyle="bold"
+            android:textColor="#303F80"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="10dp"
+            android:textSize="17dp" />
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="참여여부  "/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="23dp"
+            android:layout_below="@id/my_info"
+            android:id="@+id/my_roc">
+
+            <TextView
+                android:id="@+id/my_roc1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="위치 :  "
+                android:textColor="#000000"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/my_roc2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="신도림역"
+                android:textColor="#000000"
+                android:layout_toRightOf="@id/my_roc1"
+                android:textSize="16dp" />
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/my_btn1"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:paddingHorizontal="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/my_roc"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/roc_set_btn"
+            app:backgroundTint="@null"
+            android:text="시작 위치 설정하기"
+            android:textColor="#000000" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#F2F2F7"
+        android:layout_marginVertical="25dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="38dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/vote">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/vote_top">
+
+            <TextView
+                android:id="@+id/meet_roc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="모임 위치"
+                android:textStyle="bold"
+                android:textColor="#303F80"
+                android:textSize="17dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignBaseline="@+id/vote_btn1"/>
+
+            <Button
+                android:id="@+id/vote_btn1"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="180dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/button_round_blue"
+                app:backgroundTint="@null"
+                android:text="투표하러 가기"
+                android:textColor="#000000" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/vote_top"
+            android:layout_marginTop="15dp"
+            android:id="@+id/final_roc">
+
+            <TextView
+                android:id="@+id/final_roc1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="최종 위치 :  "
+                android:textColor="#000000"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/final_roc2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="미정 (투표중)"
+                android:textColor="#000000"
+                android:layout_toRightOf="@id/final_roc1"
+                android:textSize="16dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/final_roc"
+            android:layout_marginTop="5dp"
+            android:id="@+id/vote_personnel">
+
+            <TextView
+                android:id="@+id/vote_personnel1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="투표 미참여자 :  "
+                android:textColor="#000000"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/vote_personnel2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="없음"
+                android:textColor="#000000"
+                android:layout_toRightOf="@id/vote_personnel1"
+                android:textSize="16dp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E2E2E2"
+        android:layout_marginVertical="25dp"
+        android:layout_marginHorizontal="20dp"/>
+
+    <RelativeLayout
+        android:id="@+id/place"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp">
+
+        <TextView
+            android:id="@+id/re_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:text="추천 장소"
+            android:textColor="#303F80"
+            android:textSize="17dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_below="@id/re_place"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/bg_corner_glay"
+            android:orientation="vertical"
+            android:paddingLeft="40dp"
+            android:paddingRight="30dp"
+            android:paddingTop="25dp">
+
+            <TextView
+                android:id="@+id/sub1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="성신여대입구"
+                android:textColor="#000000"
+                android:textSize="18dp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/study_cafe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="스터디카페"
+                    android:textColor="#000000"
+                    android:textSize="16dp"
+                    android:layout_marginTop="20dp"/>
+
+                <ImageView
+                    android:id="@+id/arrow1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/bottom_arrow"
+                    android:layout_toRightOf="@id/study_cafe"
+                    android:layout_alignBottom="@id/study_cafe"
+                    android:layout_marginBottom="7dp"
+                    android:layout_marginLeft="8dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/study_cafe"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/study_cafe1">
+
+                <TextView
+                    android:id="@+id/study_cafe1_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="에이원 스터디카페 성신여대역점"
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/study_cafe1_roc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="서울 성북구 동소문동6가"
+                    android:textColor="#6F6F6F"
+                    android:textSize="15dp"
+                    android:layout_below="@id/study_cafe1_name"
+                    android:layout_marginTop="3dp"/>
+
+                <ImageView
+                    android:id="@+id/loc_icon1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/loc"
+                    android:layout_toLeftOf="@id/call_icon1"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="30dp"/>
+
+                <ImageView
+                    android:id="@+id/call_icon1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/call" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/cafe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="카페"
+                    android:textColor="#000000"
+                    android:textSize="16dp"
+                    android:layout_marginTop="15dp"/>
+
+                <ImageView
+                    android:id="@+id/arrow2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/bottom_arrow"
+                    android:layout_toRightOf="@id/cafe"
+                    android:layout_alignBottom="@id/cafe"
+                    android:layout_marginBottom="7dp"
+                    android:layout_marginLeft="8dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cafe"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="10dp">
+
+                <TextView
+                    android:id="@+id/cafe1_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="유목커피바"
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/cafe1_roc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="서울 성북구 동선동1가"
+                    android:textColor="#6F6F6F"
+                    android:textSize="15dp"
+                    android:layout_below="@id/cafe1_name"
+                    android:layout_marginTop="3dp"/>
+
+                <ImageView
+                    android:id="@+id/loc_icon2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/loc"
+                    android:layout_toLeftOf="@id/call_icon2"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="30dp"/>
+
+                <ImageView
+                    android:id="@+id/call_icon2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/call" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ABABAB"
+                android:layout_marginVertical="25dp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
