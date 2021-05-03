@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ThumbUp">
-        <activity android:name=".SubSchedule"></activity>
+        <activity android:name=".MoneyAddActivity"></activity>
+        <activity android:name=".SubSchedule" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -40,7 +41,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".AfterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
