@@ -3,7 +3,6 @@ package com.example.thumbup;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -48,7 +47,7 @@ public class AfterActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.btn_logout:
                 signOut();
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 finish();
                 break;
