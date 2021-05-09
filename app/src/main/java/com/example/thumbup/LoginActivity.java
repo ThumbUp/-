@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.thumbup.DataBase.DBManager;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -70,8 +71,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 LoginManager loginManager = LoginManager.getInstance();
-                loginManager.logInWithReadPermissions(LoginActivity.this,
-                        Arrays.asList("public_profile", "email"));
+                loginManager.logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "email"));
                 loginManager.registerCallback(mFBCallbackManger, new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
@@ -179,6 +179,7 @@ public class LoginActivity extends AppCompatActivity {
         if (user != null) {
             Intent intent = new Intent(this, AfterActivity.class);
             startActivity(intent);
+            DBManager.getInstance().AddUser(user.getUid(), user.getDisplayName(), user.getEmail());
             finish();
         }
     }

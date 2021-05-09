@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.thumbup.DataBase.DBManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class AfterActivity extends AppCompatActivity implements View.OnClickListener {
