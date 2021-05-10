@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="InputTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">#303F80</item>
+        <item name="colorControlNormal">#6D6D6D</item>
+    </style>
+
+
+</resources>
