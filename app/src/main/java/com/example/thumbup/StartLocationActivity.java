@@ -1,12 +1,14 @@
 package com.example.thumbup;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -30,15 +32,16 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.util.List;
 
-public class StartLocationActivity extends AppCompatActivity {
+public class StartLocationActivity extends AppCompatActivity implements OnMapReadyCallback {
     //로그캣 사용 설정
     private static final String TAG = "MainActivity";
 
     //객체 선언
     SupportMapFragment mapFragment;
-    GoogleMap map;
+    private GoogleMap map;
     Button btnLocation, btnKor2Loc;
     EditText editText;
 
@@ -47,16 +50,117 @@ public class StartLocationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_start_location);
 
         //권한 설정
-        checkDangerousPermissions();
+        //checkDangerousPermissions();
 
         //객체 초기화
         editText = findViewById(R.id.editText);
         btnLocation = findViewById(R.id.button1);
-        btnKor2Loc = findViewById(R.id.button2);
+        btnKor2Loc = findViewById(R.id.button2); //확인_Btn
 
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+        // 확인_Btn_Click
+        btnKor2Loc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (editText.getText().toString().length() > 0) { //editText에 입력이 있다면
+                    Location input_location = getLocationFromAddress(getApplicationContext(), editText.getText().toString());
+
+                    //showCurrentLocation(location);
+                    LatLng input_latLng = new LatLng(input_location.getLatitude(), input_location.getLongitude());
+                    map.moveCamera(CameraUpdateFactory.newLatLng(input_latLng));
+                    map.moveCamera(CameraUpdateFactory.zoomTo(15));
+                    myMarker = new MarkerOptions().position(input_latLng).title(editText.getText().toString());
+                    map.addMarker(myMarker);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.map = googleMap;
+        LatLng latLng = new LatLng(37.555172, 126.970800);
+        map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        map.moveCamera(CameraUpdateFactory.zoomTo(15));
+        myMarker = new MarkerOptions().position(latLng).title("서울역");
+        map.addMarker(myMarker);
+
+        //GPS 사용 권한 퍼미션 확인
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(true);
+        } else {
+            checkLocationPermissionWithRationale();
+        }
+    }
+
+    //GPS 사용 허가 알림
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
+    private void checkLocationPermissionWithRationale() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                new AlertDialog.Builder(this)
+                        .setTitle("위치정보")
+                        .setMessage("이 앱을 사용하기 위해서는 위치정보에 접근이 필요합니다. 위치정보 접근을 허용하여 주세요.")
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ActivityCompat.requestPermissions(StartLocationActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+                            }
+                        }).create().show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        map.setMyLocationEnabled(true);
+                    }
+                } else {
+                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
+    }
+
+    // 주소 -> 위도, 경도 변환
+    private Location getLocationFromAddress(Context context, String address) {
+        Geocoder geocoder = new Geocoder(context);
+        List<Address> addresses = null;
+        Location resLocation = new Location("");
+        try {
+            addresses = geocoder.getFromLocationName(address, 10);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("test", "입출력 오류 - 서버에서 주소변환시 에러발생");
+        }
+        if (addresses != null) {
+            if (addresses.size() == 0) {
+                Toast.makeText(getApplicationContext(), "해당되는 주소 정보를 찾지 못했습니다.", Toast.LENGTH_SHORT).show();
+            } else {
+                Address addressLoc = addresses.get(0);
+                resLocation.setLatitude(addressLoc.getLatitude()); //위도
+                resLocation.setLongitude(addressLoc.getLongitude()); //경도
+            }
+        }
+        return resLocation;
+    }
+}
+
+/*
         //지도 프래그먼트 설정
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(new OnMapReadyCallback() {
@@ -81,39 +185,9 @@ public class StartLocationActivity extends AppCompatActivity {
                 requestMyLocation();
             }
         });
+*/
 
-        btnKor2Loc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(editText.getText().toString().length() > 0) {
-                    Location location = getLocationFromAddress(getApplicationContext(), editText.getText().toString());
-
-                    showCurrentLocation(location);
-                }
-            }
-        });
-    }
-
-    private Location getLocationFromAddress(Context context, String address) {
-        Geocoder geocoder = new Geocoder(context);
-        List<Address> addresses;
-        Location resLocation = new Location("");
-        try {
-            addresses = geocoder.getFromLocationName(address, 5);
-            if((addresses == null) || (addresses.size() == 0)) {
-                return null;
-            }
-            Address addressLoc = addresses.get(0);
-
-            resLocation.setLatitude(addressLoc.getLatitude());
-            resLocation.setLongitude(addressLoc.getLongitude());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return resLocation;
-    }
-
+/*
     private void requestMyLocation() {
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         try {
@@ -157,8 +231,8 @@ public class StartLocationActivity extends AppCompatActivity {
 
         //마커 찍기
         Location targetLocation = new Location("");
-        targetLocation.setLatitude(37.4937);
-        targetLocation.setLongitude(127.0643);
+        targetLocation.setLatitude(37.4937); //위도
+        targetLocation.setLongitude(127.0643); //경도
         showMyMarker(targetLocation);
     }
 
@@ -215,4 +289,4 @@ public class StartLocationActivity extends AppCompatActivity {
             map.addMarker(myMarker);
         }
     }
-}
+}*/
