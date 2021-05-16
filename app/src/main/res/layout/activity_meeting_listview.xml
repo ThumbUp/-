@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@color/white"
+    android:orientation="horizontal">
+    <TextView
+        android:id="@+id/meeting_listview_date"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="4/1"
+        android:textColor="#000000"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/meeting_listview_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="정기모임"
+        android:textColor="#000000"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/meeting_listview_time"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="미정"
+        android:textColor="#000000"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/meeting_listview_place"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="성신여대"
+        android:textColor="#000000"
+        android:gravity="center"/>
+</LinearLayout>

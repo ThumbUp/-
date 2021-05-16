@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="270dp"
+    android:layout_height="390dp"
+    android:layout_gravity="center"
+    android:background="@drawable/button_round_white"
+    android:paddingTop="20dp"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginBottom="20dp"
+        android:text="공지 추가"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:gravity="center_vertical"/>
+    <EditText
+        android:id="@+id/dialog_meeting_notice_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="15dp"
+        android:hint="공지를 입력하세요."
+        android:textColorHint="#898A8D"
+        android:textSize="12sp"
+        android:textColor="@color/black"
+        android:gravity="start"
+        android:background="@drawable/border_top_bottom"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingTop="20dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="20dp"
+        android:gravity="center">
+        <Button
+            android:id="@+id/dialog_meeting_notice_save"
+            android:layout_width="105dp"
+            android:layout_height="23dp"
+            android:layout_marginRight="23dp"
+            android:text="확인"
+            android:textSize="12dp"
+            android:textColor="@color/black"
+            android:background="@drawable/button_round_blue_border_x"/>
+        <Button
+            android:id="@+id/dialog_meeting_notice_back"
+            android:layout_width="105dp"
+            android:layout_height="23dp"
+            android:text="취소"
+            android:textSize="12dp"
+            android:textColor="@color/black"
+            android:background="@drawable/button_round_gray"/>
+    </LinearLayout>
+
+</LinearLayout>
