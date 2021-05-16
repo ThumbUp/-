@@ -14,6 +14,7 @@ public class AfterLoginFragment extends Fragment {
         return new AfterLoginFragment();
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

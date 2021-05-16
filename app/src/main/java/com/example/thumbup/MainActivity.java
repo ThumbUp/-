@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -12,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
-    Button main_mainBtn;
+    ImageButton main_mainBtn;
     Button main_meetingBtn;
     Button main_moneyBtn;
     Button main_loginBtn;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        main_mainBtn = (Button) findViewById(R.id.main_mainBtn);
+        main_mainBtn = (ImageButton) findViewById(R.id.main_mainBtn);
         main_meetingBtn = (Button) findViewById(R.id.main_meetingBtn);
         main_moneyBtn = (Button) findViewById(R.id.main_moneyBtn);
         main_loginBtn = (Button) findViewById(R.id.main_loginBtn);
@@ -100,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
                 transaction.commit();
                 break;
             case 3:
+
+            case 4:
                 LoginFragment loginFragment = new LoginFragment();
                 transaction.replace(R.id.main_frame, loginFragment);
                 transaction.commit();

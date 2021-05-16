@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 
 public class MeetingFragment extends Fragment {
     ListView meetingListView;
+    TextView meetingAddNotice;
 
     @Nullable
     @Override
@@ -21,6 +23,7 @@ public class MeetingFragment extends Fragment {
         View meetingView = inflater.inflate(R.layout.meeting, container, false);
 
         meetingListView = (ListView) meetingView.findViewById(R.id.meeting_list);
+        meetingAddNotice = (TextView) meetingView.findViewById(R.id.meeting_addNotice);
         ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
 
         String[] meetingListViewItem_date = {"4/1", "4/8", "4/15", "4/22", "4/29", "5/6", "5/13", "5/20"};
@@ -37,9 +40,19 @@ public class MeetingFragment extends Fragment {
             meetingListViewItem.add(item);
         }
 
+        meetingAddNotice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MeetingNoticeDialog meetingNoticeDialog = new MeetingNoticeDialog(getActivity());
+                meetingNoticeDialog.show();
+                for (int i = 0; i < meetingNoticeDialog.noticeList.size(); i++) {
+
+                }
+            }
+        });
+
         MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
         meetingListView.setAdapter(meetingAdapter);
         return meetingView;
     }
-
 }

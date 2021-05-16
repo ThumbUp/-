@@ -19,14 +19,19 @@
         android:layout_height="70dp"
         android:orientation="horizontal"
         android:background="#EFF1F5">
-        <Button
+        <ImageButton
             android:id="@+id/main_mainBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="모임"
             android:textColor="#999999"
-            android:background="#EFF1F5"/>
+            android:background="#EFF1F5"
+            android:src="@drawable/ic_home_meeting_list_menu"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:padding="20dp"
+            />
         <Button
             android:id="@+id/main_meetingBtn"
             android:layout_width="0dp"
