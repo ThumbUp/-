@@ -1,5 +1,6 @@
 package com.example.thumbup;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -21,8 +23,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
@@ -31,8 +35,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public class StartLocationActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -44,8 +57,15 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
     private GoogleMap map;
     Button btnLocation, btnKor2Loc;
     EditText editText;
+    TextView textView;
 
     MarkerOptions myMarker;
+
+    //static final String TAG = "PlaceAutocomplete";
+    AutocompleteSupportFragment autocompleteFragment;
+
+
+    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +75,53 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
         //권한 설정
         //checkDangerousPermissions();
 
+        Places.initialize(getApplicationContext(), "AIzaSyCxKA49sPjrLo0hvNDkgcBt3VVwQuiQ94s");
+        // Create a new Places client instance.
+        PlacesClient placesClient = Places.createClient(this);
+
         //객체 초기화
         editText = findViewById(R.id.editText);
-        btnLocation = findViewById(R.id.button1);
+        //btnLocation = findViewById(R.id.button1);
         btnKor2Loc = findViewById(R.id.button2); //확인_Btn
+        textView = findViewById(R.id.textView);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        // Fragment 추가
+        autocompleteFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                textView.setText(place.getName() + " - " + place.getLatLng());
+                Log.e("TAG", "Place: " + place.getName() + ", " + place.getLatLng());
+            }
+            @Override
+            public void onError(Status status) {
+                Log.i("TAG", "An error occurred: " + status);
+            }
+        });
+
+        /*
+        // Intent 추가
+        Places.initialize(getApplicationContext(), "AIzaSyCxKA49sPjrLo0hvNDkgcBt3VVwQuiQ94s");
+        editText.setFocusable(false);
+        editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //private static int AUTOCOMPLETE_REQUEST_CODE = 1;
+                //List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME);
+                List<Place.Field> fieldList = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList)
+                        .build(StartLocationActivity.this);
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+            }
+        });
+        */
         // 확인_Btn_Click
         btnKor2Loc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,11 +135,30 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
                     map.moveCamera(CameraUpdateFactory.zoomTo(15));
                     myMarker = new MarkerOptions().position(input_latLng).title(editText.getText().toString());
                     map.addMarker(myMarker);
+
+                    //위도, 경도 출력
+                    textView.setText(String.format("위도: %f, 경도: %f",input_location.getLatitude(), input_location.getLongitude()));
                 }
             }
         });
     }
-
+    /*
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        if ((requestCode == AUTOCOMPLETE_REQUEST_CODE) && (resultCode == RESULT_OK)) {
+            Place place = Autocomplete.getPlaceFromIntent(data);
+            editText.setText(place.getAddress());
+            textView.setText(String.valueOf(place.getLatLng()));
+            //Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+        } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+            Status status = Autocomplete.getStatusFromIntent(data);
+            Toast.makeText(getApplicationContext(),status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+            //Log.i(TAG, status.getStatusMessage());
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+    */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
