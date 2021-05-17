@@ -140,7 +140,7 @@
                 android:id="@+id/my_roc2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="신도림역"
+                android:text="서울역"
                 android:textColor="#000000"
                 android:layout_toRightOf="@id/my_roc1"
                 android:textSize="16dp" />

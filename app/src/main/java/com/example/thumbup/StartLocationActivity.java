@@ -49,46 +49,35 @@ import java.util.Arrays;
 import java.util.List;
 
 public class StartLocationActivity extends AppCompatActivity implements OnMapReadyCallback {
-    //로그캣 사용 설정
-    private static final String TAG = "MainActivity";
 
-    //객체 선언
     SupportMapFragment mapFragment;
     private GoogleMap map;
-    Button btnLocation, btnKor2Loc;
-    EditText editText;
-    TextView textView;
+    Button locOK_btn;
+
+    double Lati, Longi; //위도와 경도를 저장할 변수
+    String my_place; //사용자가 설정한 위치를 저장할 변수
 
     MarkerOptions myMarker;
 
-    //static final String TAG = "PlaceAutocomplete";
     AutocompleteSupportFragment autocompleteFragment;
-
-
-    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_location);
 
-        //권한 설정
-        //checkDangerousPermissions();
-
         Places.initialize(getApplicationContext(), "AIzaSyCxKA49sPjrLo0hvNDkgcBt3VVwQuiQ94s");
         // Create a new Places client instance.
         PlacesClient placesClient = Places.createClient(this);
 
-        //객체 초기화
-        editText = findViewById(R.id.editText);
-        //btnLocation = findViewById(R.id.button1);
-        btnKor2Loc = findViewById(R.id.button2); //확인_Btn
-        textView = findViewById(R.id.textView);
+        locOK_btn = findViewById(R.id.OK_btn); //확인_Btn
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        // Fragment 추가
+        Intent outIntent = new Intent(getApplicationContext(), SubSchedule.class);
+
+        // 자동완성 Fragment
         autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
@@ -97,8 +86,19 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                textView.setText(place.getName() + " - " + place.getLatLng());
                 Log.e("TAG", "Place: " + place.getName() + ", " + place.getLatLng());
+
+                Location input_location = getLocationFromAddress(getApplicationContext(), place.getName());
+
+                my_place = place.getName(); //설정 위치 저장
+                Lati = input_location.getLatitude(); //해당 위치의 위도와
+                Longi = input_location.getLongitude(); //경도 저장
+                LatLng input_latLng = new LatLng(Lati, Longi);
+
+                map.moveCamera(CameraUpdateFactory.newLatLng(input_latLng));
+                map.moveCamera(CameraUpdateFactory.zoomTo(15));
+                myMarker = new MarkerOptions().position(input_latLng).title(place.getName());
+                map.addMarker(myMarker);
             }
             @Override
             public void onError(Status status) {
@@ -106,59 +106,18 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
             }
         });
 
-        /*
-        // Intent 추가
-        Places.initialize(getApplicationContext(), "AIzaSyCxKA49sPjrLo0hvNDkgcBt3VVwQuiQ94s");
-        editText.setFocusable(false);
-        editText.setOnClickListener(new View.OnClickListener() {
+        // 확인 버튼 클릭
+        locOK_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //private static int AUTOCOMPLETE_REQUEST_CODE = 1;
-                //List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME);
-                List<Place.Field> fieldList = Arrays.asList(Place.Field.ID, Place.Field.NAME);
-                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList)
-                        .build(StartLocationActivity.this);
-                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
-            }
-        });
-        */
-        // 확인_Btn_Click
-        btnKor2Loc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (editText.getText().toString().length() > 0) { //editText에 입력이 있다면
-                    Location input_location = getLocationFromAddress(getApplicationContext(), editText.getText().toString());
+                outIntent.putExtra("Place", my_place);
+                setResult(RESULT_OK, outIntent);
+                finish();
 
-                    //showCurrentLocation(location);
-                    LatLng input_latLng = new LatLng(input_location.getLatitude(), input_location.getLongitude());
-                    map.moveCamera(CameraUpdateFactory.newLatLng(input_latLng));
-                    map.moveCamera(CameraUpdateFactory.zoomTo(15));
-                    myMarker = new MarkerOptions().position(input_latLng).title(editText.getText().toString());
-                    map.addMarker(myMarker);
-
-                    //위도, 경도 출력
-                    textView.setText(String.format("위도: %f, 경도: %f",input_location.getLatitude(), input_location.getLongitude()));
-                }
             }
         });
     }
-    /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
-        if ((requestCode == AUTOCOMPLETE_REQUEST_CODE) && (resultCode == RESULT_OK)) {
-            Place place = Autocomplete.getPlaceFromIntent(data);
-            editText.setText(place.getAddress());
-            textView.setText(String.valueOf(place.getLatLng()));
-            //Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-        } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-            Status status = Autocomplete.getStatusFromIntent(data);
-            Toast.makeText(getApplicationContext(),status.getStatusMessage(), Toast.LENGTH_SHORT).show();
-            //Log.i(TAG, status.getStatusMessage());
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-    */
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
@@ -223,7 +182,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
             addresses = geocoder.getFromLocationName(address, 10);
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e("test", "입출력 오류 - 서버에서 주소변환시 에러발생");
+            Log.e("TAG", "입출력 오류 - 서버에서 주소변환시 에러발생");
         }
         if (addresses != null) {
             if (addresses.size() == 0) {
@@ -238,133 +197,3 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
     }
 }
 
-/*
-        //지도 프래그먼트 설정
-        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(new OnMapReadyCallback() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                Log.d(TAG, "onMapReady: ");
-                map = googleMap;
-                if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                        checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                map.setMyLocationEnabled(true);
-            }
-        });
-        MapsInitializer.initialize(this);
-
-        //위치 확인 버튼 기능 추가
-        btnLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                requestMyLocation();
-            }
-        });
-*/
-
-/*
-    private void requestMyLocation() {
-        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        try {
-            long minTime = 1000;    //갱신 시간
-            float minDistance = 0;  //갱신에 필요한 최소 거리
-
-            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    showCurrentLocation(location);
-                }
-
-                @Override
-                public void onStatusChanged(String s, int i, Bundle bundle) {
-
-                }
-
-                @Override
-                public void onProviderEnabled(String s) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String s) {
-
-                }
-            });
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void showCurrentLocation(Location location) {
-        LatLng curPoint = new LatLng(location.getLatitude(), location.getLongitude());
-        String msg = "Latitutde : " + curPoint.latitude
-                + "\nLongitude : " + curPoint.longitude;
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-
-        //화면 확대, 숫자가 클수록 확대
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(curPoint, 15));
-
-        //마커 찍기
-        Location targetLocation = new Location("");
-        targetLocation.setLatitude(37.4937); //위도
-        targetLocation.setLongitude(127.0643); //경도
-        showMyMarker(targetLocation);
-    }
-
-    //------------------권한 설정 시작------------------------
-    private void checkDangerousPermissions() {
-        String[] permissions = {
-                android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_WIFI_STATE
-        };
-
-        int permissionCheck = PackageManager.PERMISSION_GRANTED;
-        for (int i = 0; i < permissions.length; i++) {
-            permissionCheck = ContextCompat.checkSelfPermission(this, permissions[i]);
-            if (permissionCheck == PackageManager.PERMISSION_DENIED) {
-                break;
-            }
-        }
-
-        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "권한 있음", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "권한 없음", Toast.LENGTH_LONG).show();
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[0])) {
-                Toast.makeText(this, "권한 설명 필요함.", Toast.LENGTH_LONG).show();
-            } else {
-                ActivityCompat.requestPermissions(this, permissions, 1);
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 1) {
-            for (int i = 0; i < permissions.length; i++) {
-                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, permissions[i] + " 권한이 승인됨.", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(this, permissions[i] + " 권한이 승인되지 않음.", Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-    }
-    //------------------권한 설정 끝------------------------
-
-    private void showMyMarker(Location location) {
-        if(myMarker == null) {
-            myMarker = new MarkerOptions();
-            myMarker.position(new LatLng(location.getLatitude(), location.getLongitude()));
-            myMarker.title("◎ 내위치\n");
-            myMarker.snippet("여기가 어디지?");
-            myMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.loc));
-            map.addMarker(myMarker);
-        }
-    }
-}*/

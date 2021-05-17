@@ -40,8 +40,8 @@
 
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".MoneyAddActivity" />
-        <activity android:name=".SubSchedule" />
-        <activity android:name=".StartLocationActivity">
+        <activity android:name=".StartLocationActivity" />
+        <activity android:name=".SubSchedule">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
