@@ -27,35 +27,37 @@
             android:text="모임"
             android:textColor="#999999"
             android:background="#EFF1F5"
-            android:src="@drawable/ic_home_meeting_list_menu"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:padding="20dp"
-            />
-        <Button
+            android:src="@drawable/tab_main"/>
+<!--            android:adjustViewBounds="true"-->
+<!--            android:scaleType="fitCenter"-->
+<!--            android:padding="20dp"-->
+        <ImageButton
             android:id="@+id/main_meetingBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="홈"
             android:textColor="#999999"
-            android:background="#EFF1F5"/>
-        <Button
+            android:background="#EFF1F5"
+            android:src="@drawable/tab_meeting"/>
+        <ImageButton
             android:id="@+id/main_moneyBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="돈 계산"
             android:textColor="#999999"
-            android:background="#EFF1F5"/>
-        <Button
+            android:background="#EFF1F5"
+            android:src="@drawable/tab_money"/>
+        <ImageButton
             android:id="@+id/main_loginBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="마이페이지"
             android:textColor="#999999"
-            android:background="#EFF1F5"/>
+            android:background="#EFF1F5"
+            android:src="@drawable/tab_mypage"/>
     </LinearLayout>
 
 </LinearLayout>

@@ -14,11 +14,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
     ImageButton main_mainBtn;
-    Button main_meetingBtn;
-    Button main_moneyBtn;
-    Button main_loginBtn;
+    ImageButton main_meetingBtn;
+    ImageButton main_moneyBtn;
+    ImageButton main_loginBtn;
     private final int mainFragment1 = 1;
     private final int meetingFragment2 = 2;
+    private final int moneyFragment3 = 3;
     private final int loginFragment4 = 4;
 
     @Override
@@ -26,20 +27,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         main_mainBtn = (ImageButton) findViewById(R.id.main_mainBtn);
-        main_meetingBtn = (Button) findViewById(R.id.main_meetingBtn);
-        main_moneyBtn = (Button) findViewById(R.id.main_moneyBtn);
-        main_loginBtn = (Button) findViewById(R.id.main_loginBtn);
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        MainFragment mainFragment = new MainFragment();
-        transaction.replace(R.id.main_frame, mainFragment);
-        transaction.commit();
+        main_meetingBtn = (ImageButton) findViewById(R.id.main_meetingBtn);
+        main_moneyBtn = (ImageButton) findViewById(R.id.main_moneyBtn);
+        main_loginBtn = (ImageButton) findViewById(R.id.main_loginBtn);
+        //기본 탭 : main
+        FragmentView(mainFragment1);
+        chooseTab(mainFragment1);
 
         //main 탭 눌렀을 때
         main_mainBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentView(mainFragment1);
+                chooseTab(mainFragment1);
             }
         });
         //meeting 탭 눌렀을 때
@@ -47,12 +47,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FragmentView(meetingFragment2);
+                chooseTab(meetingFragment2);
             }
         });
         //money 탭 눌렀을 때
         main_moneyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                chooseTab(moneyFragment3);
             }
         });
         //mypage 탭 눌렀을 때
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FragmentView(loginFragment4);
+                chooseTab(loginFragment4);
             }
         });
 //        findViewById(R.id.btnPopup).setOnClickListener(new View.OnClickListener() {
@@ -114,5 +117,26 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_frame, fragment);
         transaction.commit();
+    }
+
+    private void chooseTab(int fragment) {
+        main_mainBtn.setSelected(false);
+        main_meetingBtn.setSelected(false);
+        main_moneyBtn.setSelected(false);
+        main_loginBtn.setSelected(false);
+        switch (fragment) {
+            case 1:
+                main_mainBtn.setSelected(true);
+                break;
+            case 2:
+                main_meetingBtn.setSelected(true);
+                break;
+            case 3:
+                main_moneyBtn.setSelected(true);
+                break;
+            case 4:
+                main_loginBtn.setSelected(true);
+                break;
+        }
     }
 }
