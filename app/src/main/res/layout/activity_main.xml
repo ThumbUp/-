@@ -24,6 +24,7 @@
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:maxLines="1"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +32,7 @@
             tools:ignore="MissingConstraints" />
 
         <ImageButton
-            android:id="@+id/search_button"
+            android:id="@+id/btn_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -44,6 +45,7 @@
             tools:ignore="MissingConstraints" />
 
         <ImageButton
+            android:id="@+id/btn_addMeeting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -53,52 +55,28 @@
             app:layout_constraintStart_toEndOf="@+id/search_bar"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <RelativeLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="20dp"
-        android:background="@drawable/border_bottom">
+        android:layout_height="match_parent"
+        tools:context=".MainActivity" >
 
-        <ImageView
-            android:id="@+id/meetingImg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_profile" />
+        <ListView
+            android:id="@+id/main_listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
-        <TextView
-            android:id="@+id/meetingName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/meetingImg"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="3dp"
-            android:layout_toRightOf="@+id/meetingImg"
-            android:textColor="@color/black"
-            android:text="여기 모임" />
-
-        <TextView
-            android:id="@+id/meetingIntro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/meetingImg"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="3dp"
-            android:layout_toRightOf="@+id/meetingImg"
-            android:textColor="@color/black"
-            android:text="스마트 모바일 프로그래밍 프로젝트 관련 모임"
-            android:textSize="10dp" />
-
-        <ImageButton
-            android:id="@+id/btnPopup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_dot" />
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:menu="@menu/bottom_navigation"
+            android:background="#FFFFFF"
+            app:itemIconTint="@color/gray"
+            app:itemTextColor="@color/gray"
+            android:layout_alignParentBottom="true"/>
 
     </RelativeLayout>
 

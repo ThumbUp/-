@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp" >
+
+    <ImageView
+        android:id="@+id/main_meetingIcon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="16dp" />
+
+    <TextView
+        android:id="@+id/main_meetingTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/main_meetingIcon"
+        android:layout_toRightOf="@+id/main_meetingIcon"
+        android:layout_margin="5dp"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:textColor="@color/black" />
+    <TextView
+        android:id="@+id/main_meetingInfo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/main_meetingTitle"
+        android:layout_toRightOf="@+id/main_meetingIcon"
+        android:layout_margin="5dp"
+        android:textColor="@color/black"
+        android:textSize="14dp" />
+
+    <ImageButton
+        android:id="@+id/btnPopup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_dot"
+        android:background="@android:color/transparent"
+        android:layout_margin="16dp"/>
+
+</RelativeLayout>
