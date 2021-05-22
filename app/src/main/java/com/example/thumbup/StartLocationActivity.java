@@ -110,7 +110,10 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
         locOK_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                outIntent.putExtra("Place", my_place);
+                outIntent.putExtra("Place", my_place); //설정 위치 전달
+                outIntent.putExtra("Latitude", Lati); //해당 위치의 위도와
+                outIntent.putExtra("Longitude", Longi); //경도 전달
+
                 setResult(RESULT_OK, outIntent);
                 finish();
 

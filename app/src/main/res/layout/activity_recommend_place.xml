@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffffff">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="15dp"
+        android:layout_marginHorizontal="20dp"
+        android:id="@+id/top">
+
+        <ImageView
+            android:id="@+id/backBtn1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/left_back"
+            android:layout_alignParentLeft="true"
+            android:padding="10dp"/>
+
+        <TextView
+            android:id="@+id/map_roc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="설정위치"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_marginTop="7dp"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/searchBtn1"
+            android:layout_width="75dp"
+            android:layout_height="38dp"
+            android:layout_alignParentRight="true"
+            android:text="검색"
+            android:textSize="16dp"
+            android:textColor="#000"
+            android:background="@drawable/button_round_gray"/>
+
+        <!--<ImageView
+            android:id="@+id/searchBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_search"
+            android:layout_alignParentRight="true"
+            android:padding="10dp"/>-->
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <fragment
+            android:id="@+id/re_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.google.android.gms.maps.SupportMapFragment"/>
+    </FrameLayout>
+
+</LinearLayout>

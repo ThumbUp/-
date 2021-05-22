@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -17,6 +19,10 @@ public class SubSchedule extends AppCompatActivity {
 
     Button satrtLoc_Btn;
     TextView my_roc;
+    TextView re_place;
+
+    String roc; //설정 위치
+    double roc_lati, roc_longi; //해당 위치의 위도와 경도 저장
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +31,9 @@ public class SubSchedule extends AppCompatActivity {
 
         satrtLoc_Btn = findViewById(R.id.my_btn1);
         my_roc = findViewById(R.id.my_roc2);
+        re_place = findViewById(R.id.re_place);
+
+        roc = my_roc.getText().toString();
 
         satrtLoc_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,13 +43,26 @@ public class SubSchedule extends AppCompatActivity {
             }
         });
 
+        re_place.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RecommendPlaceActivity.class);
+                intent.putExtra("Rocation", roc);
+                startActivityForResult(intent, 1);
+            }
+        });
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            my_roc.setText(data.getStringExtra("Place"));
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            roc = data.getStringExtra("Place");
+            roc_lati = data.getDoubleExtra("Latitude", 0);
+            roc_longi = data.getDoubleExtra("Longitude", 0);
+
+            my_roc.setText(roc);
         }
     }
 

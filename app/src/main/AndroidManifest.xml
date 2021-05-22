@@ -17,18 +17,19 @@
         android:required="true" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
+        <activity android:name=".RecommendPlaceActivity"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCxKA49sPjrLo0hvNDkgcBt3VVwQuiQ94s" />
 
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".MoneyAddActivity" />
         <activity android:name=".StartLocationActivity" />
         <activity android:name=".SubSchedule">
@@ -76,4 +77,3 @@
     </application>
 
 </manifest>
-
