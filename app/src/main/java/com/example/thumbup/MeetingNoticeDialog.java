@@ -1,8 +1,10 @@
 package com.example.thumbup;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +22,6 @@ public class MeetingNoticeDialog extends Dialog {
     Button dialogBack;
     EditText noticeContent;
     String toAddNotice;
-    ArrayList<String> noticeList= new ArrayList<>();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,12 +34,11 @@ public class MeetingNoticeDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 toAddNotice = noticeContent.getText().toString();
-                noticeList.add(toAddNotice);
                 dismiss();
             }
         });
 
-        dialogSave.setOnClickListener(new View.OnClickListener() {
+        dialogBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();

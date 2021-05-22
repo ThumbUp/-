@@ -41,7 +41,8 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="10dp"
                 android:textStyle="bold"/>
-            <TextView
+            <ListView
+                android:id="@+id/meeting_noticeList"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="8dp"
@@ -50,7 +51,7 @@
                 android:textColor="@color/black"
                 android:background="@drawable/button_round_white" />
             <TextView
-                android:id="@+id/meeting_addList"
+                android:id="@+id/meeting_addSchedule"
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
                 android:text="일정 추가"
