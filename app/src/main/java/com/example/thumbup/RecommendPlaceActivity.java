@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -59,7 +60,8 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
     String roc_info; //주소
     double Lati, Longi; //위도와 경도
 
-    List<Marker> previous_marker = null;
+    //List<Marker> previous_marker = null;
+    List<Marker> previous_marker = new ArrayList<Marker>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,14 +96,14 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
             public void onClick(View view) {
                 map.clear();
 
-                if (previous_marker != null)
-                    previous_marker.clear();
+                //if (previous_marker != null)
+                previous_marker.clear();
 
                 new NRPlaces.Builder()
                         .listener(RecommendPlaceActivity.this)
                         .key("AIzaSyCxKA49sPjrLo0hvNDkgcBt3VVwQuiQ94s")
-                        .latlng(37.555172, 126.970800) //현재 위치
-                        .radius(2500) //500 미터 내에서 검색
+                        .latlng(Lati, Longi) //현재 위치
+                        .radius(150) //150 미터 내에서 검색
                         .type(PlaceType.CAFE) //카페
                         .build()
                         .execute();
@@ -128,22 +130,25 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
                 for (noman.googleplaces.Place place : places) {
 
                     LatLng latLng = new LatLng(place.getLatitude(), place.getLongitude());
+                    //roc_info = getAddressFromLocation(getApplicationContext(), place.getLatitude(), place.getLongitude());
 
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(latLng);
                     markerOptions.title(place.getName());
                     markerOptions.snippet(place.getVicinity());
-                    Marker item = map.addMarker(markerOptions);
-                    previous_marker.add(item);
-/*
-                    BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.coffee_roc);
+                    //markerOptions.snippet(roc_info);
+                    //Marker item = map.addMarker(markerOptions);
+                    //previous_marker.add(item);
+                    //Log.e("TAG", item.getTitle());
+
+                    BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.coffee_rocation);
                     Bitmap b=bitmapdraw.getBitmap();
-                    Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 150, false);
+                    Bitmap smallMarker = Bitmap.createScaledBitmap(b, 60, 90, false);
                     markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
                     Marker item = map.addMarker(markerOptions);
 
                     previous_marker.add(item);
-*/
+
                 }
 
                 //중복 마커 제거
@@ -165,29 +170,12 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
         //String roc_info;
         Lati = location.getLatitude(); //설정 위치의 위도와
         Longi = location.getLongitude(); //경도 저장
-
-        // 위도, 경도  -> 주소 변환
-        Geocoder geocoder = new Geocoder(this);
-
-        List<Address> list = null;
-        try {
-            list = geocoder.getFromLocation(Lati, Longi, 10);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("test", "입출력 오류 - 서버에서 주소변환시 에러발생");
-        }
-        if (list != null) {
-            if (list.size()==0) {
-                roc_info = "해당되는 주소 정보를 찾지 못했습니다.";
-            } else {
-                roc_info = list.get(0).getAddressLine(0).toString();
-            }
-        }
+        roc_info = getAddressFromLocation(getApplicationContext(), Lati, Longi);
 
         this.map = googleMap;
         LatLng latLng = new LatLng(Lati, Longi);
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        map.moveCamera(CameraUpdateFactory.zoomTo(15));
+        map.moveCamera(CameraUpdateFactory.zoomTo(17));
         myMarker = new MarkerOptions().position(latLng).title(roc).snippet(roc_info);
         map.addMarker(myMarker);
     }
@@ -213,6 +201,28 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
             }
         }
         return resLocation;
+    }
+
+    // 위도, 경도  -> 주소 변환
+    private String getAddressFromLocation(Context context, double lati, double longi){
+        Geocoder geocoder = new Geocoder(this);
+        String info="";
+
+        List<Address> list = null;
+        try {
+            list = geocoder.getFromLocation(Lati, Longi, 10);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("test", "입출력 오류 - 서버에서 주소변환시 에러발생");
+        }
+        if (list != null) {
+            if (list.size()==0) {
+                info = "해당되는 주소 정보를 찾지 못했습니다";
+            } else {
+                info = list.get(0).getAddressLine(0);
+            }
+        }
+        return info;
     }
 
 }
