@@ -1,11 +1,13 @@
 package com.example.thumbup;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -32,6 +34,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -55,6 +58,7 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
     ImageView back_btn;
     TextView map_roc;
     Button search_btn;
+    Button list_btn;
 
     String roc; //설정 위치
     String roc_info; //주소
@@ -62,6 +66,8 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
 
     //List<Marker> previous_marker = null;
     List<Marker> previous_marker = new ArrayList<Marker>();
+    ArrayList<String> names = new ArrayList<>();
+    ArrayList<String> locations = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +82,14 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
         back_btn = findViewById(R.id.backBtn1);
         map_roc = findViewById(R.id.map_roc);
         search_btn = findViewById(R.id.searchBtn1);
+        list_btn = findViewById(R.id.list_btn);
 
         Intent outIntent = getIntent();
 
         roc = outIntent.getStringExtra("Rocation");
         map_roc.setText(roc);
+
+        list_btn.setVisibility(View.INVISIBLE);
 
         // 뒤로가기 버튼 클릭
         back_btn.setOnClickListener(new View.OnClickListener() {
@@ -90,12 +99,15 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
             }
         });
 
-        // 검색 버튼 클릭
+        // 검색 버튼 클릭 -> 일단 '나의위치' 주변 카페를 찾는 것으로 구현 -> 추후 최종 투표 결과의 위치로 코드 수정 필요!
         search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                map.clear();
+                list_btn.setVisibility(View.VISIBLE);
+                names.clear();
+                locations.clear();
 
+                map.clear();
                 //if (previous_marker != null)
                 previous_marker.clear();
 
@@ -109,6 +121,51 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
                         .execute();
             }
         });
+
+        // 목록 버튼 클릭
+        list_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String[] cafe_list = new String[names.size()];
+                int size1 = 0;
+                for(String temp:names){
+                    cafe_list[size1++]=temp;
+                }
+                final String[] cafe_roc = new String[locations.size()];
+                int size2 = 0;
+                for(String temp:locations){
+                    cafe_roc[size2++]=temp;
+                }
+                AlertDialog.Builder dlg = new AlertDialog.Builder(RecommendPlaceActivity.this);
+                dlg.setTitle(roc + " 주변 카페 리스트");
+                //dlg.setMessage("카페");
+                //dlg.setItems(cafe_list, null);
+                dlg.setItems(cafe_list, new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which){
+                        //Toast.makeText(RecommendPlaceActivity.this, cafe_roc[which],Toast.LENGTH_SHORT).show();
+                        map.clear();
+                        Location location = getLocationFromAddress(getApplicationContext(), cafe_roc[which]);
+                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        //roc_info = getAddressFromLocation(getApplicationContext(), place.getLatitude(), place.getLongitude());
+                        map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                        map.moveCamera(CameraUpdateFactory.zoomTo(18));
+
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(latLng);
+                        markerOptions.title(cafe_list[which]);
+
+                        BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.coffee_rocation);
+                        Bitmap b=bitmapdraw.getBitmap();
+                        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 80, 120, false);
+                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                        map.addMarker(markerOptions);
+                    }
+                });
+                dlg.setNegativeButton("닫기",null);
+                dlg.show();
+            }
+        });
+
     }
 
     @Override
@@ -131,6 +188,8 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
 
                     LatLng latLng = new LatLng(place.getLatitude(), place.getLongitude());
                     //roc_info = getAddressFromLocation(getApplicationContext(), place.getLatitude(), place.getLongitude());
+                    map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    map.moveCamera(CameraUpdateFactory.zoomTo(17));
 
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(latLng);
@@ -147,8 +206,9 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
                     markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
                     Marker item = map.addMarker(markerOptions);
 
+                    names.add(place.getName());
+                    locations.add(place.getVicinity());
                     previous_marker.add(item);
-
                 }
 
                 //중복 마커 제거

@@ -19,7 +19,8 @@ public class SubSchedule extends AppCompatActivity {
 
     Button satrtLoc_Btn;
     TextView my_roc;
-    TextView re_place;
+    Button re_cafe_btn;
+    //TextView re_place;
 
     String roc; //설정 위치
     double roc_lati, roc_longi; //해당 위치의 위도와 경도 저장
@@ -31,9 +32,11 @@ public class SubSchedule extends AppCompatActivity {
 
         satrtLoc_Btn = findViewById(R.id.my_btn1);
         my_roc = findViewById(R.id.my_roc2);
-        re_place = findViewById(R.id.re_place);
+        re_cafe_btn = findViewById(R.id.re_cafe_btn);
+        //re_place = findViewById(R.id.re_place);
 
         roc = my_roc.getText().toString();
+        re_cafe_btn.setText("'" + roc + "' 주변 카페 지도 보기");
 
         satrtLoc_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +46,7 @@ public class SubSchedule extends AppCompatActivity {
             }
         });
 
-        re_place.setOnClickListener(new View.OnClickListener() {
+        re_cafe_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), RecommendPlaceActivity.class);
@@ -63,6 +66,7 @@ public class SubSchedule extends AppCompatActivity {
             roc_longi = data.getDoubleExtra("Longitude", 0);
 
             my_roc.setText(roc);
+            re_cafe_btn.setText("'" + roc + "' 주변 카페 지도 보기");
         }
     }
 

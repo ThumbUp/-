@@ -282,6 +282,20 @@
             android:textSize="17dp"
             android:textStyle="bold" />
 
+        <Button
+            android:id="@+id/re_cafe_btn"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="40dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/bg_corner_glay"
+            android:backgroundTint="@null"
+            android:text="주변 카페 지도 보기"
+            android:textSize="16dp"
+            android:textColor="#000000" />
+
+<!--
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="300dp"
@@ -446,8 +460,9 @@
                 android:background="#ABABAB"
                 android:layout_marginVertical="25dp" />
 
-        </LinearLayout>
+        </LinearLayout> -->
 
     </RelativeLayout>
+
 
 </LinearLayout>
