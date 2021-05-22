@@ -140,16 +140,19 @@
                 android:layout_height="wrap_content">
 
                 <RadioButton
+                    android:id="@+id/place1"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:text="성신여대입구" />
 
                 <RadioButton
+                    android:id="@+id/place2"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:text="충정로" />
 
                 <RadioButton
+                    android:id="@+id/place3"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:text="혜화" />
