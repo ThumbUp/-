@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HereMeet</string>
+    <string name="app_name">여기모임</string>
     <string name="facebook_app_id">785235652097318</string>
     <string name="fb_login_protocol_scheme">fb785235652097318</string>
 
