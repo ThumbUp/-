@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp"
+    android:padding="16dp"
     android:background="#ffffff">
 
     <RelativeLayout
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:text="내역추가"
             android:textColor="#000000"
-            android:textSize="23dp"
+            android:textSize="20dp"
             android:textStyle="bold"
             android:layout_marginTop="5dp"
             android:layout_centerHorizontal="true"/>
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:text="저장"
             android:layout_alignParentRight="true"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:textColor="#000000"
             android:textStyle="bold"
             android:layout_marginTop="8dp"
@@ -51,14 +51,13 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="35dp">
-
             <TextView
                 android:id="@+id/meetingName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="모임"
+                android:text="일정"
                 android:textStyle="bold"
-                android:textSize="18dp"
+                android:textSize="15dp"
                 android:textColor="#949494"
                 android:layout_alignBaseline="@id/meetingNumberInput"/>
 
@@ -69,7 +68,7 @@
                 android:text="스모프"
                 android:layout_toRightOf="@id/meetingName"
                 android:layout_marginLeft="35dp"
-                android:textSize="19dp"
+                android:textSize="15dp"
                 android:textColor="#000000"
                 android:layout_alignBaseline="@id/meetingNumberInput"/>
 
@@ -79,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:text="인원"
                 android:textStyle="bold"
-                android:textSize="18dp"
+                android:textSize="15dp"
                 android:textColor="#949494"
                 android:layout_toRightOf="@id/meetingName2"
                 android:layout_marginLeft="65dp"
@@ -91,17 +90,19 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:textColor="#000000"
-                android:textSize="19dp"
+                android:textSize="15dp"
                 android:layout_toRightOf="@id/meetingNumber"
                 android:layout_marginLeft="20dp"
                 android:theme="@style/InputTheme"/>
         </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="25dp">
+        android:layout_marginTop="25dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/meetingDate"
@@ -109,19 +110,18 @@
             android:layout_height="wrap_content"
             android:text="날짜"
             android:textStyle="bold"
-            android:textSize="18dp"
+            android:textSize="15dp"
             android:textColor="#949494" />
 
         <TextView
             android:id="@+id/meetingDate2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="날짜를 선택하세요"
-            android:layout_toRightOf="@id/meetingDate"
             android:layout_marginLeft="35dp"
-            android:textSize="19dp"
+            android:textSize="15dp"
             android:textColor="#000000"
-            android:layout_alignBaseline="@id/meetingDate"/>
+            android:layout_weight="1"/>
 
         <ImageView
             android:id="@+id/calendarBtn"
@@ -130,7 +130,7 @@
             app:srcCompat="@drawable/calendar"
             android:layout_alignParentRight="true"
             android:layout_marginTop="2dp"/>
-    </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -149,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:text="장소"
                 android:textStyle="bold"
-                android:textSize="18dp"
+                android:textSize="15dp"
                 android:textColor="#949494"
                 android:layout_alignBaseline="@id/meetingPlaceInput"/>
 
@@ -160,61 +160,71 @@
                 android:layout_toRightOf="@id/meetingPlace"
                 android:layout_marginLeft="32dp"
                 android:textColor="#000000"
-                android:textSize="19dp"
+                android:textSize="15dp"
                 android:theme="@style/InputTheme"/>
         </RelativeLayout>
 
-        <RelativeLayout
+        <!--메뉴, 가격 추가될 공간-->
+        <LinearLayout
+            android:id="@+id/menuBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="26dp"
-            android:layout_marginTop="5dp">
-
-            <TextView
-                android:id="@+id/placeMenu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="메뉴"
-                android:textStyle="bold"
-                android:textSize="17dp"
-                android:textColor="#949494"
-                android:layout_alignBaseline="@id/placeMenuInput" />
-
-            <EditText
-                android:id="@+id/placeMenuInput"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/placeMenu"
-                android:layout_marginLeft="10dp"
-                android:textColor="#000000"
-                android:textSize="17dp"
-                android:theme="@style/InputTheme"/>
-
-            <TextView
-                android:id="@+id/placeMenuPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="가격"
-                android:textStyle="bold"
-                android:textSize="17dp"
-                android:textColor="#949494"
-                android:layout_toRightOf="@id/placeMenuInput"
-                android:layout_marginLeft="18dp"
-                android:layout_alignBaseline="@id/placeMenuInput" />
-
-            <EditText
-                android:id="@+id/placeMenuPriceInput"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:background="@drawable/box_round_blue">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:layout_toRightOf="@id/placeMenuPrice"
-                android:layout_marginLeft="10dp"
-                android:textColor="#000000"
-                android:textSize="17dp"
-                android:theme="@style/InputTheme"/>
-        </RelativeLayout>
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/placeMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="메뉴"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    android:textColor="#949494" />
+
+                <EditText
+                    android:id="@+id/placeMenuInput"
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#000000"
+                    android:textSize="15dp"
+                    android:theme="@style/InputTheme"/>
+
+                <TextView
+                    android:id="@+id/placeMenuPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="가격"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    android:textColor="#949494"
+                    android:layout_marginLeft="18dp"/>
+
+                <EditText
+                    android:id="@+id/placeMenuPriceInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:layout_toRightOf="@id/placeMenuPrice"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#000000"
+                    android:textSize="15dp"
+                    android:theme="@style/InputTheme"/>
+            </LinearLayout>
+
+        </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/addMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="32dp"
@@ -222,8 +232,8 @@
 
             <ImageView
                 android:id="@+id/addBtn"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:src="@drawable/menu_plus"
                 android:layout_marginTop="3dp"/>
 
@@ -232,7 +242,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="메뉴 추가"
-                android:textSize="17dp"
+                android:textSize="15dp"
                 android:textColor="#949494"
                 android:layout_toRightOf="@id/addBtn"
                 android:layout_marginLeft="10dp"/>
@@ -251,7 +261,7 @@
             android:layout_height="wrap_content"
             android:text="합계"
             android:textStyle="bold"
-            android:textSize="18dp"
+            android:textSize="15dp"
             android:textColor="#949494" />
 
         <TextView
@@ -261,7 +271,7 @@
             android:text="0 원"
             android:layout_toRightOf="@id/meetingPriceSum"
             android:layout_marginLeft="35dp"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:textColor="#000000"
             android:layout_alignBaseline="@id/meetingPriceSum"/>
     </RelativeLayout>
@@ -278,7 +288,7 @@
             android:layout_height="wrap_content"
             android:text="메모"
             android:textStyle="bold"
-            android:textSize="18dp"
+            android:textSize="15dp"
             android:textColor="#949494"/>
 
         <EditText
@@ -290,7 +300,7 @@
             android:layout_marginTop="5dp"
             android:padding="10dp"
             android:textColor="#000000"
-            android:textSize="17dp"
+            android:textSize="15dp"
             android:background="@drawable/et_border"
             android:theme="@style/InputTheme"/>
     </RelativeLayout>

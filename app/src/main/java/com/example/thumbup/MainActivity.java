@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         main_moneyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FragmentView(moneyFragment3);
                 chooseTab(moneyFragment3);
             }
         });
@@ -104,7 +105,10 @@ public class MainActivity extends AppCompatActivity {
                 transaction.commit();
                 break;
             case 3:
-
+                MoneyFragment moneyFragment = new MoneyFragment();
+                transaction.replace(R.id.main_frame, moneyFragment);
+                transaction.commit();
+                break;
             case 4:
                 LoginFragment loginFragment = new LoginFragment();
                 transaction.replace(R.id.main_frame, loginFragment);
