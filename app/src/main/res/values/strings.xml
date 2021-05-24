@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HereMeet</string>
+    <string name="app_name">여기모임</string>
     <string name="facebook_app_id">785235652097318</string>
     <string name="fb_login_protocol_scheme">fb785235652097318</string>
 
@@ -8,4 +8,5 @@
     <string name="home_marginRight_meeting_list_menu">12dp</string>
     <!--  padding  -->
     <string name="home_padding_LinearLayout">16dp</string>
+    <string name="money_per_person">님이 보내야 할 돈은</string>
 </resources>
