@@ -54,6 +54,8 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
     private GoogleMap map;
     Button locOK_btn;
 
+    String roc;
+
     double Lati, Longi; //위도와 경도를 저장할 변수
     String my_place; //사용자가 설정한 위치를 저장할 변수
 
@@ -71,6 +73,13 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
         PlacesClient placesClient = Places.createClient(this);
 
         locOK_btn = findViewById(R.id.OK_btn); //확인_Btn
+
+        Intent outIntent2 = getIntent();
+        roc = outIntent2.getStringExtra("Rocation");
+        Location location = getLocationFromAddress(getApplicationContext(), roc);
+
+        Lati = location.getLatitude();
+        Longi = location.getLongitude();
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -124,7 +133,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
-        LatLng latLng = new LatLng(37.555172, 126.970800);
+        LatLng latLng = new LatLng(Lati, Longi);
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         map.moveCamera(CameraUpdateFactory.zoomTo(15));
         myMarker = new MarkerOptions().position(latLng).title("서울역");

@@ -23,7 +23,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".RecommendPlaceActivity"></activity>
+        <activity android:name=".RecommendPlace2Activity" />
+        <activity android:name=".RecommendPlaceActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

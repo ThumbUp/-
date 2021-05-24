@@ -47,7 +47,7 @@ import noman.googleplaces.Place;
 import noman.googleplaces.PlacesException;
 import noman.googleplaces.PlacesListener;
 
-public class RecommendPlaceActivity extends AppCompatActivity implements OnMapReadyCallback,
+public class RecommendPlace2Activity extends AppCompatActivity implements OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback, PlacesListener {
 
     SupportMapFragment mapFragment;
@@ -72,17 +72,17 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recommend_place);
+        setContentView(R.layout.activity_recommend_place2);
 
         Places.initialize(getApplicationContext(), "AIzaSyCxKA49sPjrLo0hvNDkgcBt3VVwQuiQ94s");
 
-        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.re_map);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.re_map1);
         mapFragment.getMapAsync(this);
 
-        back_btn = findViewById(R.id.backBtn1);
-        map_roc = findViewById(R.id.map_roc);
-        search_btn = findViewById(R.id.searchBtn1);
-        list_btn = findViewById(R.id.list_btn);
+        back_btn = findViewById(R.id.backBtn2);
+        map_roc = findViewById(R.id.map_roc1);
+        search_btn = findViewById(R.id.searchBtn2);
+        list_btn = findViewById(R.id.list_btn1);
 
         Intent outIntent = getIntent();
 
@@ -99,7 +99,7 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
             }
         });
 
-        // 검색 버튼 클릭 -> 일단 '나의위치' 주변 카페를 찾는 것으로 구현 -> 추후 최종 투표 결과의 위치로 코드 수정 필요!
+        // 검색 버튼 클릭 -> 일단 '나의위치' 주변 식당을 찾는 것으로 구현 -> 추후 최종 투표 결과의 위치로 코드 수정 필요!
         search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,15 +108,14 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
                 locations.clear();
 
                 map.clear();
-                //if (previous_marker != null)
                 previous_marker.clear();
 
                 new NRPlaces.Builder()
-                        .listener(RecommendPlaceActivity.this)
+                        .listener(RecommendPlace2Activity.this)
                         .key("AIzaSyCxKA49sPjrLo0hvNDkgcBt3VVwQuiQ94s")
                         .latlng(Lati, Longi) //현재 위치
                         .radius(150) //150 미터 내에서 검색
-                        .type(PlaceType.CAFE) //카페
+                        .type(PlaceType.RESTAURANT) //식당
                         .build()
                         .execute();
             }
@@ -126,24 +125,22 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
         list_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String[] cafe_list = new String[names.size()];
+                final String[] res_list = new String[names.size()];
                 int size1 = 0;
                 for(String temp:names){
-                    cafe_list[size1++]=temp;
+                    res_list[size1++]=temp;
                 }
-                final String[] cafe_roc = new String[locations.size()];
+                final String[] res_roc = new String[locations.size()];
                 int size2 = 0;
                 for(String temp:locations){
-                    cafe_roc[size2++]=temp;
+                    res_roc[size2++]=temp;
                 }
-                AlertDialog.Builder dlg = new AlertDialog.Builder(RecommendPlaceActivity.this);
-                dlg.setTitle(roc + " 주변 카페 리스트");
-                //dlg.setMessage("카페");
-                //dlg.setItems(cafe_list, null);
-                dlg.setItems(cafe_list, new DialogInterface.OnClickListener(){
+                AlertDialog.Builder dlg = new AlertDialog.Builder(RecommendPlace2Activity.this);
+                dlg.setTitle(roc + " 주변 식당 리스트");
+                dlg.setItems(res_list, new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int which){
                         map.clear();
-                        Location location = getLocationFromAddress(getApplicationContext(), cafe_roc[which]);
+                        Location location = getLocationFromAddress(getApplicationContext(), res_list[which]);
                         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                         //roc_info = getAddressFromLocation(getApplicationContext(), place.getLatitude(), place.getLongitude());
                         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -151,9 +148,9 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
 
                         MarkerOptions markerOptions = new MarkerOptions();
                         markerOptions.position(latLng);
-                        markerOptions.title(cafe_list[which]);
+                        markerOptions.title(res_list[which]);
 
-                        BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.coffee_rocation);
+                        BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.resraurant_rocation);
                         Bitmap b=bitmapdraw.getBitmap();
                         Bitmap smallMarker = Bitmap.createScaledBitmap(b, 80, 120, false);
                         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
@@ -194,12 +191,8 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
                     markerOptions.position(latLng);
                     markerOptions.title(place.getName());
                     markerOptions.snippet(place.getVicinity());
-                    //markerOptions.snippet(roc_info);
-                    //Marker item = map.addMarker(markerOptions);
-                    //previous_marker.add(item);
-                    //Log.e("TAG", item.getTitle());
 
-                    BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.coffee_rocation);
+                    BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.resraurant_rocation);
                     Bitmap b=bitmapdraw.getBitmap();
                     Bitmap smallMarker = Bitmap.createScaledBitmap(b, 60, 90, false);
                     markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
