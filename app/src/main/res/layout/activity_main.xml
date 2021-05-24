@@ -8,76 +8,58 @@
     android:orientation="vertical"
     android:background="@color/white">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
+        android:id="@+id/main_frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <EditText
-            android:id="@+id/search_bar"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="85dp"
-            android:layout_marginBottom="30dp"
-            android:background="@drawable/ic_search_bar"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:maxLines="1"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
+    </FrameLayout>
 
-        <ImageButton
-            android:id="@+id/btn_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_search"
-            app:layout_constraintBottom_toBottomOf="@+id/search_bar"
-            app:layout_constraintEnd_toEndOf="@+id/search_bar"
-            app:layout_constraintHorizontal_bias="0.96"
-            app:layout_constraintStart_toStartOf="@+id/search_bar"
-            app:layout_constraintTop_toTopOf="@+id/search_bar"
-            tools:ignore="MissingConstraints" />
-
-        <ImageButton
-            android:id="@+id/btn_addMeeting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_plus"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/search_bar"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5"
-            tools:ignore="MissingConstraints"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MainActivity" >
-
-        <ListView
-            android:id="@+id/main_listView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            app:menu="@menu/bottom_navigation"
-            android:background="#FFFFFF"
-            app:itemIconTint="@color/gray"
-            app:itemTextColor="@color/gray"
-            android:layout_alignParentBottom="true"/>
-
-    </RelativeLayout>
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:background="#EFF1F5">
+        <ImageButton
+            android:id="@+id/main_mainBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="모임"
+            android:textColor="#999999"
+            android:background="#EFF1F5"
+            android:src="@drawable/tab_main"/>
+<!--            android:adjustViewBounds="true"-->
+<!--            android:scaleType="fitCenter"-->
+<!--            android:padding="20dp"-->
+        <ImageButton
+            android:id="@+id/main_meetingBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="홈"
+            android:textColor="#999999"
+            android:background="#EFF1F5"
+            android:src="@drawable/tab_meeting"/>
+        <ImageButton
+            android:id="@+id/main_moneyBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="돈 계산"
+            android:textColor="#999999"
+            android:background="#EFF1F5"
+            android:src="@drawable/tab_money"/>
+        <ImageButton
+            android:id="@+id/main_loginBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="마이페이지"
+            android:textColor="#999999"
+            android:background="#EFF1F5"
+            android:src="@drawable/tab_mypage"/>
+    </LinearLayout>
 
 </LinearLayout>
