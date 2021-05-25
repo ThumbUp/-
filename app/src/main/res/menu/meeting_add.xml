@@ -3,12 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_menu1"
-        android:title="모임 나가기" />
+        android:title="모임 생성" />
     <item
         android:id="@+id/action_menu2"
-        android:title="모임 수정" />
-    <item
-        android:id="@+id/action_menu3"
-        android:title="모임 코드 복사" />
+        android:title="모임 참가" />
 
 </menu>
