@@ -1,6 +1,7 @@
 package com.example.thumbup;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -8,14 +9,17 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.thumbup.DataBase.DBCallBack;
 import com.example.thumbup.DataBase.DBManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 
 public class AfterActivity extends AppCompatActivity implements View.OnClickListener {
     ImageButton btnRevoke, btnLogout;
     TextView nameText, emailText;
     private FirebaseAuth mAuth ;
+    private DBManager dbManager = DBManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +40,21 @@ public class AfterActivity extends AppCompatActivity implements View.OnClickList
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        DBManager.getInstance().AddUser(user.getUid(), user.getDisplayName(), user.getEmail());
+
+        dbManager.Lock(this);
+        dbManager.AddUser(user.getUid(), user.getDisplayName(), user.getEmail(), new DBCallBack() {
+        @Override
+        public void success(Object data) {
+            DataSnapshot a = (DataSnapshot)data;
+            dbManager.UnLock();
+        }
+
+        @Override
+        public void fail(String errorMessage) {
+
+        }
+        });
+
         nameText.setText(user.getDisplayName());
         emailText.setText(user.getEmail());
     }
