@@ -61,13 +61,22 @@
             android:textSize="15sp"
             android:textColor="@color/black"/>
         <TextView
-            android:layout_width="100dp"
+            android:id="@+id/schedule_name"
+            android:layout_width="wrap_content"
+            android:minWidth="100dp"
+            android:maxWidth="200dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:textSize="15sp"
             android:textColor="@color/black"
             android:gravity="center"
             android:background="@drawable/border_bottom_gray"/>
+        <ImageButton
+            android:id="@+id/showSchedule"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_down_show" />
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
