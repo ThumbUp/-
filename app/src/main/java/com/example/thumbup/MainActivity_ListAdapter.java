@@ -110,7 +110,26 @@ public class MainActivity_ListAdapter extends BaseAdapter{
                                     })
                                     .show();
                         }else if (menuItem.getItemId() == R.id.action_menu2){
-                            Toast.makeText(getApplicationContext(), "모임명 수정", Toast.LENGTH_SHORT).show();
+                            final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
+                                    R.layout.dialog_main_add_meeting, null);
+
+                            new AlertDialog.Builder(getApplicationContext())
+                                    .setView(linear)
+                                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+
+
+                                            dialog.dismiss();
+                                        }
+                                    })
+                                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            dialog.dismiss();
+                                        }
+                                    })
+                                    .show();
                         }else {
                             Toast.makeText(getApplicationContext(), "인원 추가", Toast.LENGTH_SHORT).show();
                         }
@@ -125,12 +144,13 @@ public class MainActivity_ListAdapter extends BaseAdapter{
         return convertView;
     }
 
-    public void addItem(Drawable icon, String title, String info) {
+    public void addItem(Drawable icon, String title, String info, String mid) {
         MainActivity_ItemData item = new MainActivity_ItemData();
 
         item.setData_meetingIcon(icon);
         item.setData_meetingTitle(title);
         item.setData_meetingInfo(info);
+        item.setData_meetingId(mid);
 
         listViewItemList.add(item);
     }

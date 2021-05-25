@@ -8,7 +8,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.thumbup.DataBase.DBManager;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class AfterActivity extends AppCompatActivity implements View.OnClickListener {
     ImageButton btnRevoke, btnLogout;
@@ -26,12 +28,17 @@ public class AfterActivity extends AppCompatActivity implements View.OnClickList
         //btnRevoke = (Button)findViewById(R.id.btn_revoke);
 
         mAuth = FirebaseAuth.getInstance();
+        //지금 하면 될까요? 넵! 로그인 했습니다!
+        //다시 해보시겟어요?
 
         btnLogout.setOnClickListener(this);
         //btnRevoke.setOnClickListener(this);
 
-        nameText.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-        emailText.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        DBManager.getInstance().AddUser(user.getUid(), user.getDisplayName(), user.getEmail());
+        nameText.setText(user.getDisplayName());
+        emailText.setText(user.getEmail());
     }
 
     private void signOut() {

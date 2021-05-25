@@ -7,24 +7,35 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.Toast;
+import android.app.AlertDialog;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import java.util.ArrayList;
+import com.example.thumbup.DataBase.DBManager;
+import com.example.thumbup.DataBase.Meeting;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
+import java.util.ArrayList;
 
 public class MainFragment extends Fragment {
     ListView main_listView;
     ImageButton btn_addMeeting;
+    private Context mContext;
+    DBManager dbManager = DBManager.getInstance();
+
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+        mContext = context;
+    }
 
     @Nullable
     @Override
@@ -42,28 +53,36 @@ public class MainFragment extends Fragment {
         main_listView = (ListView) mainView.findViewById(R.id.main_listView);
         main_listView.setAdapter(adapter);
 
-        for(int i = 1; i < 4; i++){
-            adapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_profile), "여기 모임" + i, "스마트 모바일 프로그래밍 프로젝트 관련 모임" + i);
+        for(String key : dbManager.participatedMeetings.keySet())
+        {
+            Meeting meeting = dbManager.participatedMeetings.get(key);
+            adapter.addItem(ContextCompat.getDrawable(getContext(), R.drawable.ic_profile), meeting.title, meeting.info, key);
         }
 
         btn_addMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                final PopupMenu popupAdd = new PopupMenu(getApplicationContext(), view);
+                final PopupMenu popupAdd = new PopupMenu(getContext(), view);
                 popupAdd.getMenuInflater().inflate(R.menu.meeting_add,popupAdd.getMenu());
                 popupAdd.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         if (menuItem.getItemId() == R.id.action_menu1){
-                            final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
+                            final LinearLayout linear = (LinearLayout) View.inflate(getContext(),
                                     R.layout.dialog_main_add_meeting, null);
 
-                            new AlertDialog.Builder(getApplicationContext())
-                                    .setView(linear)
-                                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            AlertDialog.Builder dlg = new AlertDialog.Builder(getContext());
+                            dlg.setView(linear);
+                            dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int whichButton) {
+                                            EditText add_meetingTitle = (EditText)((AlertDialog)dialog).findViewById(R.id.add_meetingTitle);
+                                            EditText add_meetingInfo = (EditText)((AlertDialog)dialog).findViewById(R.id.add_meetingInfo);
 
+                                            String title = add_meetingTitle.getText().toString();
+                                            String info = add_meetingInfo.getText().toString();
+
+                                            String key = dbManager.AddMeeting(title, info);
 
                                             dialog.dismiss();
                                         }
@@ -76,15 +95,14 @@ public class MainFragment extends Fragment {
                                     })
                                     .show();
                         }else {
-                            final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
+                            final LinearLayout linear = (LinearLayout) View.inflate(getContext(),
                                     R.layout.dialog_main_join_meeting, null);
 
-                            new AlertDialog.Builder(getApplicationContext())
+                            new AlertDialog.Builder(getContext())
                                     .setView(linear)
                                     .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int whichButton) {
-
 
                                             dialog.dismiss();
                                         }
