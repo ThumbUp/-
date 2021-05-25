@@ -130,6 +130,23 @@ public class DBManager {
         mDatabase.child("Meetings").updateChildren(map);
     }
 
+    public void UpdateMeeting(String mid, final DBCallBack callBack) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(mid, participatedMeetings.get(mid));
+        mDatabase.child("Meetings").updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                callBack.success(true);
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callBack.fail(e.getMessage());
+            }
+        });
+    }
+
     public void JoinMeeting(String mid) {
         Map<String, Object> map = new HashMap<>();
         if (userData.meetings.contains(mid))
