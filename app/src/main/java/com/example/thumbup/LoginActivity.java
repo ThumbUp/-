@@ -179,7 +179,7 @@ public class LoginActivity extends AppCompatActivity {
         if (user != null) {
             Intent intent = new Intent(this, AfterActivity.class);
             startActivity(intent);
-            DBManager.getInstance().AddUser(user.getUid(), user.getDisplayName(), user.getEmail());
+            DBManager.getInstance().uid = user.getUid();
             finish();
         }
     }
