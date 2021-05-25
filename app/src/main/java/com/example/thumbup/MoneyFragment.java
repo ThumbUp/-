@@ -20,7 +20,7 @@ public class MoneyFragment extends Fragment {
     ImageButton moneyAddPlaceNMenu;
     ImageButton showSchedule;
     TextView scheduleName;
-    TextView moneyAdd_scheduleName = ((MoneyAddActivity)MoneyAddActivity.moneyAddContext).scheduleName;
+//    TextView moneyAdd_scheduleName = ((MoneyAddActivity)MoneyAddActivity.moneyAddContext).scheduleName;
 
     public void showSchedule() {
         PopupMenu schedulePopup = new PopupMenu(getActivity(), scheduleName);
@@ -32,7 +32,7 @@ public class MoneyFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 int menuIndex = item.getItemId();
                 scheduleName.setText((CharSequence) scheduleMenu.getItem(menuIndex));
-                moneyAdd_scheduleName.setText((CharSequence) scheduleMenu.getItem(menuIndex));
+//                moneyAdd_scheduleName.setText((CharSequence) scheduleMenu.getItem(menuIndex));
                 return false;
             }
         });
