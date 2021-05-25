@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.thumbup.DataBase.DBManager;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -179,6 +180,7 @@ public class LoginActivity extends AppCompatActivity {
         if (user != null) {
             Intent intent = new Intent(this, AfterActivity.class);
             startActivity(intent);
+            DBManager.getInstance().uid = user.getUid();
             finish();
         }
     }
