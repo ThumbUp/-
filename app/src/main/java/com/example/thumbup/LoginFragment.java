@@ -183,7 +183,7 @@ public class LoginFragment extends Fragment {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            ((MainActivity)getActivity()).replaceFragment(AfterLoginFragment.newInstance());
+//            ((MainActivity)getActivity()).replaceFragment(AfterLoginFragment.newInstance());
         }
     }
 }

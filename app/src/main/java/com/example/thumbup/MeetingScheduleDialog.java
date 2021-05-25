@@ -14,6 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.example.thumbup.DataBase.DBManager;
+
 import java.util.Calendar;
 
 public class MeetingScheduleDialog extends Dialog {
@@ -27,6 +29,7 @@ public class MeetingScheduleDialog extends Dialog {
     int mYear, mMonth, mDay;
     Button dialogSave;
     Button dialogBack;
+    DBManager dbManager = DBManager.getInstance();
 
     void updateDate(){
         scheduleDate.setText(String.format("%d년 %d월 %d일", mYear, mMonth + 1, mDay));
