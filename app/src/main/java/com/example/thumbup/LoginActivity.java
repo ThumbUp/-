@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.thumbup.DataBase.DBCallBack;
 import com.example.thumbup.DataBase.DBManager;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -30,6 +31,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
 
 import java.util.Arrays;
 
@@ -40,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private CallbackManager mFBCallbackManger;
+    private DBManager dbManager = DBManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,9 +181,19 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
+            dbManager.uid = user.getUid();
             Intent intent = new Intent(this, HomeActivity.class);
+            dbManager.AddUser(user.getUid(), user.getDisplayName(), user.getEmail(), new DBCallBack() {
+                @Override
+                public void success(Object data) {
+                }
+
+                @Override
+                public void fail(String errorMessage) {
+
+                }
+            });
             startActivity(intent);
-            DBManager.getInstance().uid = user.getUid();
             finish();
         }
     }
