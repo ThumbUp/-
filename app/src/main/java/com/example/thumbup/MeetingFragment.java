@@ -36,7 +36,7 @@ public class MeetingFragment extends Fragment {
 
         String[] meetingListViewItem_date = {"4/1", "4/8", "4/15", "4/22", "4/29", "5/6", "5/13", "5/20"};
         String meetingListViewItem_name = "정기모임";
-        String meetingListViewItem_time = "미정";
+        String meetingListViewItem_time = "15 : 00";
         String meetingListViewItem_place = "성신여대";
 
         for (int i = 0; i < 8; i++) {
