@@ -1,11 +1,13 @@
 package com.example.thumbup;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -52,6 +54,20 @@ public class MeetingFragment extends Fragment {
         //처음 화면 로드시 존재하는 공지 목록 띄우기
         showNotice();
 
+        //처음 화면 로드시 존재하는 일정 목록 띄우기
+        List<Schedule> dbMeetingListViewItem = new ArrayList<>();
+        dbMeetingListViewItem = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules;
+        for (int i = 0; i < dbMeetingListViewItem.size(); i++) {
+            MeetingListViewItem item = new MeetingListViewItem();
+            item.MeetingListViewItem_date = dbMeetingListViewItem.get(i).date;
+            item.MeetingListViewItem_name = dbMeetingListViewItem.get(i).title;
+            item.MeetingListViewItem_time = dbMeetingListViewItem.get(i).time;
+            item.MeetingListViewItem_place = dbMeetingListViewItem.get(i).place;
+            meetingListViewItem.add(item);
+        }
+        MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
+        meetingListView.setAdapter(meetingAdapter);
+
         meetingAddNotice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,10 +93,6 @@ public class MeetingFragment extends Fragment {
                     public void onDismiss(DialogInterface dialogInterface) {
                         List<Schedule> dbMeetingListViewItem = new ArrayList<>();
                         dbMeetingListViewItem = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules;
-                        List<String> meetingListViewItem_date = new ArrayList<>();
-                        List<String> meetingListViewItem_name = new ArrayList<>();
-                        List<String> meetingListViewItem_time = new ArrayList<>();
-                        List<String> meetingListViewItem_place = new ArrayList<>();
                         for (int i = 0; i < dbMeetingListViewItem.size(); i++) {
                             MeetingListViewItem item = new MeetingListViewItem();
                             item.MeetingListViewItem_date = dbMeetingListViewItem.get(i).date;
@@ -93,6 +105,14 @@ public class MeetingFragment extends Fragment {
                         meetingListView.setAdapter(meetingAdapter);
                     }
                 });
+            }
+        });
+
+        meetingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), SubSchedule.class);
+                startActivity(intent);
             }
         });
         return meetingView;
