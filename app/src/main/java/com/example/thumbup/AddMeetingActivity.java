@@ -1,5 +1,6 @@
 package com.example.thumbup;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,10 +14,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -62,16 +66,12 @@ public class AddMeetingActivity extends AppCompatActivity {
             }
         });
 
-
-
-
         addAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String title = addMeetingTitle.getText().toString();
                 String info = addMeetingInfo.getText().toString();
 
-                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
                 Drawable image = meetingImg.getDrawable();
                 Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -80,10 +80,26 @@ public class AddMeetingActivity extends AppCompatActivity {
                 String simage = byteArrayToBinaryString(reviewImage);
 
                 String key = dbManager.AddMeeting(title, info);
+                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
                 firebaseDatabase.getReference("reviews/").child("image").setValue(simage);
 
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+                final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
+                        R.layout.dialog_main_meeting_key, null);
+
+                AlertDialog.Builder dlg3 = new AlertDialog.Builder(AddMeetingActivity.this);
+                dlg3.setView(linear);
+                TextView k_meetingKey;
+                k_meetingKey = (TextView)linear.findViewById(R.id.k_meetingKey);
+                k_meetingKey.setText(key);
+                dlg3.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+
+                        dialog.dismiss();
+                    }
+                }).show();
             }
         });
 
@@ -106,7 +122,6 @@ public class AddMeetingActivity extends AppCompatActivity {
             meetingImg.setImageURI(selectedImageUri);
 
         }
-
     }
 
     public static String byteArrayToBinaryString(byte[] b) {

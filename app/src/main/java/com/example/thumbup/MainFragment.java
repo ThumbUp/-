@@ -82,13 +82,10 @@ public class MainFragment extends Fragment {
                                 @Override
                                 public void onClick(DialogInterface dialog, int whichButton) {
                                     EditText meetingKey = (EditText)((AlertDialog)dialog).findViewById(R.id.meetingKey);
-
                                     String meeting_key = meetingKey.getText().toString();
 
                                     dbManager.JoinMeeting(meeting_key);
 
-                                    Toast myToast = Toast.makeText(getContext(), meeting_key, Toast.LENGTH_SHORT);
-                                    myToast.show();
 
                                     dialog.dismiss();
                                 }
