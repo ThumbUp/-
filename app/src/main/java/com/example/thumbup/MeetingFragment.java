@@ -24,7 +24,7 @@ public class MeetingFragment extends Fragment {
     ListView meetingListView;
     TextView meetingAddNotice;
     TextView meetingAddSchedule;
-    List<String> noticeList= new ArrayList<>(); //공지목록
+    List<String> noticeList = new ArrayList<>(); //공지목록
     ArrayList<String> meetingNoticeList = new ArrayList<>();
     DBManager dbManager = DBManager.getInstance();
 
@@ -71,26 +71,28 @@ public class MeetingFragment extends Fragment {
             public void onClick(View v) {
                 MeetingScheduleDialog meetingScheduleDialog = new MeetingScheduleDialog(getActivity());
                 meetingScheduleDialog.show();
-                MeetingScheduleDialog.setOnDismissListener() {
-                    //일정 관련
-                    List<String> meetingListViewItem_date = new ArrayList<>();
-                    List<String> meetingListViewItem_name = new ArrayList<>();
-                    List<String> meetingListViewItem_time = new ArrayList<>();
-                    List<String> meetingListViewItem_place = new ArrayList<>();
-                    for (int i = 0; i < meetingListViewItem.size(); i++) {
-                        meetingListViewItem_date.add(meetingListViewItem_date.get(i));
+                meetingScheduleDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        List<String> meetingListViewItem_date = new ArrayList<>();
+                        List<String> meetingListViewItem_name = new ArrayList<>();
+                        List<String> meetingListViewItem_time = new ArrayList<>();
+                        List<String> meetingListViewItem_place = new ArrayList<>();
+                        for (int i = 0; i < meetingListViewItem.size(); i++) {
+                            meetingListViewItem_date.add(meetingListViewItem_date.get(i));
+                        }
+                        for (int i = 0; i < meetingListViewItem.size(); i++) {
+                            MeetingListViewItem item = new MeetingListViewItem();
+                            item.MeetingListViewItem_date = meetingListViewItem_date.get(i);
+                            item.MeetingListViewItem_name = meetingListViewItem_name.get(i);
+                            item.MeetingListViewItem_time = meetingListViewItem_time.get(i);
+                            item.MeetingListViewItem_place = meetingListViewItem_place.get(i);
+                            meetingListViewItem.add(item);
+                        }
+                        MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
+                        meetingListView.setAdapter(meetingAdapter);
                     }
-                    for (int i = 0; i < meetingListViewItem.size(); i++) {
-                        MeetingListViewItem item = new MeetingListViewItem();
-                        item.MeetingListViewItem_date = meetingListViewItem_date.get(i);
-                        item.MeetingListViewItem_name = meetingListViewItem_name.get(i);
-                        item.MeetingListViewItem_time = meetingListViewItem_time.get(i);
-                        item.MeetingListViewItem_place = meetingListViewItem_place.get(i);
-                        meetingListViewItem.add(item);
-                    }
-                    MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
-                    meetingListView.setAdapter(meetingAdapter);
-                }
+                });
             }
         });
         return meetingView;
