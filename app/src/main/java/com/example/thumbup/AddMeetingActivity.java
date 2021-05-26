@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,7 +24,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.thumbup.DataBase.DBManager;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -67,7 +71,16 @@ public class AddMeetingActivity extends AppCompatActivity {
                 String title = addMeetingTitle.getText().toString();
                 String info = addMeetingInfo.getText().toString();
 
+                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                Drawable image = meetingImg.getDrawable();
+                Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] reviewImage = stream.toByteArray();
+                String simage = byteArrayToBinaryString(reviewImage);
+
                 String key = dbManager.AddMeeting(title, info);
+                firebaseDatabase.getReference("reviews/").child("image").setValue(simage);
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
@@ -95,4 +108,20 @@ public class AddMeetingActivity extends AppCompatActivity {
         }
 
     }
+
+    public static String byteArrayToBinaryString(byte[] b) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < b.length; ++i) {
+            sb.append(byteToBinaryString(b[i]));
+        } return sb.toString();
+    }
+    public static String byteToBinaryString(byte n) {
+        StringBuilder sb = new StringBuilder("00000000");
+        for (int bit = 0; bit < 8; bit++) {
+            if (((n >> bit) & 1) > 0) {
+                sb.setCharAt(7 - bit, '1');
+            }
+        } return sb.toString();
+    }
+
 }
