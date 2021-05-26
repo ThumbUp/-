@@ -30,6 +30,12 @@
                     android:textColor="#000000"
                     android:textSize="20sp"
                     android:textStyle="bold"/>
+                <ImageButton
+                    android:id="@+id/showSchedule"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/ic_down_show" />
             </LinearLayout>
             <TextView
                 android:id="@+id/meeting_addNotice"

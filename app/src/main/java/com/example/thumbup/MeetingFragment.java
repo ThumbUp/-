@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ public class MeetingFragment extends Fragment {
     List<String> noticeList = new ArrayList<>(); //공지목록
     ArrayList<String> meetingNoticeList = new ArrayList<>();
     DBManager dbManager = DBManager.getInstance();
+    ImageButton showSchedule;
 
     void showNotice() { //공지 보여주는 것
         noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
@@ -48,6 +50,7 @@ public class MeetingFragment extends Fragment {
         meetingAddNotice = (TextView) meetingView.findViewById(R.id.meeting_addNotice);
         meetingAddSchedule = (TextView) meetingView.findViewById(R.id.meeting_addSchedule);
         ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
+        showSchedule = (ImageButton) meetingView.findViewById(R.id.showSchedule);
 
         //처음 화면 로드시 존재하는 공지 목록 띄우기
         showNotice();
@@ -93,6 +96,14 @@ public class MeetingFragment extends Fragment {
                         meetingListView.setAdapter(meetingAdapter);
                     }
                 });
+            }
+        });
+
+        showSchedule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //모임 목록 뜨게끔
+                List<String> dbMeetingList = new ArrayList<>();
             }
         });
         return meetingView;
