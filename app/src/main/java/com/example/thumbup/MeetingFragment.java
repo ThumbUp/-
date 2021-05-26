@@ -28,14 +28,14 @@ public class MeetingFragment extends Fragment {
     ArrayList<String> meetingNoticeList = new ArrayList<>();
     DBManager dbManager = DBManager.getInstance();
 
-    void showNotice() { //공지 보여주는 것
-        noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
-        for (int i = 0; i < noticeList.size(); i++) {
-            meetingNoticeList.add(noticeList.get(i));
-        }
-        ArrayAdapter meetingNoticeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, meetingNoticeList);
-        meetingNoticeListView.setAdapter(meetingNoticeAdapter);
-   }
+//    void showNotice() { //공지 보여주는 것
+//        noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
+//        for (int i = 0; i < noticeList.size(); i++) {
+//            meetingNoticeList.add(noticeList.get(i));
+//        }
+//        ArrayAdapter meetingNoticeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, meetingNoticeList);
+//        meetingNoticeListView.setAdapter(meetingNoticeAdapter);
+//   }
 
     @Nullable
     @Override
@@ -49,7 +49,7 @@ public class MeetingFragment extends Fragment {
         ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
 
         //처음 화면 로드시 존재하는 공지 목록 띄우기
-        showNotice();
+//        showNotice();
 
         //일정 관련
         String[] meetingListViewItem_date = {"4/1", "4/8", "4/15", "4/22", "4/29", "5/6", "5/13", "5/20"};
@@ -75,7 +75,7 @@ public class MeetingFragment extends Fragment {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         //공지 추가
-                        showNotice();
+//                        showNotice();
                     }
                 });
             }

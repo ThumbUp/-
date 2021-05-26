@@ -37,14 +37,11 @@ public class MeetingScheduleDialog extends Dialog {
     EditText scheduleDay;
     TextView scheduleTime,schedule_ampm, scheduleHour, scheduleMinute;
     EditText scheduleName;
-    ImageButton scheduleDateBtn;
-    ImageButton scheduleTimeBtn;
-    ImageButton scheduleMapBtn;
     int mYear, mMonth, mDay;
     Button dialogSave;
     Button dialogBack;
     DBManager dbManager = DBManager.getInstance();
-    String dbScheduleName, dbPlace;
+    String dbScheduleName;
     String dbDate, dbMonth, dbDay;
     String dbTime, dbMinute;
     String dbAmPm = "오후";
@@ -121,12 +118,10 @@ public class MeetingScheduleDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_meeting_schedule);
-        scheduleMapBtn = (ImageButton) findViewById(R.id.ic_schedule_map);
         dialogSave = (Button) findViewById(R.id.dialog_meeting_notice_save);
         dialogBack = (Button) findViewById(R.id.dialog_meeting_notice_back);
         dateNull = (TextView) findViewById(R.id.dateNull);
         timeNull = (TextView) findViewById(R.id.timeNull);
-        placeNull = (TextView) findViewById(R.id.placeNull);
         scheduleName = (EditText) findViewById(R.id.schedule_name);
         //날짜관련
         scheduleYear = (TextView) findViewById(R.id.schedule_year);
@@ -149,6 +144,7 @@ public class MeetingScheduleDialog extends Dialog {
                     dateState = 1;
                     dateNull.setTextColor(Color.parseColor("#303F80"));
                     //날짜 초기화
+
                     scheduleYear.setText(""); scheduleYear.setBackgroundResource(R.drawable.schedule_disabled_box);
                     scheduleMonth.setText(""); scheduleMonth.setBackgroundResource(R.drawable.schedule_disabled_box);
                     scheduleDay.setText(""); scheduleDay.setBackgroundResource(R.drawable.schedule_disabled_box);
@@ -171,25 +167,19 @@ public class MeetingScheduleDialog extends Dialog {
                 if (timeState == 0) { //미정을 선택했을 경우
                     timeState = 1;
                     timeNull.setTextColor(Color.parseColor("#303F80"));
+                    //시간 초기화
+                    schedule_ampm.setText(""); schedule_ampm.setBackgroundResource(R.drawable.schedule_disabled_box);
+                    scheduleHour.setText(""); scheduleHour.setBackgroundResource(R.drawable.schedule_disabled_box);
+                    scheduleMinute.setText(""); scheduleMinute.setBackgroundResource(R.drawable.schedule_disabled_box);
                     dbTime = "미정";
                 } else {
                     timeState = 0;
                     timeNull.setTextColor(Color.parseColor("#898A8D"));
+                    dbAmPm = "오후";
+                    schedule_ampm.setText(dbAmPm); schedule_ampm.setBackgroundResource(border_round_gray);
+                    scheduleHour.setText(""); scheduleHour.setBackgroundResource(border_round_gray);
+                    scheduleMinute.setText(""); scheduleMinute.setBackgroundResource(border_round_gray);
                     dbTime = "";
-                }
-            }
-        });
-        placeNull.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (placeState == 0) { //미정을 선택했을 경우
-                    placeState = 1;
-                    placeNull.setTextColor(Color.parseColor("#303F80"));
-                    dbPlace = "미정";
-                } else {
-                    placeState = 0;
-                    placeNull.setTextColor(Color.parseColor("#898A8D"));
-                    dbPlace = "";
                 }
             }
         });
