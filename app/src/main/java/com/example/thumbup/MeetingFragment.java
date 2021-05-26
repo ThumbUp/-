@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.thumbup.DataBase.DBManager;
+import com.example.thumbup.DataBase.Schedule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,18 +25,18 @@ public class MeetingFragment extends Fragment {
     ListView meetingListView;
     TextView meetingAddNotice;
     TextView meetingAddSchedule;
-    List<String> noticeList= new ArrayList<>(); //공지목록
+    List<String> noticeList = new ArrayList<>(); //공지목록
     ArrayList<String> meetingNoticeList = new ArrayList<>();
     DBManager dbManager = DBManager.getInstance();
 
-//    void showNotice() { //공지 보여주는 것
-//        noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
-//        for (int i = 0; i < noticeList.size(); i++) {
-//            meetingNoticeList.add(noticeList.get(i));
-//        }
-//        ArrayAdapter meetingNoticeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, meetingNoticeList);
-//        meetingNoticeListView.setAdapter(meetingNoticeAdapter);
-//   }
+    void showNotice() { //공지 보여주는 것
+        noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
+        for (int i = 0; i < noticeList.size(); i++) {
+            meetingNoticeList.add(noticeList.get(i));
+        }
+        ArrayAdapter meetingNoticeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, meetingNoticeList);
+        meetingNoticeListView.setAdapter(meetingNoticeAdapter);
+   }
 
     @Nullable
     @Override
@@ -49,22 +50,7 @@ public class MeetingFragment extends Fragment {
         ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
 
         //처음 화면 로드시 존재하는 공지 목록 띄우기
-//        showNotice();
-
-        //일정 관련
-        String[] meetingListViewItem_date = {"4/1", "4/8", "4/15", "4/22", "4/29", "5/6", "5/13", "5/20"};
-        String meetingListViewItem_name = "정기모임";
-        String meetingListViewItem_time = "15 : 00";
-        String meetingListViewItem_place = "성신여대";
-
-        for (int i = 0; i < 8; i++) {
-            MeetingListViewItem item = new MeetingListViewItem();
-            item.MeetingListViewItem_date = meetingListViewItem_date[i];
-            item.MeetingListViewItem_name = meetingListViewItem_name;
-            item.MeetingListViewItem_time = meetingListViewItem_time;
-            item.MeetingListViewItem_place = meetingListViewItem_place;
-            meetingListViewItem.add(item);
-        }
+        showNotice();
 
         meetingAddNotice.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +61,7 @@ public class MeetingFragment extends Fragment {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         //공지 추가
-//                        showNotice();
+                        showNotice();
                     }
                 });
             }
@@ -86,11 +72,29 @@ public class MeetingFragment extends Fragment {
             public void onClick(View v) {
                 MeetingScheduleDialog meetingScheduleDialog = new MeetingScheduleDialog(getActivity());
                 meetingScheduleDialog.show();
+                meetingScheduleDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        List<Schedule> dbMeetingListViewItem = new ArrayList<>();
+                        dbMeetingListViewItem = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules;
+                        List<String> meetingListViewItem_date = new ArrayList<>();
+                        List<String> meetingListViewItem_name = new ArrayList<>();
+                        List<String> meetingListViewItem_time = new ArrayList<>();
+                        List<String> meetingListViewItem_place = new ArrayList<>();
+                        for (int i = 0; i < dbMeetingListViewItem.size(); i++) {
+                            MeetingListViewItem item = new MeetingListViewItem();
+                            item.MeetingListViewItem_date = dbMeetingListViewItem.get(i).date;
+                            item.MeetingListViewItem_name = dbMeetingListViewItem.get(i).title;
+                            item.MeetingListViewItem_time = dbMeetingListViewItem.get(i).time;
+                            item.MeetingListViewItem_place = dbMeetingListViewItem.get(i).place;
+                            meetingListViewItem.add(item);
+                        }
+                        MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
+                        meetingListView.setAdapter(meetingAdapter);
+                    }
+                });
             }
         });
-
-        MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
-        meetingListView.setAdapter(meetingAdapter);
         return meetingView;
     }
 }
