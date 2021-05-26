@@ -2,6 +2,7 @@ package com.example.thumbup;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.example.thumbup.DataBase.DBManager;
+
 import java.util.ArrayList;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -24,6 +27,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class MainActivity_ListAdapter extends BaseAdapter{
 
     private View view;
+    DBManager dbManager = DBManager.getInstance();
 
     // 생성자로부터 전달된 resource id 값을 저장.
     int resourceId;
@@ -99,6 +103,8 @@ public class MainActivity_ListAdapter extends BaseAdapter{
                                     .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int whichButton) {
+                                            // 모임 나가기
+                                            // dbManager.
                                             dialog.dismiss();
                                         }
                                     })
@@ -110,28 +116,11 @@ public class MainActivity_ListAdapter extends BaseAdapter{
                                     })
                                     .show();
                         }else if (menuItem.getItemId() == R.id.action_menu2){
-                            final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
-                                    R.layout.dialog_main_add_meeting, null);
-
-                            new AlertDialog.Builder(getApplicationContext())
-                                    .setView(linear)
-                                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-
-
-                                            dialog.dismiss();
-                                        }
-                                    })
-                                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            dialog.dismiss();
-                                        }
-                                    })
-                                    .show();
+                            // 모임 수정
+                            Intent intent = new Intent(getApplicationContext(), ModifyMeetingActivity.class);
+                            //startActivity(intent);
                         }else {
-                            Toast.makeText(getApplicationContext(), "인원 추가", Toast.LENGTH_SHORT).show();
+                            //모임원 추가
                         }
 
                         return false;

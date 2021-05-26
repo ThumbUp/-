@@ -156,7 +156,7 @@ public class DBManager {
                 Log.w("loadPost:onCancelled", databaseError.toException());
             }
         };
-        //그부분 어디있을까용 화면에 표시하는 부분
+
         mPostReference.addValueEventListener(postListener);
     }
 

@@ -2,11 +2,13 @@ package com.example.thumbup;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -68,45 +70,29 @@ public class MainFragment extends Fragment {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         if (menuItem.getItemId() == R.id.action_menu1){
-                            final LinearLayout linear = (LinearLayout) View.inflate(getContext(),
-                                    R.layout.dialog_main_add_meeting, null);
-
-                            AlertDialog.Builder dlg = new AlertDialog.Builder(getContext());
-                            dlg.setView(linear);
-                            dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            EditText add_meetingTitle = (EditText)((AlertDialog)dialog).findViewById(R.id.add_meetingTitle);
-                                            EditText add_meetingInfo = (EditText)((AlertDialog)dialog).findViewById(R.id.add_meetingInfo);
-
-                                            String title = add_meetingTitle.getText().toString();
-                                            String info = add_meetingInfo.getText().toString();
-
-                                            String key = dbManager.AddMeeting(title, info);
-
-                                            dialog.dismiss();
-                                        }
-                                    })
-                                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            dialog.dismiss();
-                                        }
-                                    })
-                                    .show();
+                            Intent intent = new Intent(getContext(), AddMeetingActivity.class);
+                            startActivity(intent);
                         }else {
                             final LinearLayout linear = (LinearLayout) View.inflate(getContext(),
                                     R.layout.dialog_main_join_meeting, null);
 
-                            new AlertDialog.Builder(getContext())
-                                    .setView(linear)
-                                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int whichButton) {
+                            AlertDialog.Builder dlg2 = new AlertDialog.Builder(getContext());
+                            dlg2.setView(linear);
+                            dlg2.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    EditText meetingKey = (EditText)((AlertDialog)dialog).findViewById(R.id.meetingKey);
 
-                                            dialog.dismiss();
-                                        }
-                                    })
+                                    String meeting_key = meetingKey.getText().toString();
+
+                                    dbManager.JoinMeeting(meeting_key);
+
+                                    Toast myToast = Toast.makeText(getContext(), meeting_key, Toast.LENGTH_SHORT);
+                                    myToast.show();
+
+                                    dialog.dismiss();
+                                }
+                            })
                                     .setNegativeButton("취소", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int whichButton) {
@@ -114,7 +100,7 @@ public class MainFragment extends Fragment {
                                         }
                                     })
                                     .show();
-                        }
+                                }
 
                         return false;
                     }
