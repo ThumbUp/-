@@ -66,6 +66,8 @@ public class MeetingFragment extends Fragment {
                         for (int i = 0; i < noticeList.size(); i++) {
                             meetingNoticeList.add(noticeList.get(i));
                         }
+                        ArrayAdapter meetingNoticeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, meetingNoticeList);
+                        meetingNoticeListView.setAdapter(meetingNoticeAdapter);
                     }
                 });
             }
@@ -79,8 +81,6 @@ public class MeetingFragment extends Fragment {
             }
         });
 
-        ArrayAdapter meetingNoticeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, meetingNoticeList);
-        meetingNoticeListView.setAdapter(meetingNoticeAdapter);
         MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
         meetingListView.setAdapter(meetingAdapter);
         return meetingView;
