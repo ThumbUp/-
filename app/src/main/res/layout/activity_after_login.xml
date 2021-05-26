@@ -14,8 +14,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:text="마이페이지"
-        android:textSize="20dp"
-        android:textColor="@color/black"
+        android:textColor="#000000"
+        android:textSize="23dp"
         android:textStyle="bold"
         tools:ignore="MissingConstraints" />
     <FrameLayout
@@ -25,41 +25,49 @@
         android:layout_gravity="center"
         android:layout_marginTop="150dp">
 
-        <ImageView
-            android:id="@+id/profile_bg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.064"
-            app:srcCompat="@drawable/profile_bg"
-            tools:ignore="MissingConstraints" />
+        <!-- <ImageView
+             android:id="@+id/profile_bg"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center_horizontal"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toTopOf="parent"
+             app:layout_constraintVertical_bias="0.064"
+             app:srcCompat="@drawable/profile_bg"
+             tools:ignore="MissingConstraints" />-->
 
-        <ImageView
+        <!-- <ImageView
+             android:id="@+id/profile_image"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center"
+             android:adjustViewBounds="true"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toTopOf="parent"
+             app:layout_constraintVertical_bias="0.064"
+             app:srcCompat="@drawable/profile_default"
+             tools:ignore="MissingConstraints" />-->
+
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.064"
-            app:srcCompat="@drawable/profile_default"
-            tools:ignore="MissingConstraints" />
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/profile_default"
+            tools:ignore="MissingConstraints"/>
+
     </FrameLayout>
 
     <!--    <Button-->
-<!--        android:id="@+id/btn_revoke"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center_horizontal"-->
-<!--        android:text="회원탈퇴"-->
-<!--        tools:ignore="MissingConstraints" />-->
+    <!--        android:id="@+id/btn_revoke"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="center_horizontal"-->
+    <!--        android:text="회원탈퇴"-->
+    <!--        tools:ignore="MissingConstraints" />-->
 
     <TextView
         android:id="@+id/myPage_nameText"
@@ -69,7 +77,6 @@
         android:layout_marginTop="10dp"
         android:text="이름"
         android:textSize="15dp"
-        android:textColor="@color/black"
         android:textStyle="bold"
         tools:ignore="MissingConstraints" />
 
@@ -80,19 +87,43 @@
         android:layout_gravity="center_horizontal"
         android:text="Thumb_up@gmail.com"
         android:textSize="15dp"
-        android:textColor="@color/black"
         tools:ignore="MissingConstraints" />
 
-    <ImageButton
-        android:id="@+id/btn_logout"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="330dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
-        android:adjustViewBounds="true"
-        android:background="@android:color/transparent"
-        android:scaleType="fitCenter"
-        app:srcCompat="@drawable/logout"
-        tools:ignore="MissingConstraints" />
+        android:background="#D6E1F5"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="20dp">
+
+        <ImageButton
+            android:id="@+id/btn_ch_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="50dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/change_img"
+            tools:ignore="MissingConstraints" />
+
+        <ImageButton
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="50dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/logout2"
+            tools:ignore="MissingConstraints" />
+
+    </LinearLayout>
+
 
 </LinearLayout>
