@@ -37,10 +37,11 @@ public class AfterLoginFragment extends Fragment implements View.OnClickListener
     TextView nameText, emailText;
     private FirebaseAuth mAuth;
     private DBManager dbManager = DBManager.getInstance();
-
+    //거기좀 켜주실래요?
     private Boolean isPermission = true;
     private static final int PICK_FROM_ALBUM = 1;
     private File tempFile;
+    private ImageView imageView;
 
     @Nullable
     @Override
@@ -68,6 +69,9 @@ public class AfterLoginFragment extends Fragment implements View.OnClickListener
         emailText.setText(user.getEmail());
 
         tedPermission();
+
+        imageView = (ImageView) afterLoginView.findViewById(R.id.profile_image);
+        setImage(dbManager.userData.profile);
 
         btnGallery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,7 +149,6 @@ public class AfterLoginFragment extends Fragment implements View.OnClickListener
                  *  content:/// 에서 file:/// 로  변경한다.
                  */
                 String[] proj = {MediaStore.Images.Media.DATA};
-
                 assert photoUri != null;
                 cursor = getActivity().getContentResolver().query(photoUri, proj, null, null, null);
 
@@ -168,11 +171,22 @@ public class AfterLoginFragment extends Fragment implements View.OnClickListener
     }
 
     private void setImage() {
-
         ImageView imageView = (ImageView) getView().findViewById(R.id.profile_image);
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         Bitmap originalBm = BitmapFactory.decodeFile(tempFile.getAbsolutePath(), options);
+
+        imageView.setImageBitmap(originalBm);
+        dbManager.userData.profile = tempFile.getAbsolutePath();
+        dbManager.UpdateUser();
+    }
+
+    private void setImage(String path) {
+        if(path.equals("") == true)
+            return;
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        Bitmap originalBm = BitmapFactory.decodeFile(path, options);
 
         imageView.setImageBitmap(originalBm);
 
