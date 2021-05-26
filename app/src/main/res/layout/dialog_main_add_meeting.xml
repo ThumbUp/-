@@ -53,9 +53,7 @@
             android:maxWidth="200dp"
             android:layout_margin="50dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/ic_profile"
-            android:onClick="onClick"
-            android:background="@drawable/radius"/>
+            android:src="@drawable/ic_profile"/>
 
         <Button
             android:id="@+id/add_meetingImg"

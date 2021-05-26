@@ -86,7 +86,6 @@ public class MainFragment extends Fragment {
 
                                     dbManager.JoinMeeting(meeting_key);
 
-
                                     dialog.dismiss();
                                 }
                             })
