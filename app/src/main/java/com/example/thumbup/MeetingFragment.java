@@ -71,7 +71,12 @@ public class MeetingFragment extends Fragment {
             public void onClick(View v) {
                 MeetingScheduleDialog meetingScheduleDialog = new MeetingScheduleDialog(getActivity());
                 meetingScheduleDialog.show();
-                MeetingScheduleDialog.setOnDismissListener() {
+                MeetingScheduleDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        
+                    }
+                });
                     //일정 관련
                     List<String> meetingListViewItem_date = new ArrayList<>();
                     List<String> meetingListViewItem_name = new ArrayList<>();
@@ -90,7 +95,6 @@ public class MeetingFragment extends Fragment {
                     }
                     MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
                     meetingListView.setAdapter(meetingAdapter);
-                }
             }
         });
         return meetingView;
