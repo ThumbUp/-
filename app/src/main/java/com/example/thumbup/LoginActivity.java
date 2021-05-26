@@ -1,5 +1,6 @@
 package com.example.thumbup;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,7 +32,6 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DataSnapshot;
 
 import java.util.Arrays;
 
@@ -182,19 +182,24 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             dbManager.uid = user.getUid();
-            Intent intent = new Intent(this, HomeActivity.class);
+            Context context = this;
+            dbManager.Lock(this);
             dbManager.AddUser(user.getUid(), user.getDisplayName(), user.getEmail(), new DBCallBack() {
                 @Override
                 public void success(Object data) {
+                    Intent intent = new Intent(context, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
+
+                //이거 푸시해보실래요ㅕ? 제꺼에서 좀 볼게요 승연님이 하신거까지요?
+                //넵 이거 그대로
 
                 @Override
                 public void fail(String errorMessage) {
 
                 }
             });
-            startActivity(intent);
-            finish();
         }
     }
 }
