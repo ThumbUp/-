@@ -26,6 +26,7 @@ public class MeetingNoticeDialog extends Dialog {
     EditText noticeContent;
     String toAddNotice;
     DBManager dbManager = DBManager.getInstance();
+    private OnDismissListener onDismissListener = null;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +43,6 @@ public class MeetingNoticeDialog extends Dialog {
                 dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k", new DBCallBack() {
                     @Override
                     public void success(Object data) {
-                        ((MeetingFragment)getContext()).noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
                         dismiss();
                     }
 

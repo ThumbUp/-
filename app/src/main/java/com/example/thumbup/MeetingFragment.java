@@ -1,5 +1,6 @@
 package com.example.thumbup;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,10 +58,16 @@ public class MeetingFragment extends Fragment {
             public void onClick(View v) {
                 MeetingNoticeDialog meetingNoticeDialog = new MeetingNoticeDialog(getActivity());
                 meetingNoticeDialog.show();
-                noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
-                for (int i = 0; i < noticeList.size(); i++) {
-                    meetingNoticeList.add(noticeList.get(i));
-                }
+                meetingNoticeDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        //공지 추가 코드
+                        noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
+                        for (int i = 0; i < noticeList.size(); i++) {
+                            meetingNoticeList.add(noticeList.get(i));
+                        }
+                    }
+                });
             }
         });
 
