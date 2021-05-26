@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:text="스모프"
             android:textColor="#000000"
-            android:textSize="23dp"
+            android:textSize="22dp"
             android:textStyle="bold"
             android:layout_marginTop="5dp"
             android:layout_centerHorizontal="true"/>
@@ -117,6 +117,8 @@
             android:id="@+id/switch1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:track="@drawable/switch_track_selector"
+            android:thumb="@drawable/switch_thumb"
             android:layout_alignParentRight="true"
             android:text="참여여부  "/>
 
@@ -140,7 +142,7 @@
                 android:id="@+id/my_roc2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="신도림역"
+                android:text="서울역"
                 android:textColor="#000000"
                 android:layout_toRightOf="@id/my_roc1"
                 android:textSize="16dp" />
@@ -150,15 +152,16 @@
         <Button
             android:id="@+id/my_btn1"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="40dp"
-            android:paddingHorizontal="100dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/my_roc"
             android:layout_marginTop="16dp"
             android:background="@drawable/roc_set_btn"
             app:backgroundTint="@null"
-            android:text="시작 위치 설정하기"
+            android:text="일정 미참여 시, 시작 위치를 설정할 수 없습니다"
+            android:enabled="false"
+            android:textSize="13dp"
             android:textColor="#000000" />
 
     </RelativeLayout>
@@ -266,22 +269,83 @@
         android:layout_marginVertical="25dp"
         android:layout_marginHorizontal="20dp"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/place"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp">
+        android:layout_marginHorizontal="20dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/re_place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="18dp"
+            android:layout_marginBottom="15dp"
             android:text="추천 장소"
             android:textColor="#303F80"
             android:textSize="17dp"
             android:textStyle="bold" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#EDEDED">
+
+            <TextView
+                android:id="@+id/re_map_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="15dp"
+                android:text="근처 추천 지도 보기"
+                android:textColor="#000000"
+                android:textSize="16dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="18dp">
+
+                <Button
+                    android:id="@+id/re_cafe_btn"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:background="@drawable/bg_corner_glay"
+                    android:backgroundTint="@null"
+                    android:text="카페"
+                    android:textSize="16dp"
+                    android:textColor="#000000" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="35dp"
+                    android:background="#C4C4C4"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="6dp">
+                </View>
+
+                <Button
+                    android:id="@+id/re_res_btn"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/bg_corner_glay"
+                    android:backgroundTint="@null"
+                    android:text="식당"
+                    android:textSize="16dp"
+                    android:textColor="#000000" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+<!--
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="300dp"
@@ -446,8 +510,9 @@
                 android:background="#ABABAB"
                 android:layout_marginVertical="25dp" />
 
-        </LinearLayout>
+        </LinearLayout> -->
 
-    </RelativeLayout>
+    </LinearLayout>
+
 
 </LinearLayout>

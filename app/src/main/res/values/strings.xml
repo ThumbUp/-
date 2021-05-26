@@ -3,7 +3,7 @@
     <string name="facebook_app_id">785235652097318</string>
     <string name="fb_login_protocol_scheme">fb785235652097318</string>
 
-<!--  home  -->
+    <!--  home  -->
     <!--  margin  -->
     <string name="home_marginRight_meeting_list_menu">12dp</string>
     <!--  padding  -->
