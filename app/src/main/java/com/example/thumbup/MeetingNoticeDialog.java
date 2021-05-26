@@ -11,6 +11,9 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 
+import com.example.thumbup.DataBase.DBCallBack;
+import com.example.thumbup.DataBase.DBManager;
+
 import java.util.ArrayList;
 
 public class MeetingNoticeDialog extends Dialog {
@@ -22,6 +25,7 @@ public class MeetingNoticeDialog extends Dialog {
     Button dialogBack;
     EditText noticeContent;
     String toAddNotice;
+    DBManager dbManager = DBManager.getInstance();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +38,19 @@ public class MeetingNoticeDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 toAddNotice = noticeContent.getText().toString();
-                dismiss();
+                dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices.add(toAddNotice);
+                dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k", new DBCallBack() {
+                    @Override
+                    public void success(Object data) {
+                        ((MeetingFragment)getContext()).noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
+                        dismiss();
+                    }
+
+                    @Override
+                    public void fail(String errorMessage) {
+                        dismiss();
+                    }
+                });
             }
         });
 

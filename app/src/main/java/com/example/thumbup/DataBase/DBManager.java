@@ -1,7 +1,10 @@
 package com.example.thumbup.DataBase;
 
+import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 
+import com.example.thumbup.ProgressDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,6 +31,8 @@ public class DBManager {
     public User userData;   //현재 로그인 된 유저 정보
     public Map<String, Meeting> participatedMeetings = new HashMap<>(); //현재 로그인된 유저가 가입된 미팅 정보
 
+    private ProgressDialog customProgressDialog;
+
     //이렇게 되어있어요 넵
     //DB에서 해당유저나 유저가 가입된 미팅정보가 바뀌면
     //자동으로 위에있느 변수의 내용이 업데이트되게 해놓아서
@@ -49,24 +54,45 @@ public class DBManager {
     private DBManager() {
     }
 
+    public void Lock(Context context)
+    {
+        customProgressDialog = new ProgressDialog(context);
+        customProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        customProgressDialog.setCancelable(false);
+        customProgressDialog.show();
+    }
+
+    public void UnLock()
+    {
+        customProgressDialog.dismiss();
+    }
+
     public void Init() {
         addUserPostEventListener(mDatabase.child("Users").child(uid));
     }
 
-    public void AddUser(String uid, String name, String email) {
+    public void AddUser(String uid, String name, String email, final DBCallBack callBack) {
         mDatabase.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String temp = snapshot.getKey();
                     if (temp.equals(uid) == true) {
-                        DBManager.getInstance().Init();
+                        userData = snapshot.getValue(User.class);
+                        if (userData.meetings != null) {
+                            for (int i = 0; i < userData.meetings.size(); i++) {
+                                String mid = userData.meetings.get(i);
+                                addMeetingPostEventListener(mDatabase.child("Meetings").child(mid), mid);
+                            }
+                        }
+                        Init();
+                        callBack.success(dataSnapshot);
                         return;
                     }
                 }
 
                 Map<String, Object> map = new HashMap<>();
-                User userData = new User(name, email);
+                userData = new User(name, email);
                 map.put(uid, userData);
                 mDatabase.child("Users").updateChildren(map);
                 Init();
@@ -74,7 +100,7 @@ public class DBManager {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                callBack.fail(databaseError.getMessage());
             }
         });
     }
@@ -102,6 +128,23 @@ public class DBManager {
         Map<String, Object> map = new HashMap<>();
         map.put(mid, participatedMeetings.get(mid));
         mDatabase.child("Meetings").updateChildren(map);
+    }
+
+    public void UpdateMeeting(String mid, final DBCallBack callBack) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(mid, participatedMeetings.get(mid));
+        mDatabase.child("Meetings").updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                callBack.success(true);
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callBack.fail(e.getMessage());
+            }
+        });
     }
 
     public void JoinMeeting(String mid) {

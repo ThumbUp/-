@@ -13,14 +13,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.thumbup.DataBase.DBManager;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class MeetingFragment extends Fragment {
     ListView meetingNoticeListView;
     ListView meetingListView;
     TextView meetingAddNotice;
     TextView meetingAddSchedule;
-    ArrayList<String> noticeList= new ArrayList<>();
+    List<String> noticeList= new ArrayList<>(); //공지목록
+    DBManager dbManager = DBManager.getInstance();
 
     @Nullable
     @Override
@@ -36,7 +40,7 @@ public class MeetingFragment extends Fragment {
 
         String[] meetingListViewItem_date = {"4/1", "4/8", "4/15", "4/22", "4/29", "5/6", "5/13", "5/20"};
         String meetingListViewItem_name = "정기모임";
-        String meetingListViewItem_time = "미정";
+        String meetingListViewItem_time = "15 : 00";
         String meetingListViewItem_place = "성신여대";
 
         for (int i = 0; i < 8; i++) {
@@ -53,10 +57,10 @@ public class MeetingFragment extends Fragment {
             public void onClick(View v) {
                 MeetingNoticeDialog meetingNoticeDialog = new MeetingNoticeDialog(getActivity());
                 meetingNoticeDialog.show();
-//                Log.d("notice", "공지 목록 : " + meetingNoticeDialog.noticeList);
-//                for (int i = 0; i < meetingNoticeDialog.noticeList.size(); i++) {
-//                    meetingNoticeList.add(meetingNoticeDialog.noticeList.get(i));
-//                }
+                noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
+                for (int i = 0; i < noticeList.size(); i++) {
+                    meetingNoticeList.add(noticeList.get(i));
+                }
             }
         });
 
