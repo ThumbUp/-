@@ -41,6 +41,7 @@ public class AfterLoginFragment extends Fragment implements View.OnClickListener
     private Boolean isPermission = true;
     private static final int PICK_FROM_ALBUM = 1;
     private File tempFile;
+    private ImageView imageView;
 
     @Nullable
     @Override
@@ -69,6 +70,7 @@ public class AfterLoginFragment extends Fragment implements View.OnClickListener
 
         tedPermission();
 
+        imageView = (ImageView) afterLoginView.findViewById(R.id.profile_image);
         setImage(dbManager.userData.profile);
 
         btnGallery.setOnClickListener(new View.OnClickListener() {
@@ -180,8 +182,8 @@ public class AfterLoginFragment extends Fragment implements View.OnClickListener
     }
 
     private void setImage(String path) {
-
-        ImageView imageView = (ImageView) getView().findViewById(R.id.profile_image);
+        if(path.equals("") == true)
+            return;
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         Bitmap originalBm = BitmapFactory.decodeFile(path, options);
