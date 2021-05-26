@@ -13,6 +13,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.thumbup.DataBase.DBManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -25,6 +26,7 @@ public class SubSchedule extends AppCompatActivity {
     Button re_res_btn;
     Switch switchView;
     TextView re_map_text;
+    DBManager dbManager = DBManager.getInstance();
 
     String roc; //설정 위치
     double roc_lati, roc_longi; //해당 위치의 위도와 경도 저장

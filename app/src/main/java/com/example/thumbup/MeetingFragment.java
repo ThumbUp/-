@@ -32,16 +32,12 @@ public class MeetingFragment extends Fragment {
     DBManager dbManager = DBManager.getInstance();
 
     void showNotice() { //공지 보여주는 것
-        try {
-            noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
-            for (int i = 0; i < noticeList.size(); i++) {
-                meetingNoticeList.add(noticeList.get(i));
-            }
-            ArrayAdapter meetingNoticeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, meetingNoticeList);
-            meetingNoticeListView.setAdapter(meetingNoticeAdapter);
-        } catch (NullPointerException e) {
-            Log.d("meeting", "Notice 부분 NullPoint Error");
+        noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
+        for (int i = 0; i < noticeList.size(); i++) {
+            meetingNoticeList.add(noticeList.get(i));
         }
+        ArrayAdapter meetingNoticeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, meetingNoticeList);
+        meetingNoticeListView.setAdapter(meetingNoticeAdapter);
    }
 
     @Nullable
@@ -60,21 +56,17 @@ public class MeetingFragment extends Fragment {
 
         //처음 화면 로드시 존재하는 일정 목록 띄우기
         List<Schedule> dbMeetingListViewItem = new ArrayList<>();
-        try {
-            dbMeetingListViewItem = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules;
-            for (int i = 0; i < dbMeetingListViewItem.size(); i++) {
-                MeetingListViewItem item = new MeetingListViewItem();
-                item.MeetingListViewItem_date = dbMeetingListViewItem.get(i).date;
-                item.MeetingListViewItem_name = dbMeetingListViewItem.get(i).title;
-                item.MeetingListViewItem_time = dbMeetingListViewItem.get(i).time;
-                item.MeetingListViewItem_place = dbMeetingListViewItem.get(i).place;
-                meetingListViewItem.add(item);
-                MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
-                meetingListView.setAdapter(meetingAdapter);
-            }
-        } catch (NullPointerException e) {
-            Log.d("meeting", "Schedule 부분 NullPoint Error");
+        dbMeetingListViewItem = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules;
+        for (int i = 0; i < dbMeetingListViewItem.size(); i++) {
+            MeetingListViewItem item = new MeetingListViewItem();
+            item.MeetingListViewItem_date = dbMeetingListViewItem.get(i).date;
+            item.MeetingListViewItem_name = dbMeetingListViewItem.get(i).title;
+            item.MeetingListViewItem_time = dbMeetingListViewItem.get(i).time;
+            item.MeetingListViewItem_place = dbMeetingListViewItem.get(i).place;
+            meetingListViewItem.add(item);
         }
+        MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
+        meetingListView.setAdapter(meetingAdapter);
 
         meetingAddNotice.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,21 +92,17 @@ public class MeetingFragment extends Fragment {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
                         List<Schedule> dbMeetingListViewItem = new ArrayList<>();
-                        try {
-                            dbMeetingListViewItem = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules;
-                            for (int i = 0; i < dbMeetingListViewItem.size(); i++) {
-                                MeetingListViewItem item = new MeetingListViewItem();
-                                item.MeetingListViewItem_date = dbMeetingListViewItem.get(i).date;
-                                item.MeetingListViewItem_name = dbMeetingListViewItem.get(i).title;
-                                item.MeetingListViewItem_time = dbMeetingListViewItem.get(i).time;
-                                item.MeetingListViewItem_place = dbMeetingListViewItem.get(i).place;
-                                meetingListViewItem.add(item);
-                            }
-                            MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
-                            meetingListView.setAdapter(meetingAdapter);
-                        } catch (NullPointerException e) {
-                            Log.d("meeting", "Schedule 부분 NullPoint Error");
+                        dbMeetingListViewItem = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules;
+                        for (int i = 0; i < dbMeetingListViewItem.size(); i++) {
+                            MeetingListViewItem item = new MeetingListViewItem();
+                            item.MeetingListViewItem_date = dbMeetingListViewItem.get(i).date;
+                            item.MeetingListViewItem_name = dbMeetingListViewItem.get(i).title;
+                            item.MeetingListViewItem_time = dbMeetingListViewItem.get(i).time;
+                            item.MeetingListViewItem_place = dbMeetingListViewItem.get(i).place;
+                            meetingListViewItem.add(item);
                         }
+                        MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
+                        meetingListView.setAdapter(meetingAdapter);
                     }
                 });
             }
