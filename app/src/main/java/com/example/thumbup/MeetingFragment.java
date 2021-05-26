@@ -51,21 +51,6 @@ public class MeetingFragment extends Fragment {
         //처음 화면 로드시 존재하는 공지 목록 띄우기
 //        showNotice();
 
-        //일정 관련
-        String[] meetingListViewItem_date = {"4/1", "4/8", "4/15", "4/22", "4/29", "5/6", "5/13", "5/20"};
-        String meetingListViewItem_name = "정기모임";
-        String meetingListViewItem_time = "15 : 00";
-        String meetingListViewItem_place = "성신여대";
-
-        for (int i = 0; i < 8; i++) {
-            MeetingListViewItem item = new MeetingListViewItem();
-            item.MeetingListViewItem_date = meetingListViewItem_date[i];
-            item.MeetingListViewItem_name = meetingListViewItem_name;
-            item.MeetingListViewItem_time = meetingListViewItem_time;
-            item.MeetingListViewItem_place = meetingListViewItem_place;
-            meetingListViewItem.add(item);
-        }
-
         meetingAddNotice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,11 +71,28 @@ public class MeetingFragment extends Fragment {
             public void onClick(View v) {
                 MeetingScheduleDialog meetingScheduleDialog = new MeetingScheduleDialog(getActivity());
                 meetingScheduleDialog.show();
+                MeetingScheduleDialog.setOnDismissListener() {
+                    //일정 관련
+                    List<String> meetingListViewItem_date = new ArrayList<>();
+                    List<String> meetingListViewItem_name = new ArrayList<>();
+                    List<String> meetingListViewItem_time = new ArrayList<>();
+                    List<String> meetingListViewItem_place = new ArrayList<>();
+                    for (int i = 0; i < meetingListViewItem.size(); i++) {
+                        meetingListViewItem_date.add(meetingListViewItem_date.get(i));
+                    }
+                    for (int i = 0; i < meetingListViewItem.size(); i++) {
+                        MeetingListViewItem item = new MeetingListViewItem();
+                        item.MeetingListViewItem_date = meetingListViewItem_date.get(i);
+                        item.MeetingListViewItem_name = meetingListViewItem_name.get(i);
+                        item.MeetingListViewItem_time = meetingListViewItem_time.get(i);
+                        item.MeetingListViewItem_place = meetingListViewItem_place.get(i);
+                        meetingListViewItem.add(item);
+                    }
+                    MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
+                    meetingListView.setAdapter(meetingAdapter);
+                }
             }
         });
-
-        MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
-        meetingListView.setAdapter(meetingAdapter);
         return meetingView;
     }
 }

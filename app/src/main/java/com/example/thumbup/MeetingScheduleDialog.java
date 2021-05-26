@@ -20,7 +20,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.example.thumbup.DataBase.DBCallBack;
 import com.example.thumbup.DataBase.DBManager;
+import com.example.thumbup.DataBase.Schedule;
 
 import java.util.Calendar;
 
@@ -92,7 +94,7 @@ public class MeetingScheduleDialog extends Dialog {
                 if (dbAmPm == "오후" && dbHour != 12) {
                     dbHour = dbHour + 12;
                 } else if (dbAmPm == "오전" && dbHour == 12) {
-                    dbHour = 0;
+                    dbHour = -12;
                 }
                 return false;
             }
@@ -136,7 +138,7 @@ public class MeetingScheduleDialog extends Dialog {
         Calendar calendar = Calendar.getInstance();
         mYear = calendar.get(Calendar.YEAR);
         scheduleYear.setText(String.valueOf(mYear));
-        //미정 선택시
+        //날짜 미정 선택시
         dateNull.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,12 +146,14 @@ public class MeetingScheduleDialog extends Dialog {
                     dateState = 1;
                     dateNull.setTextColor(Color.parseColor("#303F80"));
                     //날짜 초기화
-
                     scheduleYear.setText(""); scheduleYear.setBackgroundResource(R.drawable.schedule_disabled_box);
                     scheduleMonth.setText(""); scheduleMonth.setBackgroundResource(R.drawable.schedule_disabled_box);
                     scheduleDay.setText(""); scheduleDay.setBackgroundResource(R.drawable.schedule_disabled_box);
                     scheduleDay.setEnabled(false);
+                    //db에 들어갈 데이터 설정
                     dbDate = "미정";
+                    dbMonth = null;
+                    dbDay = null;
                 } else {
                     scheduleYear.setText(String.valueOf(mYear));
                     dateState = 0; scheduleYear.setBackgroundResource(border_round_gray);
@@ -157,7 +161,6 @@ public class MeetingScheduleDialog extends Dialog {
                     scheduleDay.setBackgroundResource(border_round_gray);
                     scheduleDay.setEnabled(true);
                     dateNull.setTextColor(Color.parseColor("#898A8D"));
-                    dbDate = "";
                 }
             }
         });
@@ -172,6 +175,7 @@ public class MeetingScheduleDialog extends Dialog {
                     scheduleHour.setText(""); scheduleHour.setBackgroundResource(R.drawable.schedule_disabled_box);
                     scheduleMinute.setText(""); scheduleMinute.setBackgroundResource(R.drawable.schedule_disabled_box);
                     dbTime = "미정";
+                    dbMinute = null;
                 } else {
                     timeState = 0;
                     timeNull.setTextColor(Color.parseColor("#898A8D"));
@@ -179,7 +183,6 @@ public class MeetingScheduleDialog extends Dialog {
                     schedule_ampm.setText(dbAmPm); schedule_ampm.setBackgroundResource(border_round_gray);
                     scheduleHour.setText(""); scheduleHour.setBackgroundResource(border_round_gray);
                     scheduleMinute.setText(""); scheduleMinute.setBackgroundResource(border_round_gray);
-                    dbTime = "";
                 }
             }
         });
@@ -226,24 +229,48 @@ public class MeetingScheduleDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 Log.d("name", "일정제목: " + scheduleName.getText().toString());
-                if (scheduleName.getText().toString() == "") { //일정제목이 비어있으면 확인버튼 안눌림
+                if (scheduleName.length() == 0) { //일정제목이 비어있을 때
                     scheduleName.setBackgroundResource(schedule_error_box);
                     scheduleName.setHint("일정 제목을 입력해주세요.");
-                }else {
+                }else { // 일정제목이 쓰여있을 때
                     dbScheduleName = scheduleName.getText().toString(); //일정 이름
                     scheduleName.setBackgroundResource(border_round_gray);
-                }
-                dbDay = scheduleDay.getText().toString(); //날짜_일(day)
-                dbDate = dbMonth + " / " + dbDay;
-                if (dbHour == 0) { // 시간
-                    dbTime = "00 : " + dbMinute;
-                } else {
-                    dbTime = dbHour + " : " + dbMinute;
-                }
-                Log.d("date", "날짜는 " + dbDate);
-                Log.d("time", "시간은 " + dbTime);
-                if (scheduleName.getText().toString() != "") {
-                    dismiss();
+                    dbDay = scheduleDay.getText().toString(); //날짜_일(day)
+                    //날짜
+                    if (dbMonth == null || dbDay == null) { //월 / 일 설정하지 않으면 날짜는 미정으로
+                        dbDate = "미정";
+                    } else {
+                        dbDate = dbMonth + " / " + dbDay;
+                    }
+
+                    //시간
+                    if (dbHour == 0 || dbMinute == null) { //시 분 설정하지 않으면 시간은 미정으로
+                        dbTime = "미정";
+                    }else if (dbHour == -12) { // 오전 12시일 때
+                        dbTime = "00 : " + dbMinute;
+                    } else {
+                        dbTime = dbHour + " : " + dbMinute;
+                    }
+                    Log.d("date", "날짜는 " + dbDate);
+                    Log.d("time", "시간은 " + dbTime);
+
+                    Schedule schedule = new Schedule();
+                    schedule.date = dbDate;
+                    schedule.time = dbTime;
+                    schedule.title = dbScheduleName;
+                    schedule.place = "미정";
+                    dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.add(schedule);
+                    dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k", new DBCallBack() {
+                        @Override
+                        public void success(Object data) {
+                            dismiss();
+                        }
+
+                        @Override
+                        public void fail(String errorMessage) {
+                            dismiss();
+                        }
+                    });
                 }
             }
         });
