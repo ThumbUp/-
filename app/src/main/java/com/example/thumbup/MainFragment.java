@@ -33,6 +33,7 @@ public class MainFragment extends Fragment {
     private Context mContext;
     DBManager dbManager = DBManager.getInstance();
 
+
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
@@ -81,11 +82,13 @@ public class MainFragment extends Fragment {
                             dlg2.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    EditText meetingKey = (EditText)((AlertDialog)dialog).findViewById(R.id.meetingKey);
+                                    EditText meetingKey = (EditText) linear.findViewById(R.id.meetingKey);
                                     String meeting_key = meetingKey.getText().toString();
 
                                     dbManager.JoinMeeting(meeting_key);
-
+                                    //안녕하세요! 이 부분이 모임 id를 넘기는 부분인데 계속 이 오류가 나서요..
+                                    //이 뿌Qqn부분 말씀하시는거나요?네네
+        //원격렉이 심해서 푸시해주시면 제꺼에서볼게요 넵!
                                     dialog.dismiss();
                                 }
                             })
