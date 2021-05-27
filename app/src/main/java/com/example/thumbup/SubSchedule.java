@@ -28,6 +28,7 @@ public class SubSchedule extends AppCompatActivity {
     Button re_res_btn;
     Switch switchView;
     TextView re_map_text;
+    DBManager dbManager = DBManager.getInstance();
 
     DBManager dbManager = DBManager.getInstance();
 

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -33,7 +34,7 @@ public class MeetingFragment extends Fragment {
     ArrayList<String> meetingNoticeList = new ArrayList<>();
     DBManager dbManager = DBManager.getInstance();
 
-   void showNotice() { //공지 보여주는 것
+    void showNotice() { //공지 보여주는 것
         noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
         for (int i = 0; i < noticeList.size(); i++) {
             meetingNoticeList.add(noticeList.get(i));
@@ -49,7 +50,7 @@ public class MeetingFragment extends Fragment {
         //}
         ArrayAdapter meetingNoticeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, meetingNoticeList);
         meetingNoticeListView.setAdapter(meetingNoticeAdapter);
-    }
+   }
 
     void showSchedule(){
         ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
