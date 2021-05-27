@@ -4,11 +4,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.thumbup.DataBase.DBManager;
+import com.example.thumbup.DataBase.Meeting;
 import com.example.thumbup.DataBase.Schedule;
 
 import java.util.ArrayList;
@@ -26,8 +29,10 @@ public class MeetingFragment extends Fragment {
     ListView meetingListView;
     TextView meetingAddNotice;
     TextView meetingAddSchedule;
+    TextView meetingTitle;
     List<String> noticeList = new ArrayList<>(); //공지목록
     ArrayList<String> meetingNoticeList = new ArrayList<>();
+    List<Meeting> dbUserMeetingList = new ArrayList<>();
     DBManager dbManager = DBManager.getInstance();
     ImageButton showSchedule;
 
@@ -40,11 +45,20 @@ public class MeetingFragment extends Fragment {
         meetingNoticeListView.setAdapter(meetingNoticeAdapter);
    }
 
+   void popup_meeting(List _userMeetingList) {
+       PopupMenu meetingpopup = new PopupMenu(getActivity().getApplicationContext(), meetingTitle);
+       Menu meetingMenu = meetingpopup.getMenu();
+       for (int i = 0; i < _userMeetingList.size(); i++) {
+           //모임 가져와서 넣기
+       }
+   }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View meetingView = inflater.inflate(R.layout.meeting, container, false);
 
+        meetingTitle = (TextView) meetingView.findViewById(R.id.meeting_title);
         meetingNoticeListView = (ListView) meetingView.findViewById(R.id.meeting_noticeList);
         meetingListView = (ListView) meetingView.findViewById(R.id.meeting_list);
         meetingAddNotice = (TextView) meetingView.findViewById(R.id.meeting_addNotice);
@@ -80,10 +94,6 @@ public class MeetingFragment extends Fragment {
                     public void onDismiss(DialogInterface dialogInterface) {
                         List<Schedule> dbMeetingListViewItem = new ArrayList<>();
                         dbMeetingListViewItem = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules;
-                        List<String> meetingListViewItem_date = new ArrayList<>();
-                        List<String> meetingListViewItem_name = new ArrayList<>();
-                        List<String> meetingListViewItem_time = new ArrayList<>();
-                        List<String> meetingListViewItem_place = new ArrayList<>();
                         for (int i = 0; i < dbMeetingListViewItem.size(); i++) {
                             MeetingListViewItem item = new MeetingListViewItem();
                             item.MeetingListViewItem_date = dbMeetingListViewItem.get(i).date;
@@ -103,7 +113,11 @@ public class MeetingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //모임 목록 뜨게끔
-                List<String> dbMeetingList = new ArrayList<>();
+               List<String> dbMeetingList = new ArrayList<>();
+               dbUserMeetingList = (ArrayList<Meeting>) dbManager.participatedMeetings;
+               for( String key : dbManager.participatedMeetings.keySet() ){
+                    dbUserMeetingList.add(dbManager.participatedMeetings.get(key));
+               }
             }
         });
         return meetingView;
