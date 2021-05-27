@@ -44,9 +44,7 @@ public class MeetingFragment extends Fragment {
 
     void showNoticeAdd(){
         noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
-        //for (int i = 0; i < noticeList.size(); i++) {
         meetingNoticeList.add(noticeList.get(noticeList.size()-1));
-        //}
         ArrayAdapter meetingNoticeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, meetingNoticeList);
         meetingNoticeListView.setAdapter(meetingNoticeAdapter);
     }
@@ -79,7 +77,7 @@ public class MeetingFragment extends Fragment {
         meetingAddSchedule = (TextView) meetingView.findViewById(R.id.meeting_addSchedule);
         ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
 
-        //처음 화면 로드시 존재하는 공지 목록 띄우기
+        //처음 화면 로드시 존재하는 공지/일정 목록 띄우기
         showNotice();
         showSchedule();
 
@@ -91,9 +89,8 @@ public class MeetingFragment extends Fragment {
                 meetingNoticeDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        //공지 추가
+                        //공지 추가 시, 추가한 공지만 띄우기
                         showNoticeAdd();
-                        //showNotice();
                     }
                 });
             }
