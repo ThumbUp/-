@@ -79,8 +79,8 @@ public class HomeActivity extends AppCompatActivity {
                 transaction.commit();
                 break;
             case 3:
-                MoneyFragment moneyFragment = new MoneyFragment();
-                transaction.replace(R.id.main_frame, moneyFragment);
+                MoneyAddFragment moneyaddFragment = new MoneyAddFragment();
+                transaction.replace(R.id.main_frame, moneyaddFragment);
                 transaction.commit();
                 break;
             case 4:

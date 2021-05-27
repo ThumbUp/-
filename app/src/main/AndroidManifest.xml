@@ -44,7 +44,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCxKA49sPjrLo0hvNDkgcBt3VVwQuiQ94s" />
 
-        <activity android:name=".MoneyAddActivity" />
+<!--        <activity android:name=".MoneyAddActivity" />-->
         <activity android:name=".SubSchedule" />
         <activity android:name=".MainActivity">
         </activity>
