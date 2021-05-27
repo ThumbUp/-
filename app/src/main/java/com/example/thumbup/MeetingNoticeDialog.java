@@ -3,13 +3,15 @@ package com.example.thumbup;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
+import com.example.thumbup.DataBase.DBCallBack;
+import com.example.thumbup.DataBase.DBManager;
 
 public class MeetingNoticeDialog extends Dialog {
     public MeetingNoticeDialog(@NonNull Context context) {
@@ -20,7 +22,8 @@ public class MeetingNoticeDialog extends Dialog {
     Button dialogBack;
     EditText noticeContent;
     String toAddNotice;
-    ArrayList<String> noticeList= new ArrayList<>();
+    DBManager dbManager = DBManager.getInstance();
+    private OnDismissListener onDismissListener = null;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,12 +36,25 @@ public class MeetingNoticeDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 toAddNotice = noticeContent.getText().toString();
-                noticeList.add(toAddNotice);
-                dismiss();
+                dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices.add(toAddNotice);
+                Log.e("notice - ", "update before");
+                dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k", new DBCallBack() {
+                    @Override
+                    public void success(Object data) {
+                        dismiss();
+                        Log.e("notice - ", "success");
+                    }
+
+                    @Override
+                    public void fail(String errorMessage) {
+                        dismiss();
+                        Log.e("notice - ", "fail");
+                    }
+                });
             }
         });
 
-        dialogSave.setOnClickListener(new View.OnClickListener() {
+        dialogBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();

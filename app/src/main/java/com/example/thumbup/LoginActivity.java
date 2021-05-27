@@ -1,5 +1,6 @@
 package com.example.thumbup;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.thumbup.DataBase.DBCallBack;
 import com.example.thumbup.DataBase.DBManager;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -40,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private CallbackManager mFBCallbackManger;
+    private DBManager dbManager = DBManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,10 +181,25 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            Intent intent = new Intent(this, AfterActivity.class);
-            startActivity(intent);
-            DBManager.getInstance().uid = user.getUid();
-            finish();
+            dbManager.uid = user.getUid();
+            Context context = this;
+            dbManager.Lock(this);
+            dbManager.AddUser(user.getUid(), user.getDisplayName(), user.getEmail(), new DBCallBack() {
+                @Override
+                public void success(Object data) {
+                    Intent intent = new Intent(context, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+                //이거 푸시해보실래요ㅕ? 제꺼에서 좀 볼게요 승연님이 하신거까지요?
+                //넵 이거 그대로
+
+                @Override
+                public void fail(String errorMessage) {
+
+                }
+            });
         }
     }
 }
