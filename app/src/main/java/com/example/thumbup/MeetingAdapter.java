@@ -1,15 +1,22 @@
 package com.example.thumbup;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class MeetingAdapter extends BaseAdapter {
     LayoutInflater meetingAdapterInflater = null;
@@ -32,7 +39,7 @@ public class MeetingAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
@@ -54,6 +61,20 @@ public class MeetingAdapter extends BaseAdapter {
         meetingListViewItem_name.setText(meetingListViewItem.get(position).MeetingListViewItem_name);
         meetingListViewItem_time.setText(meetingListViewItem.get(position).MeetingListViewItem_time);
         meetingListViewItem_place.setText(meetingListViewItem.get(position).MeetingListViewItem_place);
+
+        LinearLayout clickedListView = (LinearLayout) convertView.findViewById(R.id.meeting_listview_schedule);
+        clickedListView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                long click_position = getItemId(position);
+                String s = ""+click_position;
+                Log.e("Click list ID : ", s);
+
+                Intent intent = new Intent(getApplicationContext(), SubSchedule.class);
+                intent.putExtra("ListID", s);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getApplicationContext().startActivity(intent);
+            }
+        });
         return convertView;
     }
 }

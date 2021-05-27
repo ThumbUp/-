@@ -260,15 +260,18 @@ public class MeetingScheduleDialog extends Dialog {
                     schedule.title = dbScheduleName;
                     schedule.place = "미정";
                     dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.add(schedule);
+                    Log.e("schedule - ", "update before");
                     dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k", new DBCallBack() {
                         @Override
                         public void success(Object data) {
                             dismiss();
+                            Log.e("schedule - ", "success");
                         }
 
                         @Override
                         public void fail(String errorMessage) {
                             dismiss();
+                            Log.e("schedule - ", "fail");
                         }
                     });
                 }
