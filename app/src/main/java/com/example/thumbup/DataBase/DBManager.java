@@ -25,7 +25,7 @@ import androidx.annotation.NonNull;
 
 public class DBManager {
     private static DBManager mDBManager = null;
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    protected DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
     public String uid;      //현재 로그인 된 유저 uid
     public User userData;   //현재 로그인 된 유저 정보
@@ -44,6 +44,10 @@ public class DBManager {
     //여기까지 되셧나요? 네!
     //미팅추가하는 부분은 바로 DB에 업데이트 되어야하는 내요이라서
     //Update함수는 쓸필요가 없어욤
+
+    public DatabaseReference returnMDB(){
+        return mDatabase;
+    }
 
     public static DBManager getInstance() {
         if (mDBManager == null)
