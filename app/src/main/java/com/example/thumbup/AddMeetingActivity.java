@@ -38,7 +38,7 @@ public class AddMeetingActivity extends AppCompatActivity {
     DBManager dbManager = DBManager.getInstance();
     private final int GET_GALLERY_IMAGE = 200;
     ImageView meetingImg;
-    Button addMeetingImg;
+    TextView addMeetingImg;
     EditText addMeetingTitle;
     EditText addMeetingInfo;
     Button addAccept;
@@ -51,7 +51,7 @@ public class AddMeetingActivity extends AppCompatActivity {
         setContentView(R.layout.dialog_main_add_meeting);
 
         meetingImg = findViewById(R.id.meetingImg);
-        addMeetingImg = findViewById(R.id.add_meetingImg);
+        addMeetingImg = findViewById(R.id.addMeeting_text);
         addMeetingTitle = findViewById(R.id.add_meetingTitle);
         addMeetingInfo = findViewById(R.id.add_meetingInfo);
         addAccept = findViewById(R.id.add_accept);
