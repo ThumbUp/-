@@ -1,6 +1,7 @@
 package com.example.thumbup;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,8 +9,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -25,6 +29,8 @@ import com.example.thumbup.DataBase.Schedule;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class MeetingFragment extends Fragment {
     String meetingId = ""; //선택된 모임의 아이디(=코드)
     TextView meetingName; //선택된 모임의 이름 넣을 공간
@@ -38,6 +44,7 @@ public class MeetingFragment extends Fragment {
     List<String> noticeList = new ArrayList<>(); //공지목록
     ArrayList<String> meetingNoticeList = new ArrayList<>();
     DBManager dbManager = DBManager.getInstance();
+    ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
 
     public MeetingFragment(String _meetingId) {
         meetingId = _meetingId;
@@ -66,6 +73,8 @@ public class MeetingFragment extends Fragment {
         meetingPopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                Log.d("meetingIndex", "meetingIndex" + item.getItemId());
+                int meetingIndex = item.getItemId();
                 meetingId = meetingIdList.get(item.getItemId());
                 Log.d("meetingId", "meetingId: " + meetingId);
                 meetingName.setText(item.getTitle().toString());
@@ -119,7 +128,7 @@ public class MeetingFragment extends Fragment {
         meetingAddSchedule = (TextView) meetingView.findViewById(R.id.meeting_addSchedule);
         ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
 
-        //처음 화면 로드시 존재하는 공지 목록 띄우기
+        //처음 화면 로드시 존재하는 공지/일정 목록 띄우기
         if (meetingId != "") {
             showNotice();
             showSchedule();
