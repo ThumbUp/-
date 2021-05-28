@@ -53,9 +53,10 @@ public class MeetingFragment extends Fragment {
 
     }
     //유저가 가입한 모임 팝업메뉴 생성
-    PopupMenu meetingPopup = new PopupMenu(getActivity().getApplicationContext(), meetingUserMeetingList);
-    Menu meetingMenu = meetingPopup.getMenu();
+
     void showMeeting() {
+        PopupMenu meetingPopup = new PopupMenu(getActivity(), meetingUserMeetingList);
+        Menu meetingMenu = meetingPopup.getMenu();
         for( String key : dbManager.participatedMeetings.keySet() ){
             Log.e("LIST", "participatedMeetings" + dbManager.participatedMeetings.keySet());
             dbUserMeetingList.add(dbManager.participatedMeetings.get(key));
@@ -63,19 +64,21 @@ public class MeetingFragment extends Fragment {
             meetingIdList.add(key);
             Log.e("LIST","KEY " + key + "   meetingIdList " + dbUserMeetingList);
         }
-        for (int i = 0; i < dbUserMeetingList.size(); i++) {
-            meetingMenu.add((CharSequence) dbUserMeetingList.get(i).title);
+        if (meetingMenu.size() != dbUserMeetingList.size()) {
+            for (int i = 0; i < dbUserMeetingList.size(); i++) {
+                meetingMenu.add((CharSequence) dbUserMeetingList.get(i).title);
+            }
         }
         meetingPopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                int meetingIndex = item.getItemId();
                 meetingId = meetingIdList.get(item.getItemId());
                 Log.d("meetingId", "meetingId: " + meetingId);
-                meetingName.setText(meetingMenu.getItem(meetingIndex).toString());
+                meetingName.setText(item.getTitle().toString());
                 return false;
             }
         });
+        meetingPopup.show();
     }
 
     void showNotice() { //공지 보여주는 것
@@ -136,17 +139,17 @@ public class MeetingFragment extends Fragment {
         meetingUserMeetingList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                meetingPopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        int meetingIndex = item.getItemId();
-                        meetingId = meetingIdList.get(item.getItemId());
-                        Log.d("meetingId", "meetingId: " + meetingId);
-                        meetingName.setText(meetingMenu.getItem(meetingIndex).toString());
-                        return false;
-                    }
-                });
-                meetingPopup.show();
+//                meetingPopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        int meetingIndex = item.getItemId();
+//                        meetingId = meetingIdList.get(item.getItemId());
+//                        Log.d("meetingId", "meetingId: " + meetingId);
+//                        meetingName.setText(meetingMenu.getItem(meetingIndex).toString());
+//                        return false;
+//                    }
+//                });
+                showMeeting();
             }
         });
 
