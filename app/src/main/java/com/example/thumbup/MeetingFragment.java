@@ -44,6 +44,13 @@ public class MeetingFragment extends Fragment {
     ArrayList<String> meetingNoticeList = new ArrayList<>();
     DBManager dbManager = DBManager.getInstance();
 
+    public MeetingFragment(String _meetingId) {
+        meetingId = _meetingId;
+    }
+
+    public MeetingFragment() {
+
+    }
     void showMeeting() {
         for( String key : dbManager.participatedMeetings.keySet() ){
             dbUserMeetingList.add(dbManager.participatedMeetings.get(key));
