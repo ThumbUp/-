@@ -32,7 +32,7 @@ import java.util.List;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class MeetingFragment extends Fragment {
-    String meetingId; //선택된 모임의 아이디(=코드)
+    String meetingId = ""; //선택된 모임의 아이디(=코드)
     TextView meetingName; //선택된 모임의 이름 넣을 공간
     LinearLayout meetingUserMeetingList;
     ListView meetingNoticeListView;
@@ -77,7 +77,7 @@ public class MeetingFragment extends Fragment {
     }
 
     void showNotice() { //공지 보여주는 것
-        noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
+        noticeList = dbManager.participatedMeetings.get(meetingId).notices;
         for (int i = 0; i < noticeList.size(); i++) {
             meetingNoticeList.add(noticeList.get(i));
         }
@@ -123,8 +123,10 @@ public class MeetingFragment extends Fragment {
         ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
 
         //처음 화면 로드시 존재하는 공지 목록 띄우기
-        showNotice();
-        showSchedule();
+        if (meetingId != "") {
+            showNotice();
+            showSchedule();
+        }
 
         meetingUserMeetingList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,28 +138,30 @@ public class MeetingFragment extends Fragment {
         meetingAddNotice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MeetingNoticeDialog meetingNoticeDialog = new MeetingNoticeDialog(getActivity());
-                meetingNoticeDialog.show();
-                meetingNoticeDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        //공지 추가
-                        showNoticeAdd();
-                        //showNotice();
-                    }
-                });
+                if (meetingId != "") {
+                    MeetingNoticeDialog meetingNoticeDialog = new MeetingNoticeDialog(getActivity());
+                    meetingNoticeDialog.show();
+                    meetingNoticeDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            //공지 추가
+                            showNoticeAdd();
+                        }
+                    });
+                }
             }
         });
 
         meetingAddSchedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MeetingScheduleDialog meetingScheduleDialog = new MeetingScheduleDialog(getActivity());
-                meetingScheduleDialog.show();
-                meetingScheduleDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        showSchedule();
+                if (meetingId != "") {
+                    MeetingScheduleDialog meetingScheduleDialog = new MeetingScheduleDialog(getActivity());
+                    meetingScheduleDialog.show();
+                    meetingScheduleDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            showSchedule();
 
 //                        List<Schedule> dbMeetingListViewItem = new ArrayList<>();
 //                        dbMeetingListViewItem = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules;
@@ -172,8 +176,10 @@ public class MeetingFragment extends Fragment {
 //                        MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
 //                        meetingListView.setAdapter(meetingAdapter);
 
-                    }
-                });
+                        }
+                    });
+                }
+
             }
         });
 
