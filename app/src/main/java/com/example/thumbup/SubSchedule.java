@@ -37,6 +37,7 @@ public class SubSchedule extends AppCompatActivity {
     TextView title; //일정명
     TextView date; //날짜
     TextView time; //시간
+    TextView personal;
 
     ImageView back_Btn;
     Button satrtLoc_Btn;
@@ -51,11 +52,14 @@ public class SubSchedule extends AppCompatActivity {
     int clickedIndex;
     String myKey;
 
+    boolean meetingIn = false;
+
     List<Schedule> schedule = new ArrayList<>(); //일정
 
     String DBtitle; //DB 일정명
     String DBdate; //날짜
     String DBtime; //시간
+    int DBpersonal;
 
     String roc; //설정 위치
     double roc_lati, roc_longi; //해당 위치의 위도와 경도 저장
@@ -92,6 +96,13 @@ public class SubSchedule extends AppCompatActivity {
         time = findViewById(R.id.meet_time2);
         time.setText(DBtime); //시간 변경
 
+        //dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k");
+        DBpersonal = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.size(); //int type
+        personal = findViewById(R.id.meet_personnel2); //textView
+        Log.e("PERSON", DBpersonal+"");
+        personal.setText(DBpersonal+"");
+
+
         back_Btn = findViewById(R.id.backBtn);
         satrtLoc_Btn = findViewById(R.id.my_btn1);
         my_roc = findViewById(R.id.my_roc2);
@@ -111,31 +122,14 @@ public class SubSchedule extends AppCompatActivity {
         String name = my.name;
         Log.e("MY DATA | ", name);
 
+        //COPY
+        //schedule.get(clickedIndex).members.add(my);
+
         // 참여 유무 스위치 체인지
         switchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     //True이면 할 일
-                    //schedule.get(clickedIndex).members.add(my); //배열, DB 추가
-
-                    /*DatabaseReference databaseReference =
-                            mdb.child("Meetings").child("-MaZIcU6ZjxsYF_iX-6k").child("schedules").child(clickedIndex+"").child("members");
-                    databaseReference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                                myKey = postSnapshot.getKey();
-                                Log.e("KEY", myKey);
-                                //schedule.get(clickedIndex).members.add(my);
-                            }
-                        }
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });*/
-
-                    //저렇게 변수에 저장안하고, 실시간으로 가져와서 쓴거에요
                     boolean meetingIn = false;
                     List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
                     for (int i = 0; i < users.size(); i++) {
@@ -153,6 +147,9 @@ public class SubSchedule extends AppCompatActivity {
                         @Override
                         public void success(Object data) {
                             dbManager.UnLock();
+                            Log.e("PERSON ADD SIZE",
+                                    dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.size() + "");
+                            personal.setText(dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.size()+"");
                         }
 
                         @Override
@@ -160,7 +157,7 @@ public class SubSchedule extends AppCompatActivity {
 
                         }
                     });
-                    Log.e("SIZE", schedule.get(clickedIndex).members.size() + "");
+                    //Log.e("SIZE", schedule.get(clickedIndex).members.size() + "");
 
                     satrtLoc_Btn.setText("시작 위치 설정하기");
                     satrtLoc_Btn.setEnabled(true);
@@ -171,6 +168,10 @@ public class SubSchedule extends AppCompatActivity {
                     //제가 아까 해당 변수를 다 새로가져온다고 했잖아요? 아네넨
                     //그래서 똑같은 주소를 가진my가 없으니 삭제가 안되는거죠 리스트에서
                     //그래서 그냥 email같은 리스트값이 잇으면 삭제하게 바꿧어요 네! 이해했씁니ㅏㄷ!
+                    //굳굳 감사해요 ㅎ!!
+                    //아니에요 그리고 updateMeeting에 콜백으로 작업해줘야 그
+                    //그 버튼을 뭐라하죠! 오니쪽오른쪽 왓다갓다하는것!스위치요?>? 네네 스위치 마구마구 누르면
+                    //오류날 가능성이 농후해서
                     List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
                     for (int i = 0; i < users.size(); i++) {
                         if (users.get(i).email.equals(my.email) == true) {
@@ -178,14 +179,18 @@ public class SubSchedule extends AppCompatActivity {
                             break;
                         }
                     }
-                    //아니에요 그리고 updateMeeting에 콜백으로 작업해줘야
-                    // 스위치 업데이트 로딩
+
                     dbManager.Lock(context);
                     dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k", new DBCallBack() {
                         @Override
                         public void success(Object data) {
                             dbManager.UnLock();
+                            Log.e("PERSON REMOVE SIZE",
+                                    dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.size() + "");
+                            personal.setText(dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.size()+"");
+
                         }
+
                         @Override
                         public void fail(String errorMessage) {
 
