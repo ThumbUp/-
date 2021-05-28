@@ -36,7 +36,8 @@ public class MoneyAddFragment extends Fragment {
     }
 
     @Nullable
-    public View onCreate(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View MoneyAddView = inflater.inflate(R.layout.activity_money_add, container, false);
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_money_add);
@@ -44,11 +45,8 @@ public class MoneyAddFragment extends Fragment {
         moneyAddContext = this;
         money_add_mDate = (TextView) MoneyAddView.findViewById(R.id.meetingDate2);
         money_add_calBtn = (ImageView) MoneyAddView.findViewById(R.id.calendarBtn);
-//        backBtn = (ImageView) findViewById(R.id.backBtn);
         menuBox = (LinearLayout) MoneyAddView.findViewById(R.id.menuBox);
         addMenu = (RelativeLayout) MoneyAddView.findViewById(R.id.addMenu);
-//        showSchedule = (ImageButton) findViewById(R.id.showSchedule);
-//        scheduleName = (TextView) findViewById(R.id.schedule_name);
         place = (EditText) MoneyAddView.findViewById(R.id.placeInput);
         price = (EditText) MoneyAddView.findViewById(R.id.placeMenuPriceInput);
 
