@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -22,13 +21,11 @@ import java.util.GregorianCalendar;
 
 public class MoneyAddFragment extends Fragment {
     public static MoneyAddFragment moneyAddContext;
-    TextView money_add_mDate;
+    TextView money_add_mDate, price_sum;
     ImageView money_add_calBtn;
     int mYear, mMonth, mDay;
     LinearLayout menuBox;
     RelativeLayout addMenu;
-    ImageButton showSchedule;
-    TextView scheduleName;
     EditText place, price;
 
     void updateDate(){
@@ -40,7 +37,6 @@ public class MoneyAddFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View MoneyAddView = inflater.inflate(R.layout.activity_money_add, container, false);
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_money_add);
 
         moneyAddContext = this;
         money_add_mDate = (TextView) MoneyAddView.findViewById(R.id.meetingDate2);
@@ -49,23 +45,7 @@ public class MoneyAddFragment extends Fragment {
         addMenu = (RelativeLayout) MoneyAddView.findViewById(R.id.addMenu);
         place = (EditText) MoneyAddView.findViewById(R.id.placeInput);
         price = (EditText) MoneyAddView.findViewById(R.id.placeMenuPriceInput);
-
-        /*//이전 버튼 클릭시 액티비티 종료
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });*/
-
-
-
-        /*showSchedule.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSchedule();
-            }
-        });*/
+        price_sum = (TextView) MoneyAddView.findViewById(R.id.meetingPriceSum);
 
         //현재 날짜와 시간을 가져오기위한 Calendar 인스턴스 선언
         Calendar money_add_calendar = new GregorianCalendar();
@@ -95,10 +75,7 @@ public class MoneyAddFragment extends Fragment {
             }
         });
 
-//        MenuItem menuItem = new MenuItem();
-//        menuItem.MenuItem_title =*//*
-
-       /* //메뉴 추가시 메뉴, 가격 추가
+        /*//메뉴 추가시 메뉴, 가격 추가
         addMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,6 +83,26 @@ public class MoneyAddFragment extends Fragment {
                 menuInflater.inflate(R.layout.inflater_money_add_menu, menuBox, true);
             }
         });*/
+
+
+        //덧셈 버튼 클릭시
+
+        price_sum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText number1 = (EditText) MoneyAddView.findViewById(R.id.placeMenuPriceInput1);
+                EditText number2 = (EditText) MoneyAddView.findViewById(R.id.placeMenuPriceInput2);
+                EditText number3 = (EditText) MoneyAddView.findViewById(R.id.placeMenuPriceInput3);
+
+                TextView result = (TextView) MoneyAddView.findViewById(R.id.meetingPriceSum2);
+
+                int n1 = Integer.parseInt(number1.getText().toString());
+                int n2 = Integer.parseInt(number2.getText().toString());
+                int n3 = Integer.parseInt(number3.getText().toString());
+
+                result.setText(Integer.toString(n1+n2+n3));
+            }
+        });
 
         return MoneyAddView;
     }

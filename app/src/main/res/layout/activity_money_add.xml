@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="35dp"
         android:orientation="horizontal"
         android:gravity="center_vertical">
 
@@ -67,7 +67,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="35dp"
         android:orientation="vertical"
         android:gravity="center_vertical"
         android:background="@drawable/box_round_blue">
@@ -165,6 +165,64 @@
 
             <EditText
                 android:id="@+id/placeMenuPriceInput2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:layout_toRightOf="@id/placeMenuPrice"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:theme="@style/InputTheme"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menuBox3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:background="@drawable/box_round_blue">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/placeMenu3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="장소"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:textColor="#949494" />
+
+            <EditText
+                android:id="@+id/placeInput3"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:theme="@style/InputTheme"/>
+
+            <TextView
+                android:id="@+id/placeMenuPrice3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="가격"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:textColor="#949494"
+                android:layout_marginLeft="18dp"/>
+
+            <EditText
+                android:id="@+id/placeMenuPriceInput3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"

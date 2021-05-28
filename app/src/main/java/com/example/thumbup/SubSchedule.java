@@ -1,39 +1,54 @@
 package com.example.thumbup;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.thumbup.DataBase.DBManager;
 
 public class SubSchedule extends AppCompatActivity {
 
+    ImageView back_Btn;
     Button satrtLoc_Btn;
     TextView my_roc;
     Button re_cafe_btn;
     Button re_res_btn;
     Switch switchView;
     TextView re_map_text;
+    DBManager dbManager = DBManager.getInstance();
+
+//    DBManager dbManager = DBManager.getInstance();
+
+    int clickedIndex;
+
+    String DBtitle; //일정명
+    String DBdate; //날짜
+    String DBtime; //시간
 
     String roc; //설정 위치
     double roc_lati, roc_longi; //해당 위치의 위도와 경도 저장
+
+    void titleGetDB(){
+        //DBtitle = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_schedule);
 
+        Intent outIntent = getIntent();
+        String index = outIntent.getStringExtra("ListID");
+        clickedIndex = Integer.parseInt(index); //선택 일정 인덱스
+
+        back_Btn = findViewById(R.id.backBtn);
         satrtLoc_Btn = findViewById(R.id.my_btn1);
         my_roc = findViewById(R.id.my_roc2);
         re_cafe_btn = findViewById(R.id.re_cafe_btn);
@@ -56,6 +71,14 @@ public class SubSchedule extends AppCompatActivity {
                     satrtLoc_Btn.setText("일정 미참여 시, 시작 위치를 설정할 수 없습니다");
                     satrtLoc_Btn.setEnabled(false);
                 }
+            }
+        });
+
+        // 뒤로가기 버튼 클릭
+        back_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
