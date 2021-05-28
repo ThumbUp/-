@@ -1,66 +1,66 @@
 package com.example.thumbup;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class MoneyAddActivity extends AppCompatActivity {
-    public static Context moneyAddContext;
-    ImageView backBtn;
+public class MoneyAddFragment extends Fragment {
+    public static MoneyAddFragment moneyAddContext;
     TextView money_add_mDate;
     ImageView money_add_calBtn;
     int mYear, mMonth, mDay;
     LinearLayout menuBox;
     RelativeLayout addMenu;
+    ImageButton showSchedule;
+    TextView scheduleName;
+    EditText place, price;
 
     void updateDate(){
         money_add_mDate.setText(String.format("%d년 %d월 %d일", mYear, mMonth + 1, mDay));
     }
-//    public void showSchedule() {
-//        PopupMenu schedulePopup = new PopupMenu(getApplicationContext(), scheduleName);
-//        Menu scheduleMenu = schedulePopup.getMenu();
-//        scheduleMenu.add("일정1");
-//        scheduleMenu.add("일정2");
-//        schedulePopup.show();
-//    }
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View MoneyAddView = inflater.inflate(R.layout.activity_money_add, container, false);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_money_add);
+//        setContentView(R.layout.activity_money_add);
 
         moneyAddContext = this;
-        money_add_mDate = (TextView) findViewById(R.id.meetingDate2);
-        money_add_calBtn = (ImageView) findViewById(R.id.calendarBtn);
-        /*backBtn = (ImageView) findViewById(R.id.backBtn);
-        menuBox = (LinearLayout) findViewById(R.id.menuBox);*/
-        addMenu = (RelativeLayout) findViewById(R.id.addMenu);/*
-        showSchedule = (ImageButton) findViewById(R.id.showSchedule);
-        scheduleName = (TextView) findViewById(R.id.schedule_name);*/
+        money_add_mDate = (TextView) MoneyAddView.findViewById(R.id.meetingDate2);
+        money_add_calBtn = (ImageView) MoneyAddView.findViewById(R.id.calendarBtn);
+        menuBox = (LinearLayout) MoneyAddView.findViewById(R.id.menuBox);
+        addMenu = (RelativeLayout) MoneyAddView.findViewById(R.id.addMenu);
+        place = (EditText) MoneyAddView.findViewById(R.id.placeInput);
+        price = (EditText) MoneyAddView.findViewById(R.id.placeMenuPriceInput);
 
-        //이전 버튼 클릭시 액티비티 종료
+        /*//이전 버튼 클릭시 액티비티 종료
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
-        });
+        });*/
 
 
 
-       /* showSchedule.setOnClickListener(new View.OnClickListener() {
+        /*showSchedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showSchedule();
@@ -90,18 +90,24 @@ public class MoneyAddActivity extends AppCompatActivity {
         money_add_calBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(MoneyAddActivity.this, mDateSetListener, mYear,
+                new DatePickerDialog(MoneyAddView.getContext(), mDateSetListener, mYear,
                         mMonth, mDay).show();
             }
         });
 
-        //메뉴 추가시 메뉴, 가격 추가
+//        MenuItem menuItem = new MenuItem();
+//        menuItem.MenuItem_title =*//*
+
+       /* //메뉴 추가시 메뉴, 가격 추가
         addMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LayoutInflater menuInflater = (LayoutInflater) getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
                 menuInflater.inflate(R.layout.inflater_money_add_menu, menuBox, true);
             }
-        });
+        });*/
+
+        return MoneyAddView;
     }
 }
+
