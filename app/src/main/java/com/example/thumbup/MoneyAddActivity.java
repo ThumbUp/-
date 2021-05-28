@@ -46,19 +46,9 @@ public class MoneyAddActivity extends AppCompatActivity {
         money_add_calBtn = (ImageView) findViewById(R.id.calendarBtn);
         /*backBtn = (ImageView) findViewById(R.id.backBtn);
         menuBox = (LinearLayout) findViewById(R.id.menuBox);*/
-        addMenu = (RelativeLayout) findViewById(R.id.addMenu);/*
-        showSchedule = (ImageButton) findViewById(R.id.showSchedule);
+//        addMenu = (RelativeLayout) findViewById(R.id.addMenu);
+        /*showSchedule = (ImageButton) findViewById(R.id.showSchedule);
         scheduleName = (TextView) findViewById(R.id.schedule_name);*/
-
-        //이전 버튼 클릭시 액티비티 종료
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-
 
        /* showSchedule.setOnClickListener(new View.OnClickListener() {
             @Override
