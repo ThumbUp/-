@@ -32,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 public class SubSchedule extends AppCompatActivity {
 
@@ -80,11 +81,6 @@ public class SubSchedule extends AppCompatActivity {
         //DB에서 모임명 가져올 것
         context = this;
         schedule = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules; //선택 일정 DB
-        //안됬던 이유는 현제 DB에서 파이어베이스 내용이 바뀔때마다, 실시간으로 정보를 db매니저에 가져온단말이에요?네넵
-        //그래서 participatedMeetings 내부 내용이 db가 업데이트 될때마다 새로운 변수로 바뀌는데,
-        //위에 schedule = ~~ 이 코드는 처음 화면이 만들어질때만 실행되는 코드잖아요?네
-        //그래서 처음 updateMeeting한후에 새롭게 미팅정보가 바뀌니까 자동으로 업데이트되서, 변수가 바뀌는데
-        //위의 shcedule은 옛날 변수를 들고있는거죠 이해하셧나용 어.. 그럼 어떻게 수정하신거죠?!
 
         Intent outIntent = getIntent();
         String index = outIntent.getStringExtra("ListID");
@@ -131,6 +127,7 @@ public class SubSchedule extends AppCompatActivity {
         String name = my.name;
         Log.e("MY DATA | ", name);
 
+        // 일정 멤버에 내가 있으면 스위치 ON, 없으면 OFF
         DatabaseReference databaseReference =
                 mdb.child("Meetings").child("-MaZIcU6ZjxsYF_iX-6k").child("schedules").child(clickedIndex+"").child("members");
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -154,12 +151,12 @@ public class SubSchedule extends AppCompatActivity {
             }
         });
 
-        // 참여 유무 스위치 체인지
+        // 참여 유무 스위치 체인지 시, 변화
         switchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 //sharedPreferences.edit().putBoolean(SWITCH_PARTIDOS_STATE, isChecked).commit();
+                // 스위치 ON이면 할 일
                 if (isChecked) {
-                    //True이면 할 일
                     boolean meetingIn = false;
                     List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
                     for (int i = 0; i < users.size(); i++) {
@@ -170,7 +167,7 @@ public class SubSchedule extends AppCompatActivity {
                     if(meetingIn == false){
                         dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.add(my);
                     }
-
+                    // 로딩 Wait
                     dbManager.Lock(context);
                     dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k", new DBCallBack() {
                         @Override
@@ -185,7 +182,7 @@ public class SubSchedule extends AppCompatActivity {
 
                         }
                     });
-
+                    // 일정-멤버 안에 나의 키 정보
                     DatabaseReference databaseReference =
                             mdb.child("Meetings").child("-MaZIcU6ZjxsYF_iX-6k").child("schedules").child(clickedIndex+"").child("members");
                     databaseReference.addValueEventListener(new ValueEventListener() {
@@ -205,20 +202,12 @@ public class SubSchedule extends AppCompatActivity {
 
                         }
                     });
-
+                    // 시작설정버튼 ON
                     satrtLoc_Btn.setText("시작 위치 설정하기");
                     satrtLoc_Btn.setEnabled(true);
-                } else {
-                    //False이면 할 일
-                    //그리고 삭제부분에서, 원래 remove(my)이렇게 하셧잖아요?ㄴ
-                    //저렇게쓰면 my와 같은 주소값을 가진 리스트 내부값이 삭제가되는데
-                    //제가 아까 해당 변수를 다 새로가져온다고 했잖아요? 아네넨
-                    //그래서 똑같은 주소를 가진my가 없으니 삭제가 안되는거죠 리스트에서
-                    //그래서 그냥 email같은 리스트값이 잇으면 삭제하게 바꿧어요 네! 이해했씁니ㅏㄷ!
-                    //굳굳 감사해요 ㅎ!!
-                    //아니에요 그리고 updateMeeting에 콜백으로 작업해줘야 그
-                    //그 버튼을 뭐라하죠! 오니쪽오른쪽 왓다갓다하는것!스위치요?>? 네네 스위치 마구마구 누르면
-                    //오류날 가능성이 농후해서
+                }
+                // 스위치 OFF면 할 일
+                else {
                     List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
                     for (int i = 0; i < users.size(); i++) {
                         if (users.get(i).email.equals(my.email) == true) {
@@ -226,7 +215,7 @@ public class SubSchedule extends AppCompatActivity {
                             break;
                         }
                     }
-
+                    // 로딩 Wait
                     dbManager.Lock(context);
                     dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k", new DBCallBack() {
                         @Override
@@ -242,8 +231,7 @@ public class SubSchedule extends AppCompatActivity {
 
                         }
                     });
-                    Log.e("SIZE", schedule.get(clickedIndex).members.size() + "");
-
+                    // 시작설정버튼 OFF
                     satrtLoc_Btn.setText("일정 미참여 시, 시작 위치를 설정할 수 없습니다");
                     satrtLoc_Btn.setEnabled(false);
                 }
