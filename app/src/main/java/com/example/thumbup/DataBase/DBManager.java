@@ -37,10 +37,6 @@ public class DBManager {
         return mDatabase;
     }
 
-    public DatabaseReference returnMDB(){
-        return mDatabase;
-    }
-
     public static DBManager getInstance() {
         if (mDBManager == null)
             mDBManager = new DBManager();
