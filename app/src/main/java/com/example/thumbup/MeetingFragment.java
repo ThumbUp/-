@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -38,7 +39,7 @@ public class MeetingFragment extends Fragment {
     ListView meetingListView;
     TextView meetingAddNotice;
     TextView meetingAddSchedule;
-    List<String> meetingIdList; //유저가 가입된 모임의 코드들(= 모임의 키 값)들
+    List<String> meetingIdList = new ArrayList<>(); //유저가 가입된 모임의 코드들(= 모임의 키 값)들
     List<Meeting> dbUserMeetingList = new ArrayList<>(); //모임 목록
     List<String> noticeList = new ArrayList<>(); //공지목록
     ArrayList<String> meetingNoticeList = new ArrayList<>();
@@ -51,6 +52,7 @@ public class MeetingFragment extends Fragment {
     public MeetingFragment() {
 
     }
+
     void showMeeting() {
         for( String key : dbManager.participatedMeetings.keySet() ){
             Log.e("LIST", "participatedMeetings" + dbManager.participatedMeetings.keySet());
@@ -86,13 +88,6 @@ public class MeetingFragment extends Fragment {
         meetingNoticeListView.setAdapter(meetingNoticeAdapter);
     }
 
-    void showNoticeAdd(){
-        noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
-        meetingNoticeList.add(noticeList.get(noticeList.size()-1));
-        ArrayAdapter meetingNoticeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, meetingNoticeList);
-        meetingNoticeListView.setAdapter(meetingNoticeAdapter);
-    }
-
     void showSchedule(){
         ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
 
@@ -108,6 +103,13 @@ public class MeetingFragment extends Fragment {
         }
         MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
         meetingListView.setAdapter(meetingAdapter);
+    }
+
+    void showNoticeAdd(){
+        noticeList = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices;
+        meetingNoticeList.add(noticeList.get(noticeList.size()-1));
+        ArrayAdapter meetingNoticeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, meetingNoticeList);
+        meetingNoticeListView.setAdapter(meetingNoticeAdapter);
     }
 
     @Nullable
@@ -177,6 +179,7 @@ public class MeetingFragment extends Fragment {
                 });
             }
         });
+
         return meetingView;
     }
 }

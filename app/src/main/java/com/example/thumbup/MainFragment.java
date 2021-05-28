@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -26,12 +27,16 @@ import com.example.thumbup.DataBase.DBManager;
 import com.example.thumbup.DataBase.Meeting;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainFragment extends Fragment {
     ListView main_listView;
     ImageButton btn_addMeeting;
     private Context mContext;
     DBManager dbManager = DBManager.getInstance();
+    //유정 수정
+    String meetingId; //선택된 모임의 아이디(=코드)
+    List<String> meetingIdList = new ArrayList<>(); //유저가 가입된 모임의 코드들(= 모임의 키 값)들
 
 
     @Override
@@ -60,6 +65,8 @@ public class MainFragment extends Fragment {
         {
             Meeting meeting = dbManager.participatedMeetings.get(key);
             adapter.addItem(ContextCompat.getDrawable(getContext(), R.drawable.ic_profile), meeting.title, meeting.info, key);
+            //유정 수정
+            meetingIdList.add(key);
         }
 
         btn_addMeeting.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +112,14 @@ public class MainFragment extends Fragment {
             }
         });
 
+        //유정 수정
+        main_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                meetingId = meetingIdList.get(position);
+                ((HomeActivity)getActivity()).replaceFragment(new MeetingFragment(meetingId));
+            }
+        });
         return mainView;
     }
 }
