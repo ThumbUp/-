@@ -25,13 +25,17 @@ import androidx.annotation.NonNull;
 
 public class DBManager {
     private static DBManager mDBManager = null;
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    protected DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
     public String uid;      //현재 로그인 된 유저 uid
     public User userData;   //현재 로그인 된 유저 정보
     public Map<String, Meeting> participatedMeetings = new HashMap<>(); //현재 로그인된 유저가 가입된 미팅 정보
 
     private ProgressDialog customProgressDialog;
+
+    public DatabaseReference returnMDB(){
+        return mDatabase;
+    }
 
     public static DBManager getInstance() {
         if (mDBManager == null)

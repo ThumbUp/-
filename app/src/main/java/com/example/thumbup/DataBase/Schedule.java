@@ -8,12 +8,13 @@ public class Schedule {
     public String date;
     public String time;
     public String place;
-    public List<String> members = new ArrayList<>();
+    public List<User> members;
 
     public Schedule() {
         title = "";
         date = "";
         time = "";
         place = "";
+        members = new ArrayList<>();
     }
 }
