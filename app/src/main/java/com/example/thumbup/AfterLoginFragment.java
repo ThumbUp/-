@@ -98,7 +98,7 @@ public class AfterLoginFragment extends Fragment implements View.OnClickListener
         switch (v.getId()) {
             case R.id.btn_logout:
                 signOut();
-                Intent intent = new Intent(getContext(), LoginActivity.class);
+                Intent intent = new Intent(getContext(), MainActivity.class);
                 startActivity(intent);
                 break;
         }
