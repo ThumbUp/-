@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,6 +52,8 @@ public class SubSchedule extends AppCompatActivity {
 
     int clickedIndex;
     String myKey;
+    int myKey2;
+    int mykey;
 
     boolean meetingIn = false;
 
@@ -59,12 +62,15 @@ public class SubSchedule extends AppCompatActivity {
     String DBtitle; //DB 일정명
     String DBdate; //날짜
     String DBtime; //시간
-    int DBpersonal;
+    int DBpersonal; //참가인원수
 
     String roc; //설정 위치
     double roc_lati, roc_longi; //해당 위치의 위도와 경도 저장
 
     Context context;
+
+    private static final String SWITCH_PARTIDOS_STATE = "switchPartidosState";
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +117,9 @@ public class SubSchedule extends AppCompatActivity {
         switchView = findViewById(R.id.switch1);
         re_map_text = findViewById(R.id.re_map_text);
 
+        sharedPreferences = getSharedPreferences("mySwichMode", Context.MODE_PRIVATE);
+        switchView.setChecked(sharedPreferences.getBoolean(SWITCH_PARTIDOS_STATE, false));
+
         roc = my_roc.getText().toString();
         re_map_text.setText("'" + roc + "' 근처 추천 지도 보기");
 
@@ -122,12 +131,10 @@ public class SubSchedule extends AppCompatActivity {
         String name = my.name;
         Log.e("MY DATA | ", name);
 
-        //COPY
-        //schedule.get(clickedIndex).members.add(my);
-
         // 참여 유무 스위치 체인지
         switchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                sharedPreferences.edit().putBoolean(SWITCH_PARTIDOS_STATE, isChecked).commit();
                 if (isChecked) {
                     //True이면 할 일
                     boolean meetingIn = false;
@@ -151,13 +158,33 @@ public class SubSchedule extends AppCompatActivity {
                                     dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.size() + "");
                             personal.setText(dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.size()+"");
                         }
-
                         @Override
                         public void fail(String errorMessage) {
 
                         }
                     });
-                    //Log.e("SIZE", schedule.get(clickedIndex).members.size() + "");
+
+                    DatabaseReference databaseReference =
+                            mdb.child("Meetings").child("-MaZIcU6ZjxsYF_iX-6k").child("schedules").child(clickedIndex+"").child("members");
+                    databaseReference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                myKey = postSnapshot.getKey();
+                                myKey2 = Integer.parseInt(myKey);
+                                //Log.e("KEY", mykey+"");
+                                List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
+                                if(users.get(myKey2).email.equals(my.email) == true) {
+                                    mykey = myKey2;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                     satrtLoc_Btn.setText("시작 위치 설정하기");
                     satrtLoc_Btn.setEnabled(true);
@@ -190,7 +217,6 @@ public class SubSchedule extends AppCompatActivity {
                             personal.setText(dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.size()+"");
 
                         }
-
                         @Override
                         public void fail(String errorMessage) {
 
@@ -218,6 +244,8 @@ public class SubSchedule extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), StartLocationActivity.class);
                 intent.putExtra("Rocation", roc);
+                intent.putExtra("MyKey", mykey);
+                intent.putExtra("ScheduleIndex", clickedIndex);
                 startActivityForResult(intent, 0);
             }
         });
