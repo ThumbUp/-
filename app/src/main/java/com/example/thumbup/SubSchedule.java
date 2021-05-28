@@ -137,6 +137,7 @@ public class SubSchedule extends AppCompatActivity {
                     String myKey_sw = postSnapshot.getKey();
                     int myKey2_sw = Integer.parseInt(myKey_sw);
                     List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
+                    // 예외인덱스 오류 발생 지점
                     if(users.get(myKey2_sw).email.equals(my.email) == true) {
                         switchView.setChecked(true);
                     }
