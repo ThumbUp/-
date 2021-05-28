@@ -86,9 +86,6 @@ public class MainFragment extends Fragment {
                                     String meeting_key = meetingKey.getText().toString();
 
                                     dbManager.JoinMeeting(meeting_key);
-                                    //안녕하세요! 이 부분이 모임 id를 넘기는 부분인데 계속 이 오류가 나서요..
-                                    //이 뿌Qqn부분 말씀하시는거나요?네네
-        //원격렉이 심해서 푸시해주시면 제꺼에서볼게요 넵!
                                     dialog.dismiss();
                                 }
                             })

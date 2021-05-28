@@ -33,18 +33,6 @@ public class DBManager {
 
     private ProgressDialog customProgressDialog;
 
-    //이렇게 되어있어요 넵
-    //DB에서 해당유저나 유저가 가입된 미팅정보가 바뀌면
-    //자동으로 위에있느 변수의 내용이 업데이트되게 해놓아서
-    //일단 해당유저에 대한 모임이나 정보가 필요하면 그냥
-    //음 그리고 따로 함수쓰자마자 데이터베이스에 업데이트 되야하는 내용이 아니면
-    //그냥 위에 db매니저에있는 유저나 가입된 미팅매니저의 변수내용을 고치고
-    //위에 두 함수를 실행하면 자동으로  db에 현재 변경된 변수대로 업데이트되게 해뒀어요
-
-    //여기까지 되셧나요? 네!
-    //미팅추가하는 부분은 바로 DB에 업데이트 되어야하는 내요이라서
-    //Update함수는 쓸필요가 없어욤
-
     public static DBManager getInstance() {
         if (mDBManager == null)
             mDBManager = new DBManager();

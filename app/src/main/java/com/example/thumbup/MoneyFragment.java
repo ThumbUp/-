@@ -47,6 +47,7 @@ public class MoneyFragment extends Fragment {
         scheduleName = (TextView) moneyView.findViewById(R.id.schedule_name);
         moneyAddPlaceNMenu = (ImageButton) moneyView.findViewById(R.id.money_addPlaceNMenu);
 
+
         showSchedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
