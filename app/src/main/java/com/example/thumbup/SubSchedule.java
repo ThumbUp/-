@@ -30,8 +30,6 @@ public class SubSchedule extends AppCompatActivity {
     TextView re_map_text;
     DBManager dbManager = DBManager.getInstance();
 
-    DBManager dbManager = DBManager.getInstance();
-
     int clickedIndex;
 
     String DBtitle; //일정명
