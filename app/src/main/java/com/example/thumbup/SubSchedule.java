@@ -2,6 +2,7 @@ package com.example.thumbup;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.thumbup.DataBase.DBCallBack;
 import com.example.thumbup.DataBase.DBManager;
 import com.example.thumbup.DataBase.Meeting;
 import com.example.thumbup.DataBase.Schedule;
@@ -58,13 +60,15 @@ public class SubSchedule extends AppCompatActivity {
     String roc; //설정 위치
     double roc_lati, roc_longi; //해당 위치의 위도와 경도 저장
 
+    Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_schedule);
 
         //DB에서 모임명 가져올 것
-
+        context = this;
         schedule = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules; //선택 일정 DB
 
         Intent outIntent = getIntent();
@@ -102,50 +106,51 @@ public class SubSchedule extends AppCompatActivity {
         String name = my.name;
         Log.e("MY DATA | ", name);
 
-        //COPY
-        //schedule.get(clickedIndex).members.add(my);
-
         // 참여 유무 스위치 체인지
         switchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     //True이면 할 일
-                    //schedule.get(clickedIndex).members.add(my); //배열, DB 추가
-
-//                    DatabaseReference databaseReference =
-//                            mdb.child("Meetings").child("-MaZIcU6ZjxsYF_iX-6k").child("schedules").child(clickedIndex+"").child("members");
-//                    databaseReference.addValueEventListener(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot dataSnapshot) {
-//                            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-//                                myKey = postSnapshot.getKey();
-//                                Log.e("KEY", myKey);
-//                                //schedule.get(clickedIndex).members.add(my);
-//                            }
-//                        }
-//                        @Override
-//                        public void onCancelled(DatabaseError databaseError) {
-//
-//                        }
-//                    });
                     dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.add(my);
-                    dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k");
-                    Log.e("SIZE", schedule.get(clickedIndex).members.size()+"");
+                    dbManager.Lock(context);
+                    dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k", new DBCallBack() {
+                        @Override
+                        public void success(Object data) {
+                            dbManager.UnLock();
+                        }
+
+                        @Override
+                        public void fail(String errorMessage) {
+
+                        }
+                    });
+                    Log.e("SIZE", schedule.get(clickedIndex).members.size() + "");
 
                     satrtLoc_Btn.setText("시작 위치 설정하기");
                     satrtLoc_Btn.setEnabled(true);
-                }
-                else{
+                } else {
                     //False이면 할 일
-                    dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.remove(my);
-                    dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k");
-                    //schedule.get(clickedIndex).members.remove(my); //배열 삭제
-                    //mdb.child("Meetings").child("-MaZIcU6ZjxsYF_iX-6k").child("schedules").child(clickedIndex+"").child("members").child(myKey).removeValue();
-                    //mdb.child("schedules").child("members").child("0").setValue(null);
-                    //오잉? 여기맞죠?
-                    //Map<String, Meeting> temp = dbManager.participatedMeetings;
-                    //dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k");
-                    Log.e("SIZE", schedule.get(clickedIndex).members.size()+"");
+                    List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
+                    for (int i = 0; i < users.size(); i++) {
+                        if (users.get(i).email.equals(my.email) == true) {
+                            users.remove(i);
+                            break;
+                        }
+                    }
+
+                    dbManager.Lock(context);
+                    dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k", new DBCallBack() {
+                        @Override
+                        public void success(Object data) {
+                            dbManager.UnLock();
+                        }
+
+                        @Override
+                        public void fail(String errorMessage) {
+
+                        }
+                    });
+                    Log.e("SIZE", schedule.get(clickedIndex).members.size() + "");
 
                     satrtLoc_Btn.setText("일정 미참여 시, 시작 위치를 설정할 수 없습니다");
                     satrtLoc_Btn.setEnabled(false);

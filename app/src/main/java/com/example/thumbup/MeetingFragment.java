@@ -44,6 +44,7 @@ public class MeetingFragment extends Fragment {
     List<String> noticeList = new ArrayList<>(); //공지목록
     ArrayList<String> meetingNoticeList = new ArrayList<>();
     DBManager dbManager = DBManager.getInstance();
+    ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
 
     public MeetingFragment(String _meetingId) {
         meetingId = _meetingId;
@@ -69,6 +70,7 @@ public class MeetingFragment extends Fragment {
         meetingPopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                Log.d("meetingIndex", "meetingIndex" + item.getItemId());
                 int meetingIndex = item.getItemId();
                 meetingId = meetingIdList.get(item.getItemId());
                 Log.d("meetingId", "meetingId: " + meetingId);
@@ -123,7 +125,6 @@ public class MeetingFragment extends Fragment {
         meetingListView = (ListView) meetingView.findViewById(R.id.meeting_list);
         meetingAddNotice = (TextView) meetingView.findViewById(R.id.meeting_addNotice);
         meetingAddSchedule = (TextView) meetingView.findViewById(R.id.meeting_addSchedule);
-        ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
 
         //처음 화면 로드시 존재하는 공지/일정 목록 띄우기
         showNotice();
