@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,16 +19,16 @@ import androidx.fragment.app.Fragment;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import static android.view.View.*;
+import static android.view.View.OnClickListener;
 
 public class MoneyAddFragment extends Fragment {
     public static MoneyAddFragment moneyAddContext;
-    TextView money_add_mDate, price_sum;
+    TextView money_add_mDate;
+    Button price_sum;
     ImageView money_add_calBtn, addbtn1, addbtn2, addbtn3, addbtn4;
     int mYear, mMonth, mDay;
     LinearLayout menuBox1, menuBox2, menuBox3, menuBox4, menuBox5;
-//    RelativeLayout addMenu;
-    EditText place, price;
+    EditText price;
 
     void updateDate(){
         money_add_mDate.setText(String.format("%d년 %d월 %d일", mYear, mMonth + 1, mDay));
@@ -47,10 +48,8 @@ public class MoneyAddFragment extends Fragment {
         menuBox3 = (LinearLayout) MoneyAddView.findViewById(R.id.menuBox3);
         menuBox4 = (LinearLayout) MoneyAddView.findViewById(R.id.menuBox4);
         menuBox5 = (LinearLayout) MoneyAddView.findViewById(R.id.menuBox5);
-//        addMenu = (RelativeLayout) MoneyAddView.findViewById(R.id.addMenu);
-//        place = (EditText) MoneyAddView.findViewById(R.id.placeInput);
         price = (EditText) MoneyAddView.findViewById(R.id.placeMenuPriceInput);
-        price_sum = (TextView) MoneyAddView.findViewById(R.id.meetingPriceSum);
+        price_sum = (Button) MoneyAddView.findViewById(R.id.meetingPriceSum);
         addbtn1 = (ImageView) MoneyAddView.findViewById(R.id.addBtn1);
         addbtn2 = (ImageView) MoneyAddView.findViewById(R.id.addBtn2);
         addbtn3 = (ImageView) MoneyAddView.findViewById(R.id.addBtn3);
@@ -83,16 +82,6 @@ public class MoneyAddFragment extends Fragment {
                         mMonth, mDay).show();
             }
         });
-
-        /*//메뉴 추가시 메뉴, 가격 추가
-        addMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LayoutInflater menuInflater = (LayoutInflater) getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
-                menuInflater.inflate(R.layout.inflater_money_add_menu, menuBox, true);
-            }
-        });*/
-
 
         //덧셈 버튼 클릭시
 
