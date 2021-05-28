@@ -117,8 +117,8 @@ public class SubSchedule extends AppCompatActivity {
         switchView = findViewById(R.id.switch1);
         re_map_text = findViewById(R.id.re_map_text);
 
-        sharedPreferences = getSharedPreferences("mySwichMode", Context.MODE_PRIVATE);
-        switchView.setChecked(sharedPreferences.getBoolean(SWITCH_PARTIDOS_STATE, false));
+        //sharedPreferences = getSharedPreferences("mySwichMode", Context.MODE_PRIVATE);
+        //switchView.setChecked(sharedPreferences.getBoolean(SWITCH_PARTIDOS_STATE, false));
 
         roc = my_roc.getText().toString();
         re_map_text.setText("'" + roc + "' 근처 추천 지도 보기");
@@ -131,10 +131,33 @@ public class SubSchedule extends AppCompatActivity {
         String name = my.name;
         Log.e("MY DATA | ", name);
 
+        DatabaseReference databaseReference =
+                mdb.child("Meetings").child("-MaZIcU6ZjxsYF_iX-6k").child("schedules").child(clickedIndex+"").child("members");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    String myKey_sw = postSnapshot.getKey();
+                    int myKey2_sw = Integer.parseInt(myKey_sw);
+                    List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
+                    if(users.get(myKey2_sw).email.equals(my.email) == true) {
+                        switchView.setChecked(true);
+                    }
+                    else{
+                        switchView.setChecked(false);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         // 참여 유무 스위치 체인지
         switchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferences.edit().putBoolean(SWITCH_PARTIDOS_STATE, isChecked).commit();
+                //sharedPreferences.edit().putBoolean(SWITCH_PARTIDOS_STATE, isChecked).commit();
                 if (isChecked) {
                     //True이면 할 일
                     boolean meetingIn = false;
@@ -148,7 +171,6 @@ public class SubSchedule extends AppCompatActivity {
                         dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.add(my);
                     }
 
-                    //dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.add(my);
                     dbManager.Lock(context);
                     dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k", new DBCallBack() {
                         @Override
@@ -172,14 +194,12 @@ public class SubSchedule extends AppCompatActivity {
                             for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                                 myKey = postSnapshot.getKey();
                                 myKey2 = Integer.parseInt(myKey);
-                                //Log.e("KEY", mykey+"");
                                 List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
                                 if(users.get(myKey2).email.equals(my.email) == true) {
                                     mykey = myKey2;
                                 }
                             }
                         }
-
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
 
