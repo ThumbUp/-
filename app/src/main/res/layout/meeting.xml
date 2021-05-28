@@ -46,9 +46,8 @@
             <ListView
                 android:id="@+id/meeting_noticeList"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="140dp"
                 android:layout_marginTop="8dp"
-                android:paddingTop="12dp"
                 android:paddingLeft="22dp"
                 android:textSize="12sp"
                 android:textColor="@color/black"
@@ -76,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:orientation="horizontal"
-                    android:background="@drawable/border_bottom_gray">
+                    android:background="@drawable/border_bottom_black">
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
