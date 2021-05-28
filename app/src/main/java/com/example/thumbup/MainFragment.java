@@ -3,6 +3,7 @@ package com.example.thumbup;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -26,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import com.example.thumbup.DataBase.DBManager;
 import com.example.thumbup.DataBase.Meeting;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +66,11 @@ public class MainFragment extends Fragment {
         for(String key : dbManager.participatedMeetings.keySet())
         {
             Meeting meeting = dbManager.participatedMeetings.get(key);
-            adapter.addItem(ContextCompat.getDrawable(getContext(), R.drawable.ic_profile), meeting.title, meeting.info, key);
+            byte[] b = binaryStringToByteArray(meeting.image);
+            ByteArrayInputStream is = new ByteArrayInputStream(b);
+            Drawable profile = Drawable.createFromStream(is, "profile");
+
+            adapter.addItem(profile, meeting.title, meeting.info, key);
             //유정 수정
             meetingIdList.add(key);
         }
@@ -121,5 +127,26 @@ public class MainFragment extends Fragment {
             }
         });
         return mainView;
+
+    }
+
+    // 스트링을 바이너리 바이트 배열로
+    private byte[] binaryStringToByteArray (String s){
+        int count = s.length() / 8;
+        byte[] b = new byte[count];
+        for (int i = 1; i < count; ++i) {
+            String t = s.substring((i - 1) * 8, i * 8);
+            b[i - 1] = binaryStringToByte(t);
+        }
+        return b;
+    }
+    // 스트링을 바이너리 바이트로
+    private byte binaryStringToByte (String s){
+        byte ret = 0, total = 0;
+        for (int i = 0; i < 8; ++i) {
+            ret = (s.charAt(7 - i) == '1') ? (byte) (1 << i) : 0;
+            total = (byte) (ret | total);
+        }
+        return total;
     }
 }

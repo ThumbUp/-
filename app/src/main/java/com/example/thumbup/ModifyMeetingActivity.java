@@ -54,7 +54,7 @@ public class ModifyMeetingActivity extends AppCompatActivity {
                 String title = mMeetingTitle.getText().toString();
                 String info = mMeetingInfo.getText().toString();
 
-                String key = dbManager.AddMeeting(title, info);
+             //   String key = dbManager.AddMeeting(title, info);
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);

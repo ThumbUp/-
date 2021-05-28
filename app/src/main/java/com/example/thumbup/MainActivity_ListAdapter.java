@@ -103,6 +103,7 @@ public class MainActivity_ListAdapter extends BaseAdapter{
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         if (menuItem.getItemId() == R.id.action_menu1){
+                            //모임 나가기
                             final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
                                     R.layout.dialog_main_delete_meeting, null);
 
@@ -141,10 +142,27 @@ public class MainActivity_ListAdapter extends BaseAdapter{
                                     .show();
                         }else if (menuItem.getItemId() == R.id.action_menu2){
                             // 모임 수정
-                            Intent intent = new Intent(getApplicationContext(), ModifyMeetingActivity.class);
-                            //startActivity(intent);
+                            Intent intent = new Intent(view.getContext(), ModifyMeetingActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            view.getContext().startActivity(intent);
                         }else {
-                            //모임원 추가
+                            //모임 코드 복사
+                            final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
+                                    R.layout.dialog_main_meeting_key, null);
+                            android.app.AlertDialog.Builder dlg4 = new android.app.AlertDialog.Builder(getApplicationContext());
+                            dlg4.setView(linear);
+                            TextView k_meetingKey;
+                            k_meetingKey = (TextView)linear.findViewById(R.id.k_meetingKey);
+                            //k_meetingKey.setText(key);
+                            dlg4.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    //startActivity(intent);
+
+                                    dialog.dismiss();
+                                }
+                            }).show();
                         }
 
                         return false;

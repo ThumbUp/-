@@ -155,13 +155,40 @@ public class DBManager {
         mDatabase.child("Meetings").child(key).setValue(meetingData);
         return key;
     }
-
-    public String AddMeeting(String title, String info) {
+    public String AddMeeting(String title, String info, String image) {
         Map<String, Object> map = new HashMap<>();
-        Meeting meetingData = new Meeting(title, info);
+        Meeting meetingData = new Meeting(title, info, image);
 
         String key = mDatabase.child("Meetings").push().getKey();
+        participatedMeetings.put(key, meetingData);
         mDatabase.child("Meetings").child(key).setValue(meetingData);
+        return key;
+        //다시해보실래요?했습니다!된요? 팝업창에 모임 코드는 뜨는데 파이어베이스에서 보면 없네요 음잠시만요 저 뭐좀 하고이성서 다른거부터 하고잇으실래요? 넵!
+    }
+
+    //된거같아유!
+    //db에 모임이 안 생기는 것 같아요..!
+
+
+    public String AddMeeting(String title, String info, String image, final DBCallBack callBack) {
+        Map<String, Object> map = new HashMap<>();
+        Meeting meetingData = new Meeting(title, info, "");
+
+        String key = mDatabase.child("Meetings").push().getKey();
+        participatedMeetings.put(key, meetingData);
+        mDatabase.child("Meetings").child(key).setValue(meetingData).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                callBack.success(true);
+                mDatabase.child("Meetings").child(key).setValue(meetingData);
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callBack.fail(e.getMessage());
+            }
+        });
         return key;
     }
 

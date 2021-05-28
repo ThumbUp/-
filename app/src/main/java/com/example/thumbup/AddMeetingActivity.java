@@ -27,6 +27,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.example.thumbup.DataBase.DBCallBack;
 import com.example.thumbup.DataBase.DBManager;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -76,13 +77,12 @@ public class AddMeetingActivity extends AppCompatActivity {
                 Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                byte[] reviewImage = stream.toByteArray();
-                String simage = byteArrayToBinaryString(reviewImage);
+                byte[] byteImage = stream.toByteArray();
+                String simage = byteArrayToBinaryString(byteImage);
+                String key = dbManager.AddMeeting(title, info, simage);
 
-                String key = dbManager.AddMeeting(title, info);
-                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                firebaseDatabase.getReference("reviews/").child("image").setValue(simage);
-
+                //그 이미지 보이는부분 어디잇나요? 모임 표ㅣㅅ하는 부분이용
+                //리스트에서 보이는 부분 말씀하시는건가요?네네
                 final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
                         R.layout.dialog_main_meeting_key, null);
 
