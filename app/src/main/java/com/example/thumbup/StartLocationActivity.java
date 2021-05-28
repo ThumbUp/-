@@ -1,12 +1,5 @@
 package com.example.thumbup;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,34 +8,30 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.example.thumbup.DataBase.DBManager;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -55,9 +44,13 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
     Button locOK_btn;
 
     String roc;
+    int mykey;
+    int scheduleindex;
 
     double Lati, Longi; //위도와 경도를 저장할 변수
     String my_place; //사용자가 설정한 위치를 저장할 변수
+
+    DBManager dbManager = DBManager.getInstance();
 
     MarkerOptions myMarker;
 
@@ -76,6 +69,12 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
 
         Intent outIntent2 = getIntent();
         roc = outIntent2.getStringExtra("Rocation");
+        mykey = outIntent2.getIntExtra("MyKey", 0);
+        scheduleindex = outIntent2.getIntExtra("ScheduleIndex", 0);
+
+        Log.e("MY KEY : ", mykey+"");
+        Log.e("MY S_INDEX : ", scheduleindex+"");
+
         Location location = getLocationFromAddress(getApplicationContext(), roc);
 
         Lati = location.getLatitude();
@@ -122,6 +121,11 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
                 outIntent.putExtra("Place", my_place); //설정 위치 전달
                 outIntent.putExtra("Latitude", Lati); //해당 위치의 위도와
                 outIntent.putExtra("Longitude", Longi); //경도 전달
+
+                // 일정 안에 나의 위도/경도 데이터 변경
+                dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(scheduleindex).members.get(mykey).latitude = Lati;
+                dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(scheduleindex).members.get(mykey).longitude = Longi;
+                dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k");
 
                 setResult(RESULT_OK, outIntent);
                 finish();
@@ -208,4 +212,3 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
         return resLocation;
     }
 }
-
