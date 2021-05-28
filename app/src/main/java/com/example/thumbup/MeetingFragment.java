@@ -53,8 +53,11 @@ public class MeetingFragment extends Fragment {
     }
     void showMeeting() {
         for( String key : dbManager.participatedMeetings.keySet() ){
+            Log.e("LIST", "participatedMeetings" + dbManager.participatedMeetings.keySet());
             dbUserMeetingList.add(dbManager.participatedMeetings.get(key));
-            meetingIdList.add(key);
+            //Log.e("LIST","KEY " + key + "   dbUserMeetingList " + dbUserMeetingList.size());
+            //meetingIdList.add(key);
+            Log.e("LIST","KEY " + key + "   meetingIdList " + dbUserMeetingList);
         }
         PopupMenu meetingPopup = new PopupMenu(getActivity().getApplicationContext(), meetingUserMeetingList);
         Menu meetingMenu = meetingPopup.getMenu();

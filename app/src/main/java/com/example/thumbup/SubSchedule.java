@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.thumbup.DataBase.DBManager;
+import com.example.thumbup.DataBase.Meeting;
 import com.example.thumbup.DataBase.Schedule;
 import com.example.thumbup.DataBase.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SubSchedule extends AppCompatActivity {
 
@@ -108,37 +110,40 @@ public class SubSchedule extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     //True이면 할 일
-                    schedule.get(clickedIndex).members.add(my); //배열, DB 추가
+                    //schedule.get(clickedIndex).members.add(my); //배열, DB 추가
 
-                    DatabaseReference databaseReference =
-                            mdb.child("Meetings").child("-MaZIcU6ZjxsYF_iX-6k").child("schedules").child(clickedIndex+"").child("members");
-                    databaseReference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                                myKey = postSnapshot.getKey();
-                                Log.e("KEY", myKey);
-                                //schedule.get(clickedIndex).members.add(my);
-                            }
-                        }
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+//                    DatabaseReference databaseReference =
+//                            mdb.child("Meetings").child("-MaZIcU6ZjxsYF_iX-6k").child("schedules").child(clickedIndex+"").child("members");
+//                    databaseReference.addValueEventListener(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+//                                myKey = postSnapshot.getKey();
+//                                Log.e("KEY", myKey);
+//                                //schedule.get(clickedIndex).members.add(my);
+//                            }
+//                        }
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
+                    dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.add(my);
                     dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k");
                     Log.e("SIZE", schedule.get(clickedIndex).members.size()+"");
 
                     satrtLoc_Btn.setText("시작 위치 설정하기");
                     satrtLoc_Btn.setEnabled(true);
                 }
-
                 else{
                     //False이면 할 일
-                    schedule.get(clickedIndex).members.remove(my); //배열 삭제
-                    mdb.child("Meetings").child("-MaZIcU6ZjxsYF_iX-6k").child("schedules").child(clickedIndex+"").child("members").child(myKey).removeValue();
+                    dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.remove(my);
+                    dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k");
+                    //schedule.get(clickedIndex).members.remove(my); //배열 삭제
+                    //mdb.child("Meetings").child("-MaZIcU6ZjxsYF_iX-6k").child("schedules").child(clickedIndex+"").child("members").child(myKey).removeValue();
                     //mdb.child("schedules").child("members").child("0").setValue(null);
-
+                    //오잉? 여기맞죠?
+                    //Map<String, Meeting> temp = dbManager.participatedMeetings;
                     //dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k");
                     Log.e("SIZE", schedule.get(clickedIndex).members.size()+"");
 
