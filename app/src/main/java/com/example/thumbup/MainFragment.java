@@ -36,7 +36,7 @@ public class MainFragment extends Fragment {
     ImageButton btn_addMeeting;
     private Context mContext;
     DBManager dbManager = DBManager.getInstance();
-    //유정 수정
+
     String meetingId; //선택된 모임의 아이디(=코드)
     List<String> meetingIdList = new ArrayList<>(); //유저가 가입된 모임의 코드들(= 모임의 키 값)들
 
@@ -71,7 +71,7 @@ public class MainFragment extends Fragment {
             Drawable profile = Drawable.createFromStream(is, "profile");
 
             adapter.addItem(profile, meeting.title, meeting.info, key);
-            //유정 수정
+
             meetingIdList.add(key);
         }
 
@@ -118,7 +118,6 @@ public class MainFragment extends Fragment {
             }
         });
 
-        //유정 수정
         main_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

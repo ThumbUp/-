@@ -192,9 +192,6 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 }
 
-                //이거 푸시해보실래요ㅕ? 제꺼에서 좀 볼게요 승연님이 하신거까지요?
-                //넵 이거 그대로
-
                 @Override
                 public void fail(String errorMessage) {
 

@@ -81,8 +81,6 @@ public class AddMeetingActivity extends AppCompatActivity {
                 String simage = byteArrayToBinaryString(byteImage);
                 String key = dbManager.AddMeeting(title, info, simage);
 
-                //그 이미지 보이는부분 어디잇나요? 모임 표ㅣㅅ하는 부분이용
-                //리스트에서 보이는 부분 말씀하시는건가요?네네
                 final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
                         R.layout.dialog_main_meeting_key, null);
 

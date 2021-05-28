@@ -157,8 +157,9 @@ public class MainActivity_ListAdapter extends BaseAdapter{
                             dlg4.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    //startActivity(intent);
+                                    Intent intent = new Intent(view.getContext(), MainActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    view.getContext().startActivity(intent);
 
                                     dialog.dismiss();
                                 }
