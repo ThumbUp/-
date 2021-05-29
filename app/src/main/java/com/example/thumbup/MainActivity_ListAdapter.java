@@ -21,8 +21,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.thumbup.DataBase.DBManager;
+import com.example.thumbup.DataBase.Meeting;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -30,6 +35,9 @@ public class MainActivity_ListAdapter extends BaseAdapter{
 
     private View view;
     DBManager dbManager = DBManager.getInstance();
+    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    String meetingId;
+    List<String> meetingIdList = new ArrayList<>();
 
     // 생성자로부터 전달된 resource id 값을 저장.
     int resourceId;
@@ -96,6 +104,12 @@ public class MainActivity_ListAdapter extends BaseAdapter{
         titleTextView.setText(listViewItem.getData_meetingTitle());
         infoTextView.setText(listViewItem.getData_meetingInfo());
 
+        for(String key : dbManager.participatedMeetings.keySet())
+        {
+            Meeting meeting = dbManager.participatedMeetings.get(key);
+            meetingIdList.add(key);
+        }
+
         ImageButton btnPopup = (ImageButton) convertView.findViewById(R.id.btnPopup);
         btnPopup.findViewById(R.id.btnPopup).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,12 +139,15 @@ public class MainActivity_ListAdapter extends BaseAdapter{
                                                 if (checked > -1 && checked < count) {
                                                     // 아이템 삭제
                                                     listViewItemList.remove(checked);
+                                                    //meetingId =
+                                                    //deleteItem(meetingId);
 
                                                     // listview 선택 초기화.
                                                     listview.clearChoices();
 
                                                     // listview 갱신.
                                                     adapter.notifyDataSetChanged();
+
                                                 }
                                             }
                                             dialog.dismiss();
@@ -188,6 +205,10 @@ public class MainActivity_ListAdapter extends BaseAdapter{
         item.setData_meetingId(mid);
 
         listViewItemList.add(item);
+    }
+
+    private void deleteItem(String meetingId){
+        mDatabase.child("Users").child(dbManager.uid).child("meetings").child(meetingId).removeValue();
     }
 
 

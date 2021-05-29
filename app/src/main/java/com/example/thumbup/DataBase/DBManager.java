@@ -196,12 +196,7 @@ public class DBManager {
         participatedMeetings.put(key, meetingData);
         mDatabase.child("Meetings").child(key).setValue(meetingData);
         return key;
-        //다시해보실래요?했습니다!된요? 팝업창에 모임 코드는 뜨는데 파이어베이스에서 보면 없네요 음잠시만요 저 뭐좀 하고이성서 다른거부터 하고잇으실래요? 넵!
     }
-
-    //된거같아유!
-    //db에 모임이 안 생기는 것 같아요..!
-
 
     public String AddMeeting(String title, String info, String image, final DBCallBack callBack) {
         Map<String, Object> map = new HashMap<>();

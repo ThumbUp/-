@@ -38,8 +38,8 @@ import java.io.InputStream;
 public class AddMeetingActivity extends AppCompatActivity {
     DBManager dbManager = DBManager.getInstance();
     private final int GET_GALLERY_IMAGE = 200;
-    ImageView meetingImg;
-    TextView addMeetingImg;
+    ImageView addMeetingImg;
+    TextView addMeetingText;
     EditText addMeetingTitle;
     EditText addMeetingInfo;
     Button addAccept;
@@ -51,14 +51,14 @@ public class AddMeetingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_main_add_meeting);
 
-        meetingImg = findViewById(R.id.meetingImg);
-        addMeetingImg = findViewById(R.id.addMeeting_text);
+        addMeetingImg = findViewById(R.id.meetingImg);
+        addMeetingText = findViewById(R.id.addMeeting_text);
         addMeetingTitle = findViewById(R.id.add_meetingTitle);
         addMeetingInfo = findViewById(R.id.add_meetingInfo);
         addAccept = findViewById(R.id.add_accept);
         addCancel = findViewById(R.id.add_cancel);
 
-        addMeetingImg.setOnClickListener(new View.OnClickListener() {
+        addMeetingText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
@@ -72,8 +72,8 @@ public class AddMeetingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String title = addMeetingTitle.getText().toString();
                 String info = addMeetingInfo.getText().toString();
-                meetingImg.getDrawable().getCurrent();
-                Drawable image = meetingImg.getDrawable();
+                addMeetingImg.getDrawable().getCurrent();
+                Drawable image = addMeetingImg.getDrawable();
                 Drawable dImage = getResources().getDrawable(R.drawable.ic_profile);
                 String key = "", simage = "";
                 if(image.equals(dImage) == true) {
@@ -121,7 +121,7 @@ public class AddMeetingActivity extends AppCompatActivity {
         if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             Uri selectedImageUri = data.getData();
-            meetingImg.setImageURI(selectedImageUri);
+            addMeetingImg.setImageURI(selectedImageUri);
 
         }
     }

@@ -1,27 +1,57 @@
 package com.example.thumbup;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
+import com.example.thumbup.DataBase.DBCallBack;
 import com.example.thumbup.DataBase.DBManager;
+import com.example.thumbup.DataBase.Meeting;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModifyMeetingActivity extends AppCompatActivity {
     DBManager dbManager = DBManager.getInstance();
     private final int GET_GALLERY_IMAGE = 200;
-    ImageView meetingImg;
-    Button mMeetingImg;
+    ImageView mMeetingImg;
+    TextView mMeetingText;
     EditText mMeetingTitle;
     EditText mMeetingInfo;
     Button mAccept;
     Button mCancel;
+
+    String meetingId; //선택된 모임의 아이디(=코드)
+    List<String> meetingIdList = new ArrayList<>(); //유저가 가입된 모임의 코드들(= 모임의 키 값)들
+
 
 
     @Override
@@ -29,35 +59,47 @@ public class ModifyMeetingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_main_modify_meeting);
 
-        meetingImg = findViewById(R.id.meetingImg);
         mMeetingImg = findViewById(R.id.m_meetingImg);
+        mMeetingText = findViewById(R.id.mMeeting_text);
         mMeetingTitle = findViewById(R.id.m_meetingTitle);
         mMeetingInfo = findViewById(R.id.m_meetingInfo);
         mAccept = findViewById(R.id.m_accept);
         mCancel = findViewById(R.id.m_cancel);
 
-        mMeetingImg.setOnClickListener(new View.OnClickListener() {
+        mMeetingText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
-                intent. setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                 startActivityForResult(intent, GET_GALLERY_IMAGE);
             }
         });
-
-
-
 
         mAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String title = mMeetingTitle.getText().toString();
                 String info = mMeetingInfo.getText().toString();
+                mMeetingImg.getDrawable().getCurrent();
+                Drawable image = mMeetingImg.getDrawable();
+                Drawable dImage = getResources().getDrawable(R.drawable.ic_profile);
+                String simage = "";
+                //meetingId =
+                dbManager.UpdateMeeting(meetingId);
+                if(image.equals(dImage) == true) {
+                    Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] byteImage = stream.toByteArray();
+                    simage = byteArrayToBinaryString(byteImage);
+                }
 
-             //   String key = dbManager.AddMeeting(title, info);
+                AlertDialog.Builder dlg4 = new AlertDialog.Builder(ModifyMeetingActivity.this);
+                dlg4.setTitle("모임이 수정되었습니다");
 
-                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                startActivity(intent);
+                AlertDialog alertDialog = dlg4.create();
+
+                alertDialog.show();
             }
         });
 
@@ -77,9 +119,24 @@ public class ModifyMeetingActivity extends AppCompatActivity {
         if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             Uri selectedImageUri = data.getData();
-            meetingImg.setImageURI(selectedImageUri);
+            mMeetingImg.setImageURI(selectedImageUri);
 
         }
-
     }
+
+    public static String byteArrayToBinaryString(byte[] b) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < b.length; ++i) {
+            sb.append(byteToBinaryString(b[i]));
+        } return sb.toString();
+    }
+    public static String byteToBinaryString(byte n) {
+        StringBuilder sb = new StringBuilder("00000000");
+        for (int bit = 0; bit < 8; bit++) {
+            if (((n >> bit) & 1) > 0) {
+                sb.setCharAt(7 - bit, '1');
+            }
+        } return sb.toString();
+    }
+
 }
