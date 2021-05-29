@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.thumbup.DataBase.DBManager;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -55,9 +56,13 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
     Button locOK_btn;
 
     String roc;
+    int mykey;
+    int scheduleindex;
 
     double Lati, Longi; //위도와 경도를 저장할 변수
     String my_place; //사용자가 설정한 위치를 저장할 변수
+
+    DBManager dbManager = DBManager.getInstance();
 
     MarkerOptions myMarker;
 
@@ -76,6 +81,12 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
 
         Intent outIntent2 = getIntent();
         roc = outIntent2.getStringExtra("Rocation");
+        mykey = outIntent2.getIntExtra("MyKey", 0);
+        scheduleindex = outIntent2.getIntExtra("ScheduleIndex", 0);
+
+        Log.e("MY KEY : ", mykey+"");
+        Log.e("MY S_INDEX : ", scheduleindex+"");
+
         Location location = getLocationFromAddress(getApplicationContext(), roc);
 
         Lati = location.getLatitude();
@@ -122,6 +133,11 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
                 outIntent.putExtra("Place", my_place); //설정 위치 전달
                 outIntent.putExtra("Latitude", Lati); //해당 위치의 위도와
                 outIntent.putExtra("Longitude", Longi); //경도 전달
+
+                // 일정 안에 나의 위도/경도 데이터 변경
+                dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(scheduleindex).members.get(mykey).latitude = Lati;
+                dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(scheduleindex).members.get(mykey).longitude = Longi;
+                dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k");
 
                 setResult(RESULT_OK, outIntent);
                 finish();

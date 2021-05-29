@@ -1,24 +1,19 @@
 package com.example.thumbup;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import com.example.thumbup.DataBase.DBCallBack;
 import com.example.thumbup.DataBase.DBManager;
@@ -30,8 +25,10 @@ import static com.example.thumbup.R.drawable.border_round_gray;
 import static com.example.thumbup.R.drawable.schedule_error_box;
 
 public class MeetingScheduleDialog extends Dialog {
-    public MeetingScheduleDialog(@NonNull Context context) {
+    String meetingId = "";
+    public MeetingScheduleDialog(@NonNull Context context, String _meetingId) {
         super(context);
+        meetingId = _meetingId;
     }
     TextView dateNull, timeNull, placeNull;
     int dateState, timeState, placeState = 0; //미정 선택하지 않았을 경우
@@ -259,9 +256,9 @@ public class MeetingScheduleDialog extends Dialog {
                     schedule.time = dbTime;
                     schedule.title = dbScheduleName;
                     schedule.place = "미정";
-                    dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.add(schedule);
+                    dbManager.participatedMeetings.get(meetingId).schedules.add(schedule);
                     Log.e("schedule - ", "update before");
-                    dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k", new DBCallBack() {
+                    dbManager.UpdateMeeting(meetingId, new DBCallBack() {
                         @Override
                         public void success(Object data) {
                             dismiss();

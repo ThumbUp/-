@@ -14,8 +14,10 @@ import com.example.thumbup.DataBase.DBCallBack;
 import com.example.thumbup.DataBase.DBManager;
 
 public class MeetingNoticeDialog extends Dialog {
-    public MeetingNoticeDialog(@NonNull Context context) {
+    String meetingId;
+    public MeetingNoticeDialog(@NonNull Context context, String _meetingId) {
         super(context);
+        meetingId = _meetingId;
     }
 
     Button dialogSave;
@@ -36,9 +38,9 @@ public class MeetingNoticeDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 toAddNotice = noticeContent.getText().toString();
-                dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").notices.add(toAddNotice);
+                dbManager.participatedMeetings.get(meetingId).notices.add(toAddNotice);
                 Log.e("notice - ", "update before");
-                dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k", new DBCallBack() {
+                dbManager.UpdateMeeting(meetingId, new DBCallBack() {
                     @Override
                     public void success(Object data) {
                         dismiss();
