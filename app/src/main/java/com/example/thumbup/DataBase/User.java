@@ -23,7 +23,7 @@ public class User {
         this.profile = "";
         this.latitude = 0;
         this.longitude = 0;
-        this.placeName = "";
+        this.placeName = "서울역";
     }
 
     public User(String name, String email, double latitude, double longitude, String placeName) {
