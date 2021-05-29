@@ -58,7 +58,7 @@ public class MainFragment extends Fragment {
         MainActivity_ListAdapter adapter;
         ArrayList<MainActivity_ItemData> items = new ArrayList<MainActivity_ItemData>() ;
 
-        adapter = new MainActivity_ListAdapter();
+        adapter = new MainActivity_ListAdapter(mainView);
 
         main_listView = (ListView) mainView.findViewById(R.id.main_listView);
         main_listView.setAdapter(adapter);

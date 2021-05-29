@@ -47,6 +47,9 @@ public class MainActivity_ListAdapter extends BaseAdapter{
     public MainActivity_ListAdapter() {
 
     }
+    public MainActivity_ListAdapter(View view) {
+        this.view = view;
+    }
 
     @Override
     public int getCount() {

@@ -137,14 +137,16 @@ public class SubSchedule extends AppCompatActivity {
                 }
                 else{
                     //False이면 할 일
-                    dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.remove(my);
+                    List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
+                    for(int i=0; i<users.size(); i++)
+                    {
+                        if(users.get(i).email.equals(my.email) == true)
+                        {
+                            users.remove(i);
+                            break;
+                        }
+                    }
                     dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k");
-                    //schedule.get(clickedIndex).members.remove(my); //배열 삭제
-                    //mdb.child("Meetings").child("-MaZIcU6ZjxsYF_iX-6k").child("schedules").child(clickedIndex+"").child("members").child(myKey).removeValue();
-                    //mdb.child("schedules").child("members").child("0").setValue(null);
-                    //오잉? 여기맞죠?
-                    //Map<String, Meeting> temp = dbManager.participatedMeetings;
-                    //dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k");
                     Log.e("SIZE", schedule.get(clickedIndex).members.size()+"");
 
                     satrtLoc_Btn.setText("일정 미참여 시, 시작 위치를 설정할 수 없습니다");

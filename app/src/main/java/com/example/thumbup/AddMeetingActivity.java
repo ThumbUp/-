@@ -62,7 +62,7 @@ public class AddMeetingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
-                intent. setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                 startActivityForResult(intent, GET_GALLERY_IMAGE);
             }
         });
@@ -72,14 +72,18 @@ public class AddMeetingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String title = addMeetingTitle.getText().toString();
                 String info = addMeetingInfo.getText().toString();
-
+                meetingImg.getDrawable().getCurrent();
                 Drawable image = meetingImg.getDrawable();
-                Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                byte[] byteImage = stream.toByteArray();
-                String simage = byteArrayToBinaryString(byteImage);
-                String key = dbManager.AddMeeting(title, info, simage);
+                Drawable dImage = getResources().getDrawable(R.drawable.ic_profile);
+                String key = "", simage = "";
+                if(image.equals(dImage) == true) {
+                    Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] byteImage = stream.toByteArray();
+                    simage = byteArrayToBinaryString(byteImage);
+                }
+                key = dbManager.AddMeeting(title, info, simage);
 
                 final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
                         R.layout.dialog_main_meeting_key, null);
@@ -92,7 +96,7 @@ public class AddMeetingActivity extends AppCompatActivity {
                 dlg3.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                         startActivity(intent);
 
                         dialog.dismiss();
@@ -104,7 +108,7 @@ public class AddMeetingActivity extends AppCompatActivity {
         addCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
             }
         });
