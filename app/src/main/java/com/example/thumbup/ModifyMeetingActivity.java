@@ -30,6 +30,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.example.thumbup.DataBase.DBCallBack;
 import com.example.thumbup.DataBase.DBManager;
 import com.example.thumbup.DataBase.Meeting;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayInputStream;
@@ -41,6 +42,8 @@ import java.util.List;
 
 public class ModifyMeetingActivity extends AppCompatActivity {
     DBManager dbManager = DBManager.getInstance();
+    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+
     private final int GET_GALLERY_IMAGE = 200;
     ImageView mMeetingImg;
     TextView mMeetingText;
@@ -49,6 +52,8 @@ public class ModifyMeetingActivity extends AppCompatActivity {
     Button mAccept;
     Button mCancel;
     String meetingId; //선택된 모임의 아이디(=코드)
+    List<String> meetingIdList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +93,6 @@ public class ModifyMeetingActivity extends AppCompatActivity {
                     byte[] byteImage = stream.toByteArray();
                     simage = byteArrayToBinaryString(byteImage);
                 }
-
                 dbManager.UpdateMeeting(meetingId);
 
                 AlertDialog.Builder dlg4 = new AlertDialog.Builder(ModifyMeetingActivity.this);

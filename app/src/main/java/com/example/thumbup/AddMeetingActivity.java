@@ -87,7 +87,7 @@ public class AddMeetingActivity extends AppCompatActivity {
                     simage = byteArrayToBinaryString(byteImage);
                 }
 
-                key = dbManager.AddMeeting(title, info, simage);
+                key = dbManager.AddMeeting(title, info, simage); //삭제부분어딧죠?
 
                 //모임 생성 완료 다이얼로그
                 final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),

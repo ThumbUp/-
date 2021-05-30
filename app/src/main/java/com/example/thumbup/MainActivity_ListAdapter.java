@@ -19,15 +19,21 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.example.thumbup.DataBase.DBManager;
 import com.example.thumbup.DataBase.Meeting;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.thumbup.AfterLoginFragment.binaryStringToByte;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class MainActivity_ListAdapter extends BaseAdapter{
@@ -77,8 +83,7 @@ public class MainActivity_ListAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         final int pos = position;
         final Context context = parent.getContext();
-        MainActivity_ListAdapter adapter;
-        adapter = new MainActivity_ListAdapter();
+        MainActivity_ListAdapter adapter = new MainActivity_ListAdapter();
 
         // listview 생성 및 adapter 지정.
         final ListView listview = (ListView) view.findViewById(R.id.main_listView);
@@ -141,8 +146,7 @@ public class MainActivity_ListAdapter extends BaseAdapter{
 
                                             // listview 갱신.
                                             adapter.notifyDataSetChanged();
-                                            dbManager.participatedMeetings.remove(meetingId);
-                                            dbManager.UpdateUser();
+                                            dbManager.WithdrawMeeting(meetingId);
                                         }
                                     }
                                     dialog.dismiss();
@@ -168,7 +172,7 @@ public class MainActivity_ListAdapter extends BaseAdapter{
                             dlg4.setView(linear);
                             TextView k_meetingKey;
                             k_meetingKey = (TextView)linear.findViewById(R.id.k_meetingKey);
-                            //k_meetingKey.setText(key);
+                            k_meetingKey.setText(listViewItem.getData_meetingId());
                             dlg4.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int whichButton) {
@@ -205,6 +209,5 @@ public class MainActivity_ListAdapter extends BaseAdapter{
     private void deleteItem(String meetingId){
         mDatabase.child("Users").child(dbManager.uid).child("meetings").child(meetingId).removeValue();
     }
-
 
 }
