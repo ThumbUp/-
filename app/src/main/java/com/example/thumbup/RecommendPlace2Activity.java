@@ -56,11 +56,9 @@ public class RecommendPlace2Activity extends AppCompatActivity implements OnMapR
     MarkerOptions myMarker;
 
     ImageView back_btn;
-    TextView map_roc;
     Button search_btn;
     Button list_btn;
 
-    String roc; //설정 위치
     String roc_info; //주소
     double Lati, Longi; //위도와 경도
 
@@ -80,14 +78,15 @@ public class RecommendPlace2Activity extends AppCompatActivity implements OnMapR
         mapFragment.getMapAsync(this);
 
         back_btn = findViewById(R.id.backBtn2);
-        map_roc = findViewById(R.id.map_roc1);
         search_btn = findViewById(R.id.searchBtn2);
         list_btn = findViewById(R.id.list_btn1);
 
         Intent outIntent = getIntent();
 
-        roc = outIntent.getStringExtra("Rocation");
-        map_roc.setText(roc);
+        Lati = outIntent.getDoubleExtra("midLatitude", 0);
+        Longi = outIntent.getDoubleExtra("midLongitude", 0);
+        Log.e("LAGI", Lati+"");
+        Log.e("LONGI", Longi+"");
 
         list_btn.setVisibility(View.INVISIBLE);
 
@@ -99,7 +98,6 @@ public class RecommendPlace2Activity extends AppCompatActivity implements OnMapR
             }
         });
 
-        // 검색 버튼 클릭 -> 일단 '나의위치' 주변 식당을 찾는 것으로 구현 -> 추후 최종 투표 결과의 위치로 코드 수정 필요!
         search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,13 +106,14 @@ public class RecommendPlace2Activity extends AppCompatActivity implements OnMapR
                 locations.clear();
 
                 map.clear();
+                //if (previous_marker != null)
                 previous_marker.clear();
 
                 new NRPlaces.Builder()
                         .listener(RecommendPlace2Activity.this)
                         .key("AIzaSyCxKA49sPjrLo0hvNDkgcBt3VVwQuiQ94s")
                         .latlng(Lati, Longi) //현재 위치
-                        .radius(150) //150 미터 내에서 검색
+                        .radius(200) //200 미터 내에서 검색
                         .type(PlaceType.RESTAURANT) //식당
                         .build()
                         .execute();
@@ -136,19 +135,20 @@ public class RecommendPlace2Activity extends AppCompatActivity implements OnMapR
                     res_roc[size2++]=temp;
                 }
                 AlertDialog.Builder dlg = new AlertDialog.Builder(RecommendPlace2Activity.this);
-                dlg.setTitle(roc + " 주변 식당 리스트");
+                dlg.setTitle("주변 식당 리스트");
+
                 dlg.setItems(res_list, new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int which){
                         map.clear();
-                        Location location = getLocationFromAddress(getApplicationContext(), res_list[which]);
+                        Location location = getLocationFromAddress(getApplicationContext(), res_roc[which]);
                         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                        //roc_info = getAddressFromLocation(getApplicationContext(), place.getLatitude(), place.getLongitude());
                         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                         map.moveCamera(CameraUpdateFactory.zoomTo(18));
 
                         MarkerOptions markerOptions = new MarkerOptions();
                         markerOptions.position(latLng);
                         markerOptions.title(res_list[which]);
+                        markerOptions.snippet(res_roc[which]);
 
                         BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.resraurant_rocation);
                         Bitmap b=bitmapdraw.getBitmap();
@@ -185,7 +185,7 @@ public class RecommendPlace2Activity extends AppCompatActivity implements OnMapR
                     LatLng latLng = new LatLng(place.getLatitude(), place.getLongitude());
                     //roc_info = getAddressFromLocation(getApplicationContext(), place.getLatitude(), place.getLongitude());
                     map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                    map.moveCamera(CameraUpdateFactory.zoomTo(17));
+                    map.moveCamera(CameraUpdateFactory.zoomTo(16));
 
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(latLng);
@@ -217,18 +217,13 @@ public class RecommendPlace2Activity extends AppCompatActivity implements OnMapR
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Location location = getLocationFromAddress(getApplicationContext(), roc);
-
-        //String roc_info;
-        Lati = location.getLatitude(); //설정 위치의 위도와
-        Longi = location.getLongitude(); //경도 저장
         roc_info = getAddressFromLocation(getApplicationContext(), Lati, Longi);
 
         this.map = googleMap;
         LatLng latLng = new LatLng(Lati, Longi);
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         map.moveCamera(CameraUpdateFactory.zoomTo(17));
-        myMarker = new MarkerOptions().position(latLng).title(roc).snippet(roc_info);
+        myMarker = new MarkerOptions().position(latLng);
         map.addMarker(myMarker);
     }
 

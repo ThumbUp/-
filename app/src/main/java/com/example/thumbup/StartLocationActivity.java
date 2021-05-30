@@ -143,8 +143,6 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View view) {
                 outIntent.putExtra("Place", my_place); //설정 위치 전달
-                //outIntent.putExtra("Latitude", Lati); //해당 위치의 위도와
-                //outIntent.putExtra("Longitude", Longi); //경도 전달
 
                 // 일정 안에 나의 위도/경도 데이터 변경
                 dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(scheduleindex).members.get(mykey).latitude = Lati;
