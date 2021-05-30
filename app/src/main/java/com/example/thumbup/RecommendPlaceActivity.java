@@ -80,14 +80,15 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
         mapFragment.getMapAsync(this);
 
         back_btn = findViewById(R.id.backBtn1);
-        map_roc = findViewById(R.id.map_roc);
         search_btn = findViewById(R.id.searchBtn1);
         list_btn = findViewById(R.id.list_btn);
 
         Intent outIntent = getIntent();
 
-        roc = outIntent.getStringExtra("Rocation");
-        map_roc.setText(roc);
+        Lati = outIntent.getDoubleExtra("midLatitude", 0);
+        Longi = outIntent.getDoubleExtra("midLongitude", 0);
+        Log.e("LAGI", Lati+"");
+        Log.e("LONGI", Longi+"");
 
         list_btn.setVisibility(View.INVISIBLE);
 
@@ -115,7 +116,7 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
                         .listener(RecommendPlaceActivity.this)
                         .key("AIzaSyCxKA49sPjrLo0hvNDkgcBt3VVwQuiQ94s")
                         .latlng(Lati, Longi) //현재 위치
-                        .radius(150) //150 미터 내에서 검색
+                        .radius(200) //200 미터 내에서 검색
                         .type(PlaceType.CAFE) //카페
                         .build()
                         .execute();
@@ -137,7 +138,7 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
                     cafe_roc[size2++]=temp;
                 }
                 AlertDialog.Builder dlg = new AlertDialog.Builder(RecommendPlaceActivity.this);
-                dlg.setTitle(roc + " 주변 카페 리스트");
+                dlg.setTitle("주변 카페 리스트");
                 //dlg.setMessage("카페");
                 //dlg.setItems(cafe_list, null);
                 dlg.setItems(cafe_list, new DialogInterface.OnClickListener(){
@@ -224,18 +225,13 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Location location = getLocationFromAddress(getApplicationContext(), roc);
-
-        //String roc_info;
-        Lati = location.getLatitude(); //설정 위치의 위도와
-        Longi = location.getLongitude(); //경도 저장
         roc_info = getAddressFromLocation(getApplicationContext(), Lati, Longi);
 
         this.map = googleMap;
         LatLng latLng = new LatLng(Lati, Longi);
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         map.moveCamera(CameraUpdateFactory.zoomTo(17));
-        myMarker = new MarkerOptions().position(latLng).title(roc).snippet(roc_info);
+        myMarker = new MarkerOptions().position(latLng);
         map.addMarker(myMarker);
     }
 
