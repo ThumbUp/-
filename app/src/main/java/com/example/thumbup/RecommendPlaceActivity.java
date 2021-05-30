@@ -100,7 +100,6 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
             }
         });
 
-        // 검색 버튼 클릭 -> 일단 '나의위치' 주변 카페를 찾는 것으로 구현 -> 추후 최종 투표 결과의 위치로 코드 수정 필요!
         search_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,20 +138,19 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
                 }
                 AlertDialog.Builder dlg = new AlertDialog.Builder(RecommendPlaceActivity.this);
                 dlg.setTitle("주변 카페 리스트");
-                //dlg.setMessage("카페");
-                //dlg.setItems(cafe_list, null);
+
                 dlg.setItems(cafe_list, new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int which){
                         map.clear();
                         Location location = getLocationFromAddress(getApplicationContext(), cafe_roc[which]);
                         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                        //roc_info = getAddressFromLocation(getApplicationContext(), place.getLatitude(), place.getLongitude());
                         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                         map.moveCamera(CameraUpdateFactory.zoomTo(18));
 
                         MarkerOptions markerOptions = new MarkerOptions();
                         markerOptions.position(latLng);
                         markerOptions.title(cafe_list[which]);
+                        markerOptions.snippet(cafe_roc[which]);
 
                         BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.coffee_rocation);
                         Bitmap b=bitmapdraw.getBitmap();
@@ -189,16 +187,12 @@ public class RecommendPlaceActivity extends AppCompatActivity implements OnMapRe
                     LatLng latLng = new LatLng(place.getLatitude(), place.getLongitude());
                     //roc_info = getAddressFromLocation(getApplicationContext(), place.getLatitude(), place.getLongitude());
                     map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                    map.moveCamera(CameraUpdateFactory.zoomTo(17));
+                    map.moveCamera(CameraUpdateFactory.zoomTo(16));
 
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(latLng);
                     markerOptions.title(place.getName());
                     markerOptions.snippet(place.getVicinity());
-                    //markerOptions.snippet(roc_info);
-                    //Marker item = map.addMarker(markerOptions);
-                    //previous_marker.add(item);
-                    //Log.e("TAG", item.getTitle());
 
                     BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.coffee_rocation);
                     Bitmap b=bitmapdraw.getBitmap();
