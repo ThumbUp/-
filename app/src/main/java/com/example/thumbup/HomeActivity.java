@@ -7,7 +7,12 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
+//안녕하세요
+//데이터베이스쪽은 정리했습니답
+//세윤님 편하게 그냥 dbManager.Withraw하는 함수 만들었어요
+//그리고 생각해보니 틀린 모임코드를 넣었을때 체크하는 부분이 없어서
+//그부분 함수도 새로 만들엇습니답.
+//감사합니다! Withdraw 사용해서 바로 키값 불러오면 되는 건가요?!
 public class HomeActivity extends AppCompatActivity {
     ImageButton main_mainBtn;
     ImageButton main_meetingBtn;

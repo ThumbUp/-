@@ -30,6 +30,7 @@ public class DBManager {
     public String uid;      //현재 로그인 된 유저 uid
     public User userData;   //현재 로그인 된 유저 정보
     public Map<String, Meeting> participatedMeetings = new HashMap<>(); //현재 로그인된 유저가 가입된 미팅 정보
+    private Map<String, ValueEventListener> participatedMeetingsListeners = new HashMap<>();
 
     private ProgressDialog customProgressDialog;
 
@@ -117,11 +118,34 @@ public class DBManager {
                 // ...
             }
         })
-        .addOnFailureListener(new OnFailureListener() {
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Write failed
+                        // ...
+                    }
+                });
+    }
+
+    public void CheckValidMeetingId(String mid, DBCallBack callback)
+    {
+        mDatabase.child("Meetings").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-                // Write failed
-                // ...
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot childSnapshot: snapshot.getChildren()) {
+                    String clubkey = childSnapshot.getKey();
+                    if(clubkey.equals(mid) == true)
+                    {
+                        callback.success(true);
+                        return;
+                    }
+                }
+                callback.fail("No");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
@@ -136,6 +160,8 @@ public class DBManager {
     {
         Map<String, Object> map = new HashMap<>();
         int meetingSize = userData.meetings.size();
+        if(meetingSize == 0)
+            callBack.success(true);
         for(int i=0; i < userData.meetings.size(); i++)
         {
             String uid = userData.meetings.get(i);
@@ -155,6 +181,16 @@ public class DBManager {
         }
     }
 
+    public void WithdrawMeeting(String mid)
+    {
+        userData.meetings.remove(mid);
+        participatedMeetings.get(mid).members.remove(uid);
+        mDatabase.child("Meetings").child(mid).removeEventListener(participatedMeetingsListeners.get(mid));
+        UpdateMeeting(mid);
+        participatedMeetings.remove(mid);
+        UpdateUser();
+    }
+
     public void UpdateMeeting(String mid, final DBCallBack callBack) {
         Map<String, Object> map = new HashMap<>();
         map.put(mid, participatedMeetings.get(mid));
@@ -164,12 +200,12 @@ public class DBManager {
                 callBack.success(true);
             }
         })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                callBack.fail(e.getMessage());
-            }
-        });
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callBack.fail(e.getMessage());
+                    }
+                });
     }
 
     public void JoinMeeting(String mid) {
@@ -211,12 +247,12 @@ public class DBManager {
                 mDatabase.child("Meetings").child(key).setValue(meetingData);
             }
         })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                callBack.fail(e.getMessage());
-            }
-        });
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callBack.fail(e.getMessage());
+                    }
+                });
         return key;
     }
 
@@ -267,6 +303,7 @@ public class DBManager {
                 Log.w("loadPost:onCancelled", databaseError.toException());
             }
         };
+        participatedMeetingsListeners.put(mid, postListener);
         mPostReference.addValueEventListener(postListener);
     }
 }
