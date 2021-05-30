@@ -143,7 +143,6 @@ public class MainActivity_ListAdapter extends BaseAdapter{
                                             adapter.notifyDataSetChanged();
                                             dbManager.participatedMeetings.remove(meetingId);
                                             dbManager.UpdateUser();
-
                                         }
                                     }
                                     dialog.dismiss();
