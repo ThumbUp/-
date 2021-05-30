@@ -120,7 +120,8 @@ public class MainActivity_ListAdapter extends BaseAdapter{
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         if (menuItem.getItemId() == R.id.action_menu1){
-                            //모임 나가기
+                            //모임 나가기 아무래도 푸쉬하고 제쪽에서 보는게 편할것같네요 ㅋㅋㅋ넵 알겠습니다! 마지막으로 ㅎ나번만!..!
+                            //하시고게씬가요?네 지금도 로딩중이에요...! 아하.. 그냥 푸시해주시면 제가볼게요!네!
                             final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
                                     R.layout.dialog_main_delete_meeting, null);
 
@@ -138,15 +139,31 @@ public class MainActivity_ListAdapter extends BaseAdapter{
 
                                                 if (checked > -1 && checked < count) {
                                                     // 아이템 삭제
+                                                    //매번 번거로우시게 해서 죄송합니다... 아니에요! ㅎㅎㅎ
+                                                    //모임의 id를 addMeeting을 통하지 않고 가져올 방법이 있을까요?
+                                                    //어떤 모임의 id 말씀하시는건가요?
+                                                    //선택된 모임의 id?? 넵 삭제하려는 모임의 id요!
+                                                    //그 모임 추가할때
                                                     listViewItemList.remove(checked);
-                                                    //meetingId =
-                                                    //deleteItem(meetingId);
+                                                    meetingId = listViewItem.getData_meetingId();
+                                                    //네 요거아닌가요? 네 그렇게 생각하고 했는데 삭제가 안 되어서 잘못 가져왔나 했어요..!
+                                                    //삭제하고나서, 이게 그 가입된 모임 탈퇴하는거죵?넵넵
+                                                    //하고나서 db
+                                                    deleteItem(meetingId);
 
                                                     // listview 선택 초기화.
                                                     listview.clearChoices();
 
                                                     // listview 갱신.
                                                     adapter.notifyDataSetChanged();
+                                                    dbManager.participatedMeetings.remove(meetingId);
+                                                    dbManager.UpdateUser();
+                                                    //해보면댈것같아요! 하신건가유? 네 헉 안된건가요 그런것같아요ㅠㅠ
+                                                    //이거해줘야 db에 업데이트되요!헉 감사합니다!! ㅋㅋㅋㅋ 별것도아닌데 빨리 알려드릴것그랫네요
+                                                    //넘감사해요... 지금 다시 해볼게요! 네!아 잠시만요 다시해보실래요?네!
+                                                    // 지금 화면에서는 없어졌는데 나갔다가 다시 들어오면 다시 생기는 상태에요
+                                                    //아 방금 하셨어요??네네 다시해볼까요? 중단점이 이게 안스 버그인지먼지
+                                                    //디버깅모드로해도 중단점이 안잡힐때가 많네요
 
                                                 }
                                             }

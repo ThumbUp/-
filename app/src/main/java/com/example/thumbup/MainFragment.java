@@ -73,6 +73,8 @@ public class MainFragment extends Fragment {
             Drawable profile = Drawable.createFromStream(is, "profile");
 
             adapter.addItem(profile, meeting.title, meeting.info, key);
+            //여기에서 addItem할때 key를 같이 저장하잖아요?
+            //listViewItemList에서 선택된 아이템 알수있지않나요?
 
             meetingIdList.add(key);
         }

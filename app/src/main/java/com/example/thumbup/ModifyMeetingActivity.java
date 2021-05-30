@@ -48,11 +48,7 @@ public class ModifyMeetingActivity extends AppCompatActivity {
     EditText mMeetingInfo;
     Button mAccept;
     Button mCancel;
-
     String meetingId; //선택된 모임의 아이디(=코드)
-    List<String> meetingIdList = new ArrayList<>(); //유저가 가입된 모임의 코드들(= 모임의 키 값)들
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +80,7 @@ public class ModifyMeetingActivity extends AppCompatActivity {
                 Drawable image = mMeetingImg.getDrawable();
                 Drawable dImage = getResources().getDrawable(R.drawable.ic_profile);
                 String simage = "";
-                //meetingId =
-                dbManager.UpdateMeeting(meetingId);
+
                 if(image.equals(dImage) == true) {
                     Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -93,6 +88,8 @@ public class ModifyMeetingActivity extends AppCompatActivity {
                     byte[] byteImage = stream.toByteArray();
                     simage = byteArrayToBinaryString(byteImage);
                 }
+
+                dbManager.UpdateMeeting(meetingId);
 
                 AlertDialog.Builder dlg4 = new AlertDialog.Builder(ModifyMeetingActivity.this);
                 dlg4.setTitle("모임이 수정되었습니다");

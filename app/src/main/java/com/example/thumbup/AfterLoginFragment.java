@@ -41,7 +41,7 @@ public class AfterLoginFragment extends Fragment implements View.OnClickListener
     TextView nameText, emailText;
     private FirebaseAuth mAuth;
     private DBManager dbManager = DBManager.getInstance();
-    //거기좀 켜주실래요?
+
     private Boolean isPermission = true;
     private static final int PICK_FROM_ALBUM = 1;
     private File tempFile;
@@ -60,8 +60,6 @@ public class AfterLoginFragment extends Fragment implements View.OnClickListener
         btnGallery = (ImageButton) afterLoginView.findViewById(R.id.btn_ch_img);
 
         mAuth = FirebaseAuth.getInstance();
-        //지금 하면 될까요? 넵! 로그인 했습니다!
-        //다시 해보시겟어요?
 
         btnLogout.setOnClickListener(this);
         //btnRevoke.setOnClickListener(this);
@@ -200,7 +198,7 @@ public class AfterLoginFragment extends Fragment implements View.OnClickListener
         ByteArrayInputStream stream = new ByteArrayInputStream(image);
         Drawable profile = Drawable.createFromStream(stream, "profile");
 
-        imageView.setImageDrawable(profile);//확인해보죵
+        imageView.setImageDrawable(profile);
     }
 
     // 스트링을 바이너리 바이트 배열로

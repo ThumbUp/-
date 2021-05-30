@@ -58,6 +58,7 @@ public class AddMeetingActivity extends AppCompatActivity {
         addAccept = findViewById(R.id.add_accept);
         addCancel = findViewById(R.id.add_cancel);
 
+        //모임 사진 추가
         addMeetingText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +68,7 @@ public class AddMeetingActivity extends AppCompatActivity {
             }
         });
 
+        //확인 버튼 클릭
         addAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,6 +78,7 @@ public class AddMeetingActivity extends AppCompatActivity {
                 Drawable image = addMeetingImg.getDrawable();
                 Drawable dImage = getResources().getDrawable(R.drawable.ic_profile);
                 String key = "", simage = "";
+                //이미지 바이트 변환
                 if(image.equals(dImage) == true) {
                     Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -85,6 +88,8 @@ public class AddMeetingActivity extends AppCompatActivity {
                 }
                 key = dbManager.AddMeeting(title, info, simage);
 
+
+                //모임 생성 완료 다이얼로그
                 final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
                         R.layout.dialog_main_meeting_key, null);
 
