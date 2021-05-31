@@ -1,6 +1,8 @@
 package com.example.thumbup;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +44,8 @@ public class SubSchedule extends AppCompatActivity {
     TextView time; //시간
     TextView personal;
 
+    RelativeLayout person;
+
     ImageView back_Btn;
     Button satrtLoc_Btn;
     TextView my_roc;
@@ -54,6 +59,8 @@ public class SubSchedule extends AppCompatActivity {
     String myKey;
     int myKey2;
     int mykey;
+
+    String in;
 
     List<Schedule> schedule = new ArrayList<>(); //일정
 
@@ -101,6 +108,7 @@ public class SubSchedule extends AppCompatActivity {
         Log.e("PERSON", DBpersonal+"");
         personal.setText(DBpersonal+"");
 
+        person = findViewById(R.id.meet_personnel);
 
         back_Btn = findViewById(R.id.backBtn);
         satrtLoc_Btn = findViewById(R.id.my_btn1);
@@ -150,6 +158,7 @@ public class SubSchedule extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // 스위치 ON이면 할 일
                 if (isChecked) {
+                    in = "참여";
                     boolean meetingIn = false;
                     List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
                     for (int i = 0; i < users.size(); i++) {
@@ -208,6 +217,7 @@ public class SubSchedule extends AppCompatActivity {
                 }
                 // 스위치 OFF면 할 일
                 else {
+                    in = "미참여";
                     List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
                     for (int i = 0; i < users.size(); i++) {
                         if (users.get(i).email.equals(my.email) == true) {
