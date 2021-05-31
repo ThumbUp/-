@@ -62,8 +62,6 @@ public class SubSchedule extends AppCompatActivity {
     int myKey2;
     int mykey;
 
-    String in;
-
     List<Schedule> schedule = new ArrayList<>(); //일정
 
     String DBtitle; //DB 일정명
@@ -160,7 +158,6 @@ public class SubSchedule extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // 스위치 ON이면 할 일
                 if (isChecked) {
-                    in = "참여";
                     boolean meetingIn = false;
                     List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
                     for (int i = 0; i < users.size(); i++) {
@@ -219,7 +216,6 @@ public class SubSchedule extends AppCompatActivity {
                 }
                 // 스위치 OFF면 할 일
                 else {
-                    in = "미참여";
                     List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
                     for (int i = 0; i < users.size(); i++) {
                         if (users.get(i).email.equals(my.email) == true) {

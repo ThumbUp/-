@@ -160,6 +160,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
         LatLng latLng = new LatLng(Lati, Longi);
+        Log.e("LATI / LONGI", Lati+", "+Longi);
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         map.moveCamera(CameraUpdateFactory.zoomTo(15));
         myMarker = new MarkerOptions().position(latLng).title("서울역");
