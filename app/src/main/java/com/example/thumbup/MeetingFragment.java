@@ -57,8 +57,6 @@ public class MeetingFragment extends Fragment {
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     User my = dbManager.userData;
     boolean scheIn = false;
-    //int i = 0;
-    //int i2;
 
     public MeetingFragment(String _meetingId) {
         meetingId = _meetingId;
@@ -143,7 +141,6 @@ public class MeetingFragment extends Fragment {
             }
 
             meetingListViewItem.add(item);
-
         }
         MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
         meetingListView.setAdapter(meetingAdapter);

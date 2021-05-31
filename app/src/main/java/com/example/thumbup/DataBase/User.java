@@ -21,8 +21,8 @@ public class User {
         this.name = name;
         this.email = email;
         this.profile = "";
-        this.latitude = 0;
-        this.longitude = 0;
+        this.latitude = 37.555946;
+        this.longitude = 126.97231699999999;
         this.placeName = "서울역";
     }
 
