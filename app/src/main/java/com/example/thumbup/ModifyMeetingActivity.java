@@ -52,7 +52,6 @@ public class ModifyMeetingActivity extends AppCompatActivity {
     Button mAccept;
     Button mCancel;
     String meetingId; //선택된 모임의 아이디(=코드)
-    List<String> meetingIdList = new ArrayList<>();
 
 
     @Override

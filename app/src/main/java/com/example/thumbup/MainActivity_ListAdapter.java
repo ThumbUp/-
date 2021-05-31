@@ -42,7 +42,6 @@ public class MainActivity_ListAdapter extends BaseAdapter{
     DBManager dbManager = DBManager.getInstance();
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     String meetingId;
-    List<String> meetingIdList = new ArrayList<>();
 
     // 생성자로부터 전달된 resource id 값을 저장.
     int resourceId;
@@ -107,12 +106,6 @@ public class MainActivity_ListAdapter extends BaseAdapter{
         iconImageView.setImageDrawable(listViewItem.getData_meetingIcon());
         titleTextView.setText(listViewItem.getData_meetingTitle());
         infoTextView.setText(listViewItem.getData_meetingInfo());
-
-        for(String key : dbManager.participatedMeetings.keySet())
-        {
-            Meeting meeting = dbManager.participatedMeetings.get(key);
-            meetingIdList.add(key);
-        }
 
         ImageButton btnPopup = (ImageButton) convertView.findViewById(R.id.btnPopup);
         btnPopup.findViewById(R.id.btnPopup).setOnClickListener(new View.OnClickListener() {
