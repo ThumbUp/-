@@ -10,10 +10,12 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -248,6 +250,21 @@ public class SubSchedule extends AppCompatActivity {
                         }
                     });
                 }
+            }
+        });
+
+        // 참여인원 클릭
+        person.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu meetingPopup = new PopupMenu(getApplicationContext(), view);
+                Menu meetingMenu = meetingPopup.getMenu();
+                int person_size = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.size();
+                for (int i = 0; i < person_size; i++) {
+                    meetingMenu.add(0, i,0,
+                            (CharSequence) dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.get(i).name);
+                }
+                meetingPopup.show();
             }
         });
 
