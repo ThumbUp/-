@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="#ffffff">
+
+    <TextView
+        android:id="@+id/addMeeting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="13dp"
+        android:gravity="center"
+        android:text="모임 수정"
+        android:textSize="25dp"
+        android:textColor="@color/black"/>
+
+    <LinearLayout
+        android:padding="35dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/meetingImg"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:maxHeight="200dp"
+            android:maxWidth="200dp"
+            android:layout_margin="50dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_profile"
+            android:onClick="onClick"/>
+
+        <Button
+            android:id="@+id/m_meetingImg"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="#303F80"
+            android:text="이미지 선택"
+            android:onClick="onClick"
+            android:textSize="15sp"/>
+
+        <EditText
+            android:id="@+id/m_meetingTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:hint="모임명"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/m_meetingInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:hint="모임 설명"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/m_cancel"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginRight="100dp"
+            android:text="취소" />
+
+        <Button
+            android:id="@+id/m_accept"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="80dp"
+            android:text="확인" />
+    </LinearLayout>
+
+</LinearLayout>

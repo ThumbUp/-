@@ -2,20 +2,25 @@ package com.example.thumbup;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+
+import com.example.thumbup.DataBase.DBManager;
 
 import java.util.ArrayList;
 
@@ -24,6 +29,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class MainActivity_ListAdapter extends BaseAdapter{
 
     private View view;
+    DBManager dbManager = DBManager.getInstance();
 
     // 생성자로부터 전달된 resource id 값을 저장.
     int resourceId;
@@ -61,6 +67,12 @@ public class MainActivity_ListAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         final int pos = position;
         final Context context = parent.getContext();
+        MainActivity_ListAdapter adapter;
+        adapter = new MainActivity_ListAdapter();
+
+        // listview 생성 및 adapter 지정.
+        final ListView listview = (ListView) view.findViewById(R.id.main_listView);
+        listview.setAdapter(adapter);
 
         // "listview_item" Layout을 inflate하여 convertView 참조 획득.
         if (convertView == null) {
@@ -99,6 +111,24 @@ public class MainActivity_ListAdapter extends BaseAdapter{
                                     .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int whichButton) {
+                                            int count, checked ;
+                                            count = adapter.getCount() ;
+
+                                            if (count > 0) {
+                                                // 현재 선택된 아이템의 position 획득.
+                                                checked = listview.getCheckedItemPosition();
+
+                                                if (checked > -1 && checked < count) {
+                                                    // 아이템 삭제
+                                                    listViewItemList.remove(checked);
+
+                                                    // listview 선택 초기화.
+                                                    listview.clearChoices();
+
+                                                    // listview 갱신.
+                                                    adapter.notifyDataSetChanged();
+                                                }
+                                            }
                                             dialog.dismiss();
                                         }
                                     })
@@ -110,28 +140,11 @@ public class MainActivity_ListAdapter extends BaseAdapter{
                                     })
                                     .show();
                         }else if (menuItem.getItemId() == R.id.action_menu2){
-                            final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
-                                    R.layout.dialog_main_add_meeting, null);
-
-                            new AlertDialog.Builder(getApplicationContext())
-                                    .setView(linear)
-                                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-
-
-                                            dialog.dismiss();
-                                        }
-                                    })
-                                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            dialog.dismiss();
-                                        }
-                                    })
-                                    .show();
+                            // 모임 수정
+                            Intent intent = new Intent(getApplicationContext(), ModifyMeetingActivity.class);
+                            //startActivity(intent);
                         }else {
-                            Toast.makeText(getApplicationContext(), "인원 추가", Toast.LENGTH_SHORT).show();
+                            //모임원 추가
                         }
 
                         return false;

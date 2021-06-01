@@ -8,6 +8,9 @@ public class User {
     public String email;
     public String profile;
     public List<String> meetings = new ArrayList<>();
+    public double latitude;
+    public double longitude;
+    public String placeName;
 
     public User()
     {
@@ -18,5 +21,17 @@ public class User {
         this.name = name;
         this.email = email;
         this.profile = "";
+        this.latitude = 37.555946;
+        this.longitude = 126.97231699999999;
+        this.placeName = "서울역";
+    }
+
+    public User(String name, String email, double latitude, double longitude, String placeName) {
+        this.name = name;
+        this.email = email;
+        this.profile = "";
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.placeName = placeName;
     }
 }

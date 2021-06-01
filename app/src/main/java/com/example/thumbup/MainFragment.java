@@ -2,11 +2,14 @@ package com.example.thumbup;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -24,12 +27,17 @@ import com.example.thumbup.DataBase.DBManager;
 import com.example.thumbup.DataBase.Meeting;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainFragment extends Fragment {
     ListView main_listView;
     ImageButton btn_addMeeting;
     private Context mContext;
     DBManager dbManager = DBManager.getInstance();
+    //유정 수정
+    String meetingId; //선택된 모임의 아이디(=코드)
+    List<String> meetingIdList = new ArrayList<>(); //유저가 가입된 모임의 코드들(= 모임의 키 값)들
+
 
     @Override
     public void onAttach(Context context){
@@ -57,6 +65,8 @@ public class MainFragment extends Fragment {
         {
             Meeting meeting = dbManager.participatedMeetings.get(key);
             adapter.addItem(ContextCompat.getDrawable(getContext(), R.drawable.ic_profile), meeting.title, meeting.info, key);
+            //유정 수정
+            meetingIdList.add(key);
         }
 
         btn_addMeeting.setOnClickListener(new View.OnClickListener() {
@@ -68,45 +78,24 @@ public class MainFragment extends Fragment {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         if (menuItem.getItemId() == R.id.action_menu1){
-                            final LinearLayout linear = (LinearLayout) View.inflate(getContext(),
-                                    R.layout.dialog_main_add_meeting, null);
-
-                            AlertDialog.Builder dlg = new AlertDialog.Builder(getContext());
-                            dlg.setView(linear);
-                            dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            EditText add_meetingTitle = (EditText)((AlertDialog)dialog).findViewById(R.id.add_meetingTitle);
-                                            EditText add_meetingInfo = (EditText)((AlertDialog)dialog).findViewById(R.id.add_meetingInfo);
-
-                                            String title = add_meetingTitle.getText().toString();
-                                            String info = add_meetingInfo.getText().toString();
-
-                                            String key = dbManager.AddMeeting(title, info);
-
-                                            dialog.dismiss();
-                                        }
-                                    })
-                                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            dialog.dismiss();
-                                        }
-                                    })
-                                    .show();
+                            Intent intent = new Intent(getContext(), AddMeetingActivity.class);
+                            startActivity(intent);
                         }else {
                             final LinearLayout linear = (LinearLayout) View.inflate(getContext(),
                                     R.layout.dialog_main_join_meeting, null);
 
-                            new AlertDialog.Builder(getContext())
-                                    .setView(linear)
-                                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int whichButton) {
+                            AlertDialog.Builder dlg2 = new AlertDialog.Builder(getContext());
+                            dlg2.setView(linear);
+                            dlg2.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    EditText meetingKey = (EditText) linear.findViewById(R.id.meetingKey);
+                                    String meeting_key = meetingKey.getText().toString();
 
-                                            dialog.dismiss();
-                                        }
-                                    })
+                                    dbManager.JoinMeeting(meeting_key);
+                                    dialog.dismiss();
+                                }
+                            })
                                     .setNegativeButton("취소", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int whichButton) {
@@ -114,7 +103,7 @@ public class MainFragment extends Fragment {
                                         }
                                     })
                                     .show();
-                        }
+                                }
 
                         return false;
                     }
@@ -123,6 +112,14 @@ public class MainFragment extends Fragment {
             }
         });
 
+        //유정 수정
+        main_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                meetingId = meetingIdList.get(position);
+                ((HomeActivity)getActivity()).replaceFragment(new MeetingFragment(meetingId));
+            }
+        });
         return mainView;
     }
 }

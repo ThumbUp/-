@@ -13,31 +13,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="16dp"
-            android:paddingTop="10dp"
+            android:paddingTop="8dp"
             android:paddingRight="16dp"
             android:layout_weight="1">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                >
                 <TextView
-                    android:id="@+id/meeting_title"
-                    android:layout_width="75dp"
+                    android:id="@+id/meeting_name"
+                    android:layout_width="wrap_content"
                     android:layout_height="24dp"
-                    android:text="스모프"
+                    android:text="모임 선택"
+                    android:layout_marginLeft="3dp"
                     android:gravity="center_vertical"
                     android:textColor="#000000"
-                    android:textSize="20sp"
+                    android:textSize="19dp"
                     android:textStyle="bold"/>
-                <ImageButton
-                    android:id="@+id/showSchedule"
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
-                    android:layout_marginLeft="10dp"
-                    android:src="@drawable/ic_down_show" />
-            </LinearLayout>
             <TextView
                 android:id="@+id/meeting_addNotice"
                 android:layout_width="wrap_content"
@@ -51,10 +39,9 @@
             <ListView
                 android:id="@+id/meeting_noticeList"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="140dp"
                 android:layout_marginTop="8dp"
-                android:paddingTop="12dp"
-                android:paddingLeft="22dp"
+                android:paddingHorizontal="20dp"
                 android:textSize="12sp"
                 android:textColor="@color/black"
                 android:background="@drawable/button_round_white" />
@@ -81,7 +68,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:orientation="horizontal"
-                    android:background="@drawable/border_bottom_gray">
+                    android:background="@drawable/border_bottom_black">
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -107,7 +94,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="장소"
+                        android:text="참여여부"
                         android:textColor="@color/black"
                         android:gravity="center"/>
                 </LinearLayout>

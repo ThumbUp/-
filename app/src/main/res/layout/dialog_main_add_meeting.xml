@@ -2,43 +2,94 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_width="300dp"
-    android:layout_height="wrap_content">
+    android:padding="20dp"
+    android:background="#ffffff">
 
     <TextView
         android:id="@+id/addMeeting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="13dp"
         android:gravity="center"
         android:text="모임 생성"
-        android:textSize="17dp"/>
+        android:textSize="25dp"
+        android:textColor="@color/black"/>
 
     <LinearLayout
-        android:padding="24dp"
+        android:padding="30dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <EditText
             android:id="@+id/add_meetingTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="17dp"
-            android:layout_marginBottom="3dp"
-            android:hint="모임명"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:hint="모임명"
+            android:textColor="@color/black"/>
+
         <EditText
             android:id="@+id/add_meetingInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="17dp"
-            android:layout_marginBottom="3dp"
-            android:hint="모임 설명"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:hint="모임 설명"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:id="@+id/meetingImg"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:maxHeight="200dp"
+            android:maxWidth="200dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_profile"/>
+
+        <TextView
+            android:id="@+id/addMeeting_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:layout_gravity="center"
+            android:text="사진 추가하기"
+            android:textSize="17dp"
+            android:textColor="@color/black"/>
+
     </LinearLayout>
 
-    <View
-        android:background="#66bdbdbd"
-        android:layout_width="match_parent"
-        android:layout_height="1dp" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/add_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:paddingHorizontal="50dp"
+            android:layout_marginLeft="50dp"
+            android:background="@drawable/button_round_gray"
+            android:text="취소" />
+
+        <Button
+            android:id="@+id/add_accept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingHorizontal="50dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/button_round_blue"
+            android:text="확인" />
+    </RelativeLayout>
 
 </LinearLayout>
