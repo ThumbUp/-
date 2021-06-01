@@ -204,9 +204,9 @@ public class MeetingFragment extends Fragment {
             }
         });
 
-        meetingListView.setOnClickListener(new View.OnClickListener() {
+        meetingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), SubSchedule.class);
                 intent.putExtra("meetingId", meetingId);
                 getApplicationContext().startActivity(intent);
