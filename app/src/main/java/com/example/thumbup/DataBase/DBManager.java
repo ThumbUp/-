@@ -278,15 +278,13 @@ public class DBManager {
             @Override
             public void onSuccess(Void aVoid) {
                 callBack.success(true);
-                mDatabase.child("Meetings").child(key).setValue(meetingData);
             }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        callBack.fail(e.getMessage());
-                    }
-                });
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callBack.fail(e.getMessage());
+            }
+        });
         return key;
     }
 
