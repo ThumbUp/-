@@ -270,7 +270,7 @@ public class DBManager {
 
     public String AddMeeting(String title, String info, String image, final DBCallBack callBack) {
         Map<String, Object> map = new HashMap<>();
-        Meeting meetingData = new Meeting(title, info, "");
+        Meeting meetingData = new Meeting(title, info, image);
 
         String key = mDatabase.child("Meetings").push().getKey();
         participatedMeetings.put(key, meetingData);

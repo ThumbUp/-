@@ -133,7 +133,6 @@ public class AddMeetingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
-                isImageChange = true;
             }
         });
     }

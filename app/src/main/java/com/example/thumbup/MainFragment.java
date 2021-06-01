@@ -119,14 +119,14 @@ public class MainFragment extends Fragment {
                                     });
                                 }
                             })
-                                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            dialog.dismiss();
-                                        }
-                                    })
-                                    .show();
+                            .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    dialog.dismiss();
                                 }
+                            })
+                            .show();
+                        }
 
                         return false;
                     }
