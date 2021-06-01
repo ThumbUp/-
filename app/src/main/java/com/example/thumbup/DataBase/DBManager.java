@@ -111,20 +111,24 @@ public class DBManager {
     public void UpdateUser() {
         Map<String, Object> map = new HashMap<>();
         map.put(uid, userData);
+        mDatabase.child("Users").updateChildren(map);
+    }
+
+    public void UpdateUser(final DBCallBack callBack) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(uid, userData);
         mDatabase.child("Users").updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                // Write was successful!
-                // ...
+                callBack.success(true);
             }
         })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Write failed
-                        // ...
-                    }
-                });
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callBack.fail(e.getMessage());
+            }
+        });
     }
 
     public void CheckValidMeetingId(String mid, DBCallBack callback)
@@ -181,14 +185,24 @@ public class DBManager {
         }
     }
 
-    public void WithdrawMeeting(String mid)
+    public void WithdrawMeeting(String mid, final DBCallBack callBack)
     {
         userData.meetings.remove(mid);
         participatedMeetings.get(mid).members.remove(uid);
         mDatabase.child("Meetings").child(mid).removeEventListener(participatedMeetingsListeners.get(mid));
         UpdateMeeting(mid);
         participatedMeetings.remove(mid);
-        UpdateUser();
+        UpdateUser(new DBCallBack() {
+            @Override
+            public void success(Object data) {
+                callBack.success(true);
+            }
+
+            @Override
+            public void fail(String errorMessage) {
+                callBack.fail(errorMessage);
+            }
+        });
     }
 
     public void UpdateMeeting(String mid, final DBCallBack callBack) {

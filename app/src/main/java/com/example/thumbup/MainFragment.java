@@ -72,8 +72,8 @@ public class MainFragment extends Fragment {
             ByteArrayInputStream is = new ByteArrayInputStream(b);
             Drawable profile = Drawable.createFromStream(is, "profile");
 
+            //여기가 실제로 아이템 추가되는곳이죠? 넵
             adapter.addItem(profile, meeting.title, meeting.info, key);
-
             meetingIdList.add(key);
         }
 
