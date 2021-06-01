@@ -42,7 +42,6 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class MeetingFragment extends Fragment {
     String meetingId = ""; //선택된 모임의 아이디(=코드)
     TextView meetingName; //선택된 모임의 이름 넣을 공간
-    LinearLayout meetingUserMeetingList;
     ListView meetingNoticeListView;
     ListView meetingListView;
     TextView meetingAddNotice;
@@ -68,7 +67,7 @@ public class MeetingFragment extends Fragment {
     //유저가 가입한 모임 팝업메뉴 생성
 
     void showMeeting() {
-        PopupMenu meetingPopup = new PopupMenu(getActivity(), meetingUserMeetingList);
+        PopupMenu meetingPopup = new PopupMenu(getActivity(), meetingName);
         Menu meetingMenu = meetingPopup.getMenu();
         dbUserMeetingList.clear();
         for( String key : dbManager.participatedMeetings.keySet() ){
@@ -152,7 +151,6 @@ public class MeetingFragment extends Fragment {
         View meetingView = inflater.inflate(R.layout.meeting, container, false);
 
         meetingName = (TextView) meetingView.findViewById(R.id.meeting_name);
-        meetingUserMeetingList = (LinearLayout) meetingView.findViewById(R.id.meeting_userMeetingList);
         meetingNoticeListView = (ListView) meetingView.findViewById(R.id.meeting_noticeList);
         meetingListView = (ListView) meetingView.findViewById(R.id.meeting_list);
         meetingAddNotice = (TextView) meetingView.findViewById(R.id.meeting_addNotice);
@@ -165,7 +163,7 @@ public class MeetingFragment extends Fragment {
             showSchedule();
         }
 
-        meetingUserMeetingList.setOnClickListener(new View.OnClickListener() {
+        meetingName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showMeeting();
@@ -206,6 +204,14 @@ public class MeetingFragment extends Fragment {
             }
         });
 
+        meetingListView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SubSchedule.class);
+                intent.putExtra("meetingId", meetingId);
+                getApplicationContext().startActivity(intent);
+            }
+        });
         return meetingView;
     }
 }

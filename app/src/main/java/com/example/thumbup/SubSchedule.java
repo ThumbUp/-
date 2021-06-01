@@ -1,10 +1,12 @@
 package com.example.thumbup;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -40,7 +42,7 @@ import java.util.Map;
 import java.util.Queue;
 
 public class SubSchedule extends AppCompatActivity {
-
+    String meetingId = getIntent().getStringExtra("meetingId"); //선택된 모임의 아이디(=코드)
     TextView title; //일정명
     TextView date; //날짜
     TextView time; //시간
@@ -49,6 +51,7 @@ public class SubSchedule extends AppCompatActivity {
     RelativeLayout person;
 
     ImageView back_Btn;
+    ImageView delete_Btn; //일정 삭제 버튼
     Button satrtLoc_Btn;
     TextView my_roc;
     Button re_cafe_btn;
@@ -84,7 +87,7 @@ public class SubSchedule extends AppCompatActivity {
 
         //DB에서 모임명 가져올 것
         context = this;
-        schedule = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules; //선택 일정 DB
+        schedule = dbManager.participatedMeetings.get(meetingId).schedules; //선택 일정 DB
 
         Intent outIntent = getIntent();
         String index = outIntent.getStringExtra("ListID");
@@ -101,9 +104,10 @@ public class SubSchedule extends AppCompatActivity {
         DBtime = schedule.get(clickedIndex).time;
         time = findViewById(R.id.meet_time2);
         time.setText(DBtime); //시간 변경
+        delete_Btn = (ImageView) findViewById(R.id.deleteBtn);
 
-        //dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k");
-        DBpersonal = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.size(); //int type
+        //dbManager.UpdateMeeting(meetingId);
+        DBpersonal = dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members.size(); //int type
         personal = findViewById(R.id.meet_personnel2); //textView
         Log.e("PERSON", DBpersonal+"");
         personal.setText(DBpersonal+"");
@@ -127,7 +131,7 @@ public class SubSchedule extends AppCompatActivity {
 
         // 일정 멤버에 내가 있으면 스위치 ON, 없으면 OFF
         DatabaseReference databaseReference =
-                mdb.child("Meetings").child("-MaZIcU6ZjxsYF_iX-6k").child("schedules").child(clickedIndex+"").child("members");
+                mdb.child("Meetings").child(meetingId).child("schedules").child(clickedIndex+"").child("members");
         switchView.setChecked(false);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -139,7 +143,7 @@ public class SubSchedule extends AppCompatActivity {
                     int myKey2_sw = Integer.parseInt(myKey_sw);
                     //long si = postSnapshot.getChildrenCount();
                     //Log.e("CHILD GET KEY", myKey_sw);
-                    List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
+                    List<User> users = dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members;
                     // 예외인덱스 오류 발생 지점
                     if(users.get(myKey2_sw).email.equals(my.email) == true) {
                         switchView.setChecked(true);
@@ -152,14 +156,42 @@ public class SubSchedule extends AppCompatActivity {
 
             }
         });
+        //일정 삭제 시 나오는 대화 상자
+        AlertDialog.Builder scheduleDeleteBuilder = new AlertDialog.Builder(SubSchedule.this);
+        scheduleDeleteBuilder.setTitle("일정 삭제");
+        scheduleDeleteBuilder.setMessage("선택하신" + DBtitle + "일정을 삭제하시겠습니까?")
+                .setCancelable(false)
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dbManager.participatedMeetings.get(meetingId).schedules.remove(clickedIndex);
+                        dbManager.UpdateMeeting(meetingId);
+                        finish();
+                    }
+                })
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
+                    }
+                });
+
+
+        //일정 삭제 버튼 클릭시
+        delete_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog scheduleDeleteDialog = scheduleDeleteBuilder.create();
+                scheduleDeleteDialog.show();
+            }
+        });
         // 참여 유무 스위치 체인지 시, 변화
         switchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // 스위치 ON이면 할 일
                 if (isChecked) {
                     boolean meetingIn = false;
-                    List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
+                    List<User> users = dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members;
                     for (int i = 0; i < users.size(); i++) {
                         if (users.get(i).email.equals(my.email) == true) {
                             meetingIn = true;
@@ -167,31 +199,31 @@ public class SubSchedule extends AppCompatActivity {
                     }
                     if(meetingIn == false){
                         Log.e("MY placeName ", my.placeName);
-                        dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.add(my);
+                        dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members.add(my);
                     }
                     // 로딩 Wait
                     dbManager.Lock(context);
-                    dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k", new DBCallBack() {
+                    dbManager.UpdateMeeting(meetingId, new DBCallBack() {
                         @Override
                         public void success(Object data) {
                             Log.e("PERSON ADD SIZE",
-                                    dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.size() + "");
-                            personal.setText(dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.size()+"");
+                                    dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members.size() + "");
+                            personal.setText(dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members.size()+"");
 
                             // 일정-멤버 안에 나의 키 정보
                             DatabaseReference databaseReference =
-                                    mdb.child("Meetings").child("-MaZIcU6ZjxsYF_iX-6k").child("schedules").child(clickedIndex+"").child("members");
+                                    mdb.child("Meetings").child(meetingId).child("schedules").child(clickedIndex+"").child("members");
                             databaseReference.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                                         myKey = postSnapshot.getKey();
                                         myKey2 = Integer.parseInt(myKey);
-                                        List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
+                                        List<User> users = dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members;
                                         if(users.get(myKey2).email.equals(my.email) == true) {
                                             mykey = myKey2;
 
-                                            roc = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.get(mykey).placeName; //설정위치
+                                            roc = dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members.get(mykey).placeName; //설정위치
                                             my_roc.setText(roc);
                                         }
                                     }
@@ -216,7 +248,7 @@ public class SubSchedule extends AppCompatActivity {
                 }
                 // 스위치 OFF면 할 일
                 else {
-                    List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members;
+                    List<User> users = dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members;
                     for (int i = 0; i < users.size(); i++) {
                         if (users.get(i).email.equals(my.email) == true) {
                             users.remove(i);
@@ -225,12 +257,12 @@ public class SubSchedule extends AppCompatActivity {
                     }
                     // 로딩 Wait
                     dbManager.Lock(context);
-                    dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k", new DBCallBack() {
+                    dbManager.UpdateMeeting(meetingId, new DBCallBack() {
                         @Override
                         public void success(Object data) {
                             Log.e("PERSON REMOVE SIZE",
-                                    dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.size() + "");
-                            personal.setText(dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.size()+"");
+                                    dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members.size() + "");
+                            personal.setText(dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members.size()+"");
 
                             my_roc.setText("");
 
@@ -255,10 +287,10 @@ public class SubSchedule extends AppCompatActivity {
             public void onClick(View view) {
                 PopupMenu meetingPopup = new PopupMenu(getApplicationContext(), view);
                 Menu meetingMenu = meetingPopup.getMenu();
-                int person_size = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.size();
+                int person_size = dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members.size();
                 for (int i = 0; i < person_size; i++) {
                     meetingMenu.add(0, i,0,
-                            (CharSequence) dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.get(i).name);
+                            (CharSequence) dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members.get(i).name);
                 }
                 meetingPopup.show();
             }
@@ -291,8 +323,8 @@ public class SubSchedule extends AppCompatActivity {
                 double lati_sum = 0;
                 double longi_sum = 0;
                 for(int i=0; i<DBpersonal; i++){
-                    lati_sum += dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.get(i).latitude;
-                    longi_sum += dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.get(i).longitude;
+                    lati_sum += dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members.get(i).latitude;
+                    longi_sum += dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members.get(i).longitude;
                 }
                 double lati_ev = lati_sum / (double)DBpersonal;
                 double longi_ev = longi_sum / (double)DBpersonal;
@@ -311,8 +343,8 @@ public class SubSchedule extends AppCompatActivity {
                 double lati_sum = 0;
                 double longi_sum = 0;
                 for(int i=0; i<DBpersonal; i++){
-                    lati_sum += dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.get(i).latitude;
-                    longi_sum += dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.get(i).longitude;
+                    lati_sum += dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members.get(i).latitude;
+                    longi_sum += dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members.get(i).longitude;
                 }
                 double lati_ev = lati_sum / (double)DBpersonal;
                 double longi_ev = longi_sum / (double)DBpersonal;
@@ -331,10 +363,10 @@ public class SubSchedule extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0 && resultCode == RESULT_OK) {
             roc = data.getStringExtra("Place"); // 설정한 나의 위치
-            dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(clickedIndex).members.get(mykey).placeName = roc;
+            dbManager.participatedMeetings.get(meetingId).schedules.get(clickedIndex).members.get(mykey).placeName = roc;
 
             dbManager.Lock(context);
-            dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k", new DBCallBack() {
+            dbManager.UpdateMeeting(meetingId, new DBCallBack() {
                 @Override
                 public void success(Object data) {
                     my_roc.setText(roc);
