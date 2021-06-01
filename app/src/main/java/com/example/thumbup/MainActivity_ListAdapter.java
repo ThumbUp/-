@@ -104,8 +104,6 @@ public class MainActivity_ListAdapter extends BaseAdapter {
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         MainActivity_ItemData listViewItem = listViewItemList.get(position);
 
-        //이 Adapter가 하나의 리스트그건가요? 리스 트 아이템 네네
-
         // 아이템 내 각 위젯에 데이터 반영
         iconImageView.setImageDrawable(listViewItem.getData_meetingIcon());
         titleTextView.setText(listViewItem.getData_meetingTitle());
@@ -166,20 +164,19 @@ public class MainActivity_ListAdapter extends BaseAdapter {
                             view.getContext().startActivity(intent);
                         } else {
                             //모임 코드 복사
-                            final LinearLayout linear = (LinearLayout) View.inflate(context,
-                                    R.layout.dialog_main_meeting_key, null);
-                            android.app.AlertDialog.Builder dlg4 = new android.app.AlertDialog.Builder(getApplicationContext());
-                            dlg4.setView(linear);
+                            final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
+                                    R.layout.dialog_main_copy_key, null);
+
+                            meetingId = listViewItem.getData_meetingId();
+
+                            AlertDialog.Builder dlg3 = new AlertDialog.Builder(context);
+                            dlg3.setView(linear);
                             TextView k_meetingKey;
-                            k_meetingKey = (TextView) linear.findViewById(R.id.k_meetingKey);
-                            k_meetingKey.setText(listViewItem.getData_meetingId());
-                            dlg4.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            k_meetingKey = (TextView)linear.findViewById(R.id.k_meetingKey);
+                            k_meetingKey.setText(meetingId);
+                            dlg3.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    Intent intent = new Intent(view.getContext(), MainActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    view.getContext().startActivity(intent);
-
                                     dialog.dismiss();
                                 }
                             }).show();

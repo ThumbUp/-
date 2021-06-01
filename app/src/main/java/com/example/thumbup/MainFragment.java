@@ -106,6 +106,7 @@ public class MainFragment extends Fragment {
                                         public void success(Object data) {
                                             dbManager.JoinMeeting(meeting_key);
                                             dbManager.UnLock();
+                                            adapter.notifyDataSetChanged();
                                             dialog.dismiss();
                                         }
 

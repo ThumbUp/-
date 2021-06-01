@@ -1,6 +1,7 @@
 package com.example.thumbup;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -45,6 +46,8 @@ public class AddMeetingActivity extends AppCompatActivity {
     Button addAccept;
     Button addCancel;
     boolean isImageChange = false;
+    Context context;
+    String key;
 
 
     @Override
@@ -52,6 +55,7 @@ public class AddMeetingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_main_add_meeting);
 
+        context = this;
         addMeetingImg = findViewById(R.id.meetingImg);
         addMeetingText = findViewById(R.id.addMeeting_text);
         addMeetingTitle = findViewById(R.id.add_meetingTitle);
@@ -75,12 +79,9 @@ public class AddMeetingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String title = addMeetingTitle.getText().toString();
                 String info = addMeetingInfo.getText().toString();
-                addMeetingImg.getDrawable().getCurrent();
                 Drawable image = addMeetingImg.getDrawable();
-                Drawable dImage = getResources().getDrawable(R.drawable.ic_profile);
-                String a  =image.toString();
-                String b = dImage.toString();
-                String key = "", simage = "";
+                key = "";
+                String simage = "";
                 //이미지 바이트 변환 하셧나요??
                 if(isImageChange == true) {
                     Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
@@ -90,35 +91,40 @@ public class AddMeetingActivity extends AppCompatActivity {
                     simage = byteArrayToBinaryString(byteImage);
                 }
 
-                //일단그럼 join부분 되는지 봐주실래요? 이상한코드쳣을때 넵! 존재하지 않는 모임입ㅂ
-                //니다 하고 메인으로 돌아와요 정상적으로댄다는말씀이신가요? 네네
-                //넵 이번엔 존재하는거 쳐보실래요?
-                //잘 되는데 한 번 다른 탭 갔다가 와야 뜨는 것같아요
-                //넵 그럼이번엔 1233저모임 탈이 퇴해보실래요?
-                //잘없어지네요 제 화면에서 모든 모임이 없어졌어요..!
-                //다른탭갓다와도 똒같나요?네네
+                dbManager.Lock(context);
+                key = dbManager.AddMeeting(title, info, simage, new DBCallBack() {
+                    @Override
+                    public void success(Object data) {
+                        String sKey = key;
+                        final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
+                                R.layout.dialog_main_meeting_key, null);
 
-                key = dbManager.AddMeeting(title, info, simage);
-                dbManager.JoinMeeting(key);
+                        AlertDialog.Builder dlg3 = new AlertDialog.Builder(AddMeetingActivity.this);
+                        dlg3.setView(linear);
+                        TextView k_meetingKey;
+                        k_meetingKey = (TextView)linear.findViewById(R.id.k_meetingKey);
+                        k_meetingKey.setText(key);
+                        dlg3.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                startActivity(intent);
+
+                                dialog.dismiss();
+                            }
+                        }).show();
+                        dbManager.JoinMeeting(key);
+                        dbManager.UnLock();
+                    }
+
+                    @Override
+                    public void fail(String errorMessage) {
+
+                    }
+                });
 
                 //모임 생성 완료 다이얼로그
-                final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
-                        R.layout.dialog_main_meeting_key, null);
 
-                AlertDialog.Builder dlg3 = new AlertDialog.Builder(AddMeetingActivity.this);
-                dlg3.setView(linear);
-                TextView k_meetingKey;
-                k_meetingKey = (TextView)linear.findViewById(R.id.k_meetingKey);
-                k_meetingKey.setText(key);
-                dlg3.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                        startActivity(intent);
-
-                        dialog.dismiss();
-                    }
-                }).show();
             }
         });
 
