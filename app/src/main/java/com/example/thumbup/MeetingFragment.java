@@ -44,6 +44,7 @@ public class MeetingFragment extends Fragment {
     List<String> noticeList = new ArrayList<>(); //공지목록
     ArrayList<String> meetingNoticeList = new ArrayList<>();
     DBManager dbManager = DBManager.getInstance();
+    ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
 
     public MeetingFragment(String _meetingId) {
         meetingId = _meetingId;
@@ -65,6 +66,7 @@ public class MeetingFragment extends Fragment {
             meetingIdList.add(key);
             Log.e("LIST","KEY " + key + "   meetingIdList " + dbUserMeetingList);
         }
+
         meetingMenu.clear();
         for (int i = 0; i < dbUserMeetingList.size(); i++) {
             meetingMenu.add(0, i,0, (CharSequence) dbUserMeetingList.get(i).title);
@@ -73,6 +75,8 @@ public class MeetingFragment extends Fragment {
         meetingPopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                Log.d("meetingIndex", "meetingIndex" + item.getItemId());
+                int meetingIndex = item.getItemId();
                 meetingId = meetingIdList.get(item.getItemId());
                 Log.d("meetingId", "meetingId: " + meetingId);
                 meetingName.setText(item.getTitle().toString());
@@ -85,11 +89,13 @@ public class MeetingFragment extends Fragment {
     }
 
     void showNotice() { //공지 보여주는 것
+        Log.d("meetingIdNotice", "meetingId: " + meetingId);
         noticeList = dbManager.participatedMeetings.get(meetingId).notices;
         meetingNoticeList.clear();
         for (int i = 0; i < noticeList.size(); i++) {
             meetingNoticeList.add(noticeList.get(i));
         }
+
         if (meetingNoticeList.size() != 0) {
             ArrayAdapter meetingNoticeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, meetingNoticeList);
             meetingNoticeListView.setAdapter(meetingNoticeAdapter);
@@ -126,7 +132,7 @@ public class MeetingFragment extends Fragment {
         meetingAddNotice = (TextView) meetingView.findViewById(R.id.meeting_addNotice);
         meetingAddSchedule = (TextView) meetingView.findViewById(R.id.meeting_addSchedule);
         ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
-
+        
         //처음 화면 로드시 존재하는 공지 목록 띄우기
         if (meetingId != "") {
             showNotice();
@@ -144,7 +150,7 @@ public class MeetingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (meetingId != "") {
-                    MeetingNoticeDialog meetingNoticeDialog = new MeetingNoticeDialog(getActivity());
+                    MeetingNoticeDialog meetingNoticeDialog = new MeetingNoticeDialog(getActivity(), meetingId);
                     meetingNoticeDialog.show();
                     meetingNoticeDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
@@ -161,7 +167,7 @@ public class MeetingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (meetingId != "") {
-                    MeetingScheduleDialog meetingScheduleDialog = new MeetingScheduleDialog(getActivity());
+                    MeetingScheduleDialog meetingScheduleDialog = new MeetingScheduleDialog(getActivity(), meetingId);
                     meetingScheduleDialog.show();
                     meetingScheduleDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
