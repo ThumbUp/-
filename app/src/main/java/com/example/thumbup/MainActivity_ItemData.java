@@ -22,29 +22,10 @@ public class MainActivity_ItemData extends AppCompatActivity {
     DBManager dbManager = DBManager.getInstance();
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
-
     public void setData_meetingIcon(Drawable icon) {
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    if (dataSnapshot.getKey().equals("image")) {
-                        String image = dataSnapshot.getValue().toString();
-                        byte[] b = binaryStringToByteArray(image);
-                        ByteArrayInputStream is = new ByteArrayInputStream(b);
-                        Drawable dImage = Drawable.createFromStream(is, "dImage");
-                        data_meetingIcon = dImage;
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
+        data_meetingIcon = icon;
     }
+
     public void setData_meetingTitle(String title) {
         data_meetingTitle = title;
     }

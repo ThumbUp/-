@@ -98,6 +98,7 @@ public class DBManager {
                 userData = new User(name, email);
                 map.put(uid, userData);
                 mDatabase.child("Users").updateChildren(map);
+                callBack.success(true);
                 Init();
             }
 
@@ -184,13 +185,18 @@ public class DBManager {
             });
         }
     }
-
+    //한번 새로 햇다가 삭제해보실래요? 새로 만들었는데 추가됐나요..? 아 ㄴ돠ㅣㅅㅅ니ㅏ요? 다시 해볼게요! 네네
     public void WithdrawMeeting(String mid, final DBCallBack callBack)
     {
         userData.meetings.remove(mid);
         participatedMeetings.get(mid).members.remove(uid);
-        mDatabase.child("Meetings").child(mid).removeEventListener(participatedMeetingsListeners.get(mid));
-        UpdateMeeting(mid);
+        if(participatedMeetings.get(mid).members.size() == 0) {
+            mDatabase.child("Meetings").child(mid).setValue(null);
+        }
+        else {
+            UpdateMeeting(mid);
+            mDatabase.child("Meetings").child(mid).removeEventListener(participatedMeetingsListeners.get(mid));
+        }
         participatedMeetings.remove(mid);
         UpdateUser(new DBCallBack() {
             @Override
@@ -299,7 +305,7 @@ public class DBManager {
 
         mPostReference.addValueEventListener(postListener);
     }
-
+    //머가안대나요? 토스트 작성하고 실행했는데 로그인 한 후로 앱이 꺼지더라구요
     private void addMeetingPostEventListener(DatabaseReference mPostReference, String mid) {
         ValueEventListener postListener = new ValueEventListener() {
             @Override

@@ -83,12 +83,12 @@ public class MainActivity_ListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final int pos = position;
-        final Context context = parent.getContext();
-        MainActivity_ListAdapter adapter = new MainActivity_ListAdapter();
+        final Context context = parent.getContext();//헉 됐어요!! 그 삭제는 원래 댓는데..
+        MainActivity_ListAdapter adapter = this;
 
         // listview 생성 및 adapter 지정.
         final ListView listview = (ListView) view.findViewById(R.id.main_listView);
-        //listview.setAdapter(adapter);
+
 
         // "listview_item" Layout을 inflate하여 convertView 참조 획득.
         if (convertView == null) {
@@ -127,12 +127,6 @@ public class MainActivity_ListAdapter extends BaseAdapter {
                             dlg1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    int count, checked;
-                                    // 현재 선택된 아이템의 position 획득
-                                    // 이거는 현재 리스트뷰에 체크가 없어서 안댈려나요?
-                                    // 이상태로 실행하는거 말씀하신건가요?
-                                    // 네 이거 리스트뷰에서 체크된항목 인덱스 반환하는거삭ㅌ은데
-                                    // 저희 체크가 없지 않나요?
                                     meetingId = listViewItem.getData_meetingId();
                                     // 아이템 삭제
                                     for (int i = 0; i < listViewItemList.size(); i++) {
@@ -211,9 +205,5 @@ public class MainActivity_ListAdapter extends BaseAdapter {
 
         listViewItemList.add(item);
     }
-
-//    private void deleteItem(String meetingId) {
-//        mDatabase.child("Users").child(dbManager.uid).child("meetings").child(meetingId).removeValue();
-//    }
 
 }

@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private CallbackManager mFBCallbackManger;
     private DBManager dbManager = DBManager.getInstance();
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+
+        context = this;
     }
 
     @Override
@@ -182,8 +185,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             dbManager.uid = user.getUid();
-            Context context = this;
-            dbManager.Lock(this);
+            dbManager.Lock(context);
             dbManager.AddUser(user.getUid(), user.getDisplayName(), user.getEmail(), new DBCallBack() {
                 @Override
                 public void success(Object data) {

@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.thumbup.DataBase.DBCallBack;
 import com.example.thumbup.DataBase.DBManager;
 import com.example.thumbup.DataBase.Meeting;
 import com.google.firebase.database.DatabaseReference;
@@ -38,10 +39,10 @@ public class MainFragment extends Fragment {
     ImageButton btn_addMeeting;
     private Context mContext;
     DBManager dbManager = DBManager.getInstance();
+    Context context;
 
-    String meetingId; //선택된 모임의 아이디(=코드)
-    List<String> meetingIdList = new ArrayList<>(); //유저가 가입된 모임의 코드들(= 모임의 키 값)들
-
+    String meetingId;
+    List<String> meetingIdList = new ArrayList<>();
 
     @Override
     public void onAttach(Context context){
@@ -54,7 +55,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View mainView = inflater.inflate(R.layout.fragment_main, container, false);
-
+        context = getContext();
         btn_addMeeting = (ImageButton) mainView.findViewById(R.id.btn_addMeeting);
 
         MainActivity_ListAdapter adapter;
@@ -72,7 +73,6 @@ public class MainFragment extends Fragment {
             ByteArrayInputStream is = new ByteArrayInputStream(b);
             Drawable profile = Drawable.createFromStream(is, "profile");
 
-            //여기가 실제로 아이템 추가되는곳이죠? 넵
             adapter.addItem(profile, meeting.title, meeting.info, key);
             meetingIdList.add(key);
         }
@@ -100,8 +100,22 @@ public class MainFragment extends Fragment {
                                     EditText meetingKey = (EditText) linear.findViewById(R.id.meetingKey);
                                     String meeting_key = meetingKey.getText().toString();
 
-                                    dbManager.JoinMeeting(meeting_key);
-                                    dialog.dismiss();
+                                    dbManager.Lock(context);
+                                    dbManager.CheckValidMeetingId(meeting_key, new DBCallBack() {
+                                        @Override
+                                        public void success(Object data) {
+                                            dbManager.JoinMeeting(meeting_key);
+                                            dbManager.UnLock();
+                                            dialog.dismiss();
+                                        }
+
+                                        @Override
+                                        public void fail(String errorMessage) {
+                                            Toast.makeText(getContext(), "존재하지 않는 모임입니다", Toast.LENGTH_SHORT).show();
+                                            dbManager.UnLock();
+                                            dialog.dismiss();
+                                        }
+                                    });
                                 }
                             })
                                     .setNegativeButton("취소", new DialogInterface.OnClickListener() {

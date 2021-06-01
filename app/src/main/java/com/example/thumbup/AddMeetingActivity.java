@@ -44,6 +44,7 @@ public class AddMeetingActivity extends AppCompatActivity {
     EditText addMeetingInfo;
     Button addAccept;
     Button addCancel;
+    boolean isImageChange = false;
 
 
     @Override
@@ -68,7 +69,7 @@ public class AddMeetingActivity extends AppCompatActivity {
             }
         });
 
-        //확인 버튼 클릭
+        //확인 버튼 클릭 //사진안하고 한번해주세요
         addAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,15 +78,25 @@ public class AddMeetingActivity extends AppCompatActivity {
                 addMeetingImg.getDrawable().getCurrent();
                 Drawable image = addMeetingImg.getDrawable();
                 Drawable dImage = getResources().getDrawable(R.drawable.ic_profile);
+                String a  =image.toString();
+                String b = dImage.toString();
                 String key = "", simage = "";
-                //이미지 바이트 변환
-                if(image.equals(dImage) == true) {
+                //이미지 바이트 변환 하셧나요??
+                if(isImageChange == true) {
                     Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                     byte[] byteImage = stream.toByteArray();
                     simage = byteArrayToBinaryString(byteImage);
                 }
+
+                //일단그럼 join부분 되는지 봐주실래요? 이상한코드쳣을때 넵! 존재하지 않는 모임입ㅂ
+                //니다 하고 메인으로 돌아와요 정상적으로댄다는말씀이신가요? 네네
+                //넵 이번엔 존재하는거 쳐보실래요?
+                //잘 되는데 한 번 다른 탭 갔다가 와야 뜨는 것같아요
+                //넵 그럼이번엔 1233저모임 탈이 퇴해보실래요?
+                //잘없어지네요 제 화면에서 모든 모임이 없어졌어요..!
+                //다른탭갓다와도 똒같나요?네네
 
                 key = dbManager.AddMeeting(title, info, simage);
                 dbManager.JoinMeeting(key);
@@ -116,6 +127,7 @@ public class AddMeetingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
+                isImageChange = true;
             }
         });
     }
@@ -128,7 +140,7 @@ public class AddMeetingActivity extends AppCompatActivity {
 
             Uri selectedImageUri = data.getData();
             addMeetingImg.setImageURI(selectedImageUri);
-
+            isImageChange = true;
         }
     }
 
