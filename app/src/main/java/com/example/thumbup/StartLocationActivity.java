@@ -60,6 +60,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
 
     String roc;
     int mykey;
+    String meetingid = "";
     int scheduleindex;
 
     double Lati, Longi; //위도와 경도를 저장할 변수
@@ -86,6 +87,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
         Intent outIntent2 = getIntent();
         roc = outIntent2.getStringExtra("Rocation");
         mykey = outIntent2.getIntExtra("MyKey", 0);
+        meetingid = outIntent2.getStringExtra("MeetingId");
         scheduleindex = outIntent2.getIntExtra("ScheduleIndex", 0);
 
         Log.e("MY KEY : ", mykey+"");
@@ -143,11 +145,12 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View view) {
                 outIntent.putExtra("Place", my_place); //설정 위치 전달
+                outIntent.putExtra("meetId", meetingid); //설정 위치 전달
 
                 // 일정 안에 나의 위도/경도 데이터 변경
-                dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(scheduleindex).members.get(mykey).latitude = Lati;
-                dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(scheduleindex).members.get(mykey).longitude = Longi;
-                dbManager.UpdateMeeting("-MaZIcU6ZjxsYF_iX-6k");
+                dbManager.participatedMeetings.get(meetingid).schedules.get(scheduleindex).members.get(mykey).latitude = Lati;
+                dbManager.participatedMeetings.get(meetingid).schedules.get(scheduleindex).members.get(mykey).longitude = Longi;
+                dbManager.UpdateMeeting(meetingid);
 
                 setResult(RESULT_OK, outIntent);
                 finish();

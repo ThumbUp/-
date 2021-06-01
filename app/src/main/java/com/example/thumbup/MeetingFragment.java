@@ -84,10 +84,10 @@ public class MeetingFragment extends Fragment {
         meetingPopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Log.d("meetingIndex", "meetingIndex" + item.getItemId());
+                Log.e("meetingIndex", "meetingIndex" + item.getItemId());
                 int meetingIndex = item.getItemId();
                 meetingId = meetingIdList.get(item.getItemId());
-                Log.d("meetingId", "meetingId: " + meetingId);
+                Log.e("meetingId", "meetingId: " + meetingId);
                 meetingName.setText(item.getTitle().toString());
                 showNotice();
                 showSchedule();
@@ -123,11 +123,11 @@ public class MeetingFragment extends Fragment {
             //item.MeetingListViewItem_place = dbMeetingListViewItem.get(i).place;
 
             scheIn = false;
-            int i_size = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(i).members.size();
+            int i_size = dbManager.participatedMeetings.get(meetingId).schedules.get(i).members.size();
             Log.e("I SIZE", i_size+"  ");
             for(int i2 = 0; i2 < i_size; i2++){
                 Log.e("I / I2", i+"  "+i2);
-                List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(i).members;
+                List<User> users = dbManager.participatedMeetings.get(meetingId).schedules.get(i).members;
                 if(users.get(i2).email.equals(my.email) == true) {
                     scheIn = true;
                 }
@@ -141,7 +141,7 @@ public class MeetingFragment extends Fragment {
 
             meetingListViewItem.add(item);
         }
-        MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
+        MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem, meetingId);
         meetingListView.setAdapter(meetingAdapter);
     }
 
@@ -204,14 +204,14 @@ public class MeetingFragment extends Fragment {
             }
         });
 
-        meetingListView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SubSchedule.class);
-                intent.putExtra("meetingId", meetingId);
-                getApplicationContext().startActivity(intent);
-            }
-        });
+//        meetingListView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(), SubSchedule.class);
+//                intent.putExtra("meetingId", meetingId);
+//                getApplicationContext().startActivity(intent);
+//            }
+//        });
         return meetingView;
     }
 }

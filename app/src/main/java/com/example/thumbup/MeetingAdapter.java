@@ -23,10 +23,12 @@ public class MeetingAdapter extends BaseAdapter {
     LayoutInflater meetingAdapterInflater = null;
     private ArrayList<MeetingListViewItem> meetingListViewItem = null;
     private int meetingListViewItemCount = 0;
+    String meetID = "";
 
-    public MeetingAdapter(ArrayList<MeetingListViewItem> _meetingListViewItem) {
+    public MeetingAdapter(ArrayList<MeetingListViewItem> _meetingListViewItem, String meetingid) {
         meetingListViewItem = _meetingListViewItem;
         meetingListViewItemCount = _meetingListViewItem.size();
+        meetID = meetingid;
     }
     @Override
     public int getCount() {
@@ -63,19 +65,20 @@ public class MeetingAdapter extends BaseAdapter {
         meetingListViewItem_time.setText(meetingListViewItem.get(position).MeetingListViewItem_time);
         meetingListViewItem_place.setText(meetingListViewItem.get(position).MeetingListViewItem_place);
 
-//        LinearLayout clickedListView = (LinearLayout) convertView.findViewById(R.id.meeting_listview_schedule);
-//        clickedListView.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                long click_position = getItemId(position);
-//                String s = ""+click_position;
-//                Log.e("Click list ID : ", s);
-//
-//                Intent intent = new Intent(getApplicationContext(), SubSchedule.class);
-//                intent.putExtra("ListID", s);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                getApplicationContext().startActivity(intent);
-//            }
-//        });
+        LinearLayout clickedListView = (LinearLayout) convertView.findViewById(R.id.meeting_listview_schedule);
+        clickedListView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                long click_position = getItemId(position);
+                String s = ""+click_position;
+                Log.e("Click list ID : ", s);
+
+                Intent intent = new Intent(getApplicationContext(), SubSchedule.class);
+                intent.putExtra("ListID", s);
+                intent.putExtra("MeetID", meetID);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getApplicationContext().startActivity(intent);
+            }
+        });
         return convertView;
     }
 }
