@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +54,8 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
 
     SupportMapFragment mapFragment;
     private GoogleMap map;
+
+    ImageView back_btn;
     Button locOK_btn;
 
     String roc;
@@ -77,6 +80,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
         // Create a new Places client instance.
         PlacesClient placesClient = Places.createClient(this);
 
+        back_btn = findViewById(R.id.backBtn);
         locOK_btn = findViewById(R.id.OK_btn); //확인_Btn
 
         Intent outIntent2 = getIntent();
@@ -126,13 +130,19 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
             }
         });
 
+        // 뒤로가기 버튼 클릭
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         // 확인 버튼 클릭
         locOK_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 outIntent.putExtra("Place", my_place); //설정 위치 전달
-                outIntent.putExtra("Latitude", Lati); //해당 위치의 위도와
-                outIntent.putExtra("Longitude", Longi); //경도 전달
 
                 // 일정 안에 나의 위도/경도 데이터 변경
                 dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(scheduleindex).members.get(mykey).latitude = Lati;
@@ -150,6 +160,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
         LatLng latLng = new LatLng(Lati, Longi);
+        Log.e("LATI / LONGI", Lati+", "+Longi);
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         map.moveCamera(CameraUpdateFactory.zoomTo(15));
         myMarker = new MarkerOptions().position(latLng).title("서울역");

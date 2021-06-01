@@ -22,13 +22,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.thumbup.DataBase.DBCallBack;
 import com.example.thumbup.DataBase.DBManager;
 import com.example.thumbup.DataBase.Meeting;
 import com.example.thumbup.DataBase.Schedule;
+import com.example.thumbup.DataBase.User;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class MeetingFragment extends Fragment {
@@ -45,6 +53,10 @@ public class MeetingFragment extends Fragment {
     ArrayList<String> meetingNoticeList = new ArrayList<>();
     DBManager dbManager = DBManager.getInstance();
     ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
+
+    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    User my = dbManager.userData;
+    boolean scheIn = false;
 
     public MeetingFragment(String _meetingId) {
         meetingId = _meetingId;
@@ -66,6 +78,8 @@ public class MeetingFragment extends Fragment {
             meetingIdList.add(key);
             Log.e("LIST","KEY " + key + "   meetingIdList " + dbUserMeetingList);
         }
+
+        meetingMenu.clear();
         for (int i = 0; i < dbUserMeetingList.size(); i++) {
             meetingMenu.add(0, i,0, (CharSequence) dbUserMeetingList.get(i).title);
         }
@@ -93,10 +107,11 @@ public class MeetingFragment extends Fragment {
         for (int i = 0; i < noticeList.size(); i++) {
             meetingNoticeList.add(noticeList.get(i));
         }
-        Log.d("meetingNoticeList", "meetingNoticeList: " + meetingNoticeList);
-        ArrayAdapter meetingNoticeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, meetingNoticeList);
-        meetingNoticeListView.setAdapter(meetingNoticeAdapter);
 
+        if (meetingNoticeList.size() != 0) {
+            ArrayAdapter meetingNoticeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, meetingNoticeList);
+            meetingNoticeListView.setAdapter(meetingNoticeAdapter);
+        }
     }
 
     void showSchedule(){
@@ -104,11 +119,30 @@ public class MeetingFragment extends Fragment {
         List<Schedule> dbMeetingListViewItem = new ArrayList<>();
         dbMeetingListViewItem = dbManager.participatedMeetings.get(meetingId).schedules;
         for (int i = 0; i < dbMeetingListViewItem.size(); i++) {
+            Log.e("DB SIZE", dbMeetingListViewItem.size()+"");
             MeetingListViewItem item = new MeetingListViewItem();
             item.MeetingListViewItem_date = dbMeetingListViewItem.get(i).date;
             item.MeetingListViewItem_name = dbMeetingListViewItem.get(i).title;
             item.MeetingListViewItem_time = dbMeetingListViewItem.get(i).time;
-            item.MeetingListViewItem_place = dbMeetingListViewItem.get(i).place;
+            //item.MeetingListViewItem_place = dbMeetingListViewItem.get(i).place;
+
+            scheIn = false;
+            int i_size = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(i).members.size();
+            Log.e("I SIZE", i_size+"  ");
+            for(int i2 = 0; i2 < i_size; i2++){
+                Log.e("I / I2", i+"  "+i2);
+                List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(i).members;
+                if(users.get(i2).email.equals(my.email) == true) {
+                    scheIn = true;
+                }
+            }
+            if(scheIn == true){
+                item.MeetingListViewItem_place = "참여";
+            }
+            else{
+                item.MeetingListViewItem_place = "미참여";
+            }
+
             meetingListViewItem.add(item);
         }
         MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
@@ -128,7 +162,7 @@ public class MeetingFragment extends Fragment {
         meetingAddSchedule = (TextView) meetingView.findViewById(R.id.meeting_addSchedule);
         ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
 
-        //처음 화면 로드시 존재하는 공지/일정 목록 띄우기
+        //처음 화면 로드시 존재하는 공지 목록 띄우기
         if (meetingId != "") {
             showNotice();
             showSchedule();
