@@ -55,7 +55,7 @@ public class MeetingFragment extends Fragment {
 
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     User my = dbManager.userData;
-    boolean scheIn = false;
+    boolean scheIn = false; //
 
     public MeetingFragment(String _meetingId) {
         meetingId = _meetingId;
