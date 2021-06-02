@@ -334,13 +334,14 @@ public class SubSchedule extends AppCompatActivity {
             public void onClick(View view) {
                 double lati_sum = 0;
                 double longi_sum = 0;
-                for(int i=0; i<DBpersonal; i++){
+                int DBpersonal1 = dbManager.participatedMeetings.get(clickedId_meet).schedules.get(clickedIndex_sche).members.size();
+                for(int i=0; i<DBpersonal1; i++){
                     lati_sum += dbManager.participatedMeetings.get(clickedId_meet).schedules.get(clickedIndex_sche).members.get(i).latitude;
                     longi_sum += dbManager.participatedMeetings.get(clickedId_meet).schedules.get(clickedIndex_sche).members.get(i).longitude;
 
                 }
-                double lati_ev = lati_sum / (double)DBpersonal;
-                double longi_ev = longi_sum / (double)DBpersonal;
+                double lati_ev = lati_sum / (double)DBpersonal1;
+                double longi_ev = longi_sum / (double)DBpersonal1;
 
                 Intent intent = new Intent(getApplicationContext(), RecommendPlaceActivity.class);
                 intent.putExtra("midLatitude", lati_ev);
@@ -355,14 +356,14 @@ public class SubSchedule extends AppCompatActivity {
             public void onClick(View view) {
                 double lati_sum = 0;
                 double longi_sum = 0;
-                for(int i=0; i<DBpersonal; i++){
-
+                int DBpersonal1 = dbManager.participatedMeetings.get(clickedId_meet).schedules.get(clickedIndex_sche).members.size();
+                for(int i=0; i<DBpersonal1; i++){
                     lati_sum += dbManager.participatedMeetings.get(clickedId_meet).schedules.get(clickedIndex_sche).members.get(i).latitude;
                     longi_sum += dbManager.participatedMeetings.get(clickedId_meet).schedules.get(clickedIndex_sche).members.get(i).longitude;
 
                 }
-                double lati_ev = lati_sum / (double)DBpersonal;
-                double longi_ev = longi_sum / (double)DBpersonal;
+                double lati_ev = lati_sum / (double)DBpersonal1;
+                double longi_ev = longi_sum / (double)DBpersonal1;
 
                 Intent intent = new Intent(getApplicationContext(), RecommendPlace2Activity.class);
                 intent.putExtra("midLatitude", lati_ev);

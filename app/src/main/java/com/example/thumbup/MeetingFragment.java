@@ -203,15 +203,6 @@ public class MeetingFragment extends Fragment {
 
             }
         });
-
-//        meetingListView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getApplicationContext(), SubSchedule.class);
-//                intent.putExtra("meetingId", meetingId);
-//                getApplicationContext().startActivity(intent);
-//            }
-//        });
         return meetingView;
     }
 }
