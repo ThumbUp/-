@@ -23,10 +23,12 @@ public class MeetingAdapter extends BaseAdapter {
     LayoutInflater meetingAdapterInflater = null;
     private ArrayList<MeetingListViewItem> meetingListViewItem = null;
     private int meetingListViewItemCount = 0;
+    String meetID = "";
 
-    public MeetingAdapter(ArrayList<MeetingListViewItem> _meetingListViewItem) {
+    public MeetingAdapter(ArrayList<MeetingListViewItem> _meetingListViewItem, String meetingid) {
         meetingListViewItem = _meetingListViewItem;
         meetingListViewItemCount = _meetingListViewItem.size();
+        meetID = meetingid;
     }
     @Override
     public int getCount() {
@@ -72,6 +74,7 @@ public class MeetingAdapter extends BaseAdapter {
 
                 Intent intent = new Intent(getApplicationContext(), SubSchedule.class);
                 intent.putExtra("ListID", s);
+                intent.putExtra("MeetID", meetID);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getApplicationContext().startActivity(intent);
             }
