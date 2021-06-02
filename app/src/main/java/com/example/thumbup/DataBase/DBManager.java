@@ -30,10 +30,11 @@ public class DBManager {
     public String uid;      //현재 로그인 된 유저 uid
     public User userData;   //현재 로그인 된 유저 정보
     public Map<String, Meeting> participatedMeetings = new HashMap<>(); //현재 로그인된 유저가 가입된 미팅 정보
+    private Map<String, ValueEventListener> participatedMeetingsListeners = new HashMap<>();
 
     private ProgressDialog customProgressDialog;
 
-    public DatabaseReference returnMDB(){
+    public DatabaseReference returnMDB() {
         return mDatabase;
     }
 
@@ -46,16 +47,14 @@ public class DBManager {
     private DBManager() {
     }
 
-    public void Lock(Context context)
-    {
+    public void Lock(Context context) {
         customProgressDialog = new ProgressDialog(context);
         customProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         customProgressDialog.setCancelable(false);
         customProgressDialog.show();
     }
 
-    public void UnLock()
-    {
+    public void UnLock() {
         customProgressDialog.dismiss();
     }
 
@@ -78,7 +77,17 @@ public class DBManager {
                             }
                         }
                         Init();
-                        callBack.success(dataSnapshot);
+                        GetMyMeetingData(new DBCallBack() {
+                            @Override
+                            public void success(Object data) {
+                                callBack.success(dataSnapshot);
+                            }
+
+                            @Override
+                            public void fail(String errorMessage) {
+
+                            }
+                        });
                         return;
                     }
                 }
@@ -87,6 +96,7 @@ public class DBManager {
                 userData = new User(name, email);
                 map.put(uid, userData);
                 mDatabase.child("Users").updateChildren(map);
+                callBack.success(true);
                 Init();
             }
 
@@ -100,18 +110,43 @@ public class DBManager {
     public void UpdateUser() {
         Map<String, Object> map = new HashMap<>();
         map.put(uid, userData);
+        mDatabase.child("Users").updateChildren(map);
+    }
+
+    public void UpdateUser(final DBCallBack callBack) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(uid, userData);
         mDatabase.child("Users").updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                // Write was successful!
-                // ...
+                callBack.success(true);
             }
         })
-        .addOnFailureListener(new OnFailureListener() {
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callBack.fail(e.getMessage());
+                    }
+                });
+    }
+
+    public void CheckValidMeetingId(String mid, DBCallBack callback) {
+        mDatabase.child("Meetings").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-                // Write failed
-                // ...
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                    String clubkey = childSnapshot.getKey();
+                    if (clubkey.equals(mid) == true) {
+                        callback.success(true);
+                        return;
+                    }
+                }
+                callback.fail("No");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
@@ -120,6 +155,74 @@ public class DBManager {
         Map<String, Object> map = new HashMap<>();
         map.put(mid, participatedMeetings.get(mid));
         mDatabase.child("Meetings").updateChildren(map);
+    }
+
+    private void GetMyMeetingData(final DBCallBack callBack) {
+        Map<String, Object> map = new HashMap<>();
+        int meetingSize = userData.meetings.size();
+        if (meetingSize == 0)
+            callBack.success(true);
+        for (int i = 0; i < userData.meetings.size(); i++) {
+            String uid = userData.meetings.get(i);
+            mDatabase.child("Meetings").child(uid).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if (!task.isSuccessful()) {
+                    } else {
+                        Meeting meeting = task.getResult().getValue(Meeting.class);
+                        participatedMeetings.put(uid, meeting);
+                        if (participatedMeetings.size() == meetingSize)
+                            callBack.success(true);
+                    }
+                }
+            });
+        }
+    }
+
+    public void WithdrawMeeting(String mid, final DBCallBack callBack) {
+        userData.meetings.remove(mid);
+        participatedMeetings.get(mid).members.remove(uid);
+        mDatabase.child("Meetings").child(mid).removeEventListener(participatedMeetingsListeners.get(mid));
+        GetMeetingData(mid, new DBCallBack() {
+            @Override
+            public void success(Object data) {
+                Meeting meeting = (Meeting)data;
+                int memberCount = meeting.members.size();
+                UpdateUser(new DBCallBack() {
+                    @Override
+                    public void success(Object data) {
+                        if (memberCount == 1) {
+                            mDatabase.child("Meetings").child(mid).setValue(null);
+                        }
+                        else {
+                            UpdateMeeting(mid);
+                        }
+                        participatedMeetings.remove(mid);
+                        callBack.success(true);
+                    }
+
+                    @Override
+                    public void fail(String errorMessage) {
+                        callBack.fail(errorMessage);
+                    }
+                });
+            }
+
+            @Override
+            public void fail(String errorMessage) {
+
+            }
+        });
+
+    }
+
+    public void WithdrawMeeting(String mid) {
+        userData.meetings.remove(mid);
+        participatedMeetings.get(mid).members.remove(uid);
+        mDatabase.child("Meetings").child(mid).removeEventListener(participatedMeetingsListeners.get(mid));
+        UpdateMeeting(mid);
+        participatedMeetings.remove(mid);
+        UpdateUser();
     }
 
     public void UpdateMeeting(String mid, final DBCallBack callBack) {
@@ -131,12 +234,12 @@ public class DBManager {
                 callBack.success(true);
             }
         })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                callBack.fail(e.getMessage());
-            }
-        });
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callBack.fail(e.getMessage());
+                    }
+                });
     }
 
     public void JoinMeeting(String mid) {
@@ -156,12 +259,33 @@ public class DBManager {
         return key;
     }
 
-    public String AddMeeting(String title, String info) {
+    public String AddMeeting(String title, String info, String image) {
         Map<String, Object> map = new HashMap<>();
-        Meeting meetingData = new Meeting(title, info);
+        Meeting meetingData = new Meeting(title, info, image);
 
         String key = mDatabase.child("Meetings").push().getKey();
+        participatedMeetings.put(key, meetingData);
         mDatabase.child("Meetings").child(key).setValue(meetingData);
+        return key;
+    }
+
+    public String AddMeeting(String title, String info, String image, final DBCallBack callBack) {
+        Map<String, Object> map = new HashMap<>();
+        Meeting meetingData = new Meeting(title, info, image);
+
+        String key = mDatabase.child("Meetings").push().getKey();
+        participatedMeetings.put(key, meetingData);
+        mDatabase.child("Meetings").child(key).setValue(meetingData).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                callBack.success(true);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callBack.fail(e.getMessage());
+            }
+        });
         return key;
     }
 
@@ -195,16 +319,39 @@ public class DBManager {
         mPostReference.addValueEventListener(postListener);
     }
 
+    private void GetMeetingData(String uid, final DBCallBack callBack) {
+        mDatabase.child("Meetings").child(uid).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                } else {
+                    Meeting meeting = task.getResult().getValue(Meeting.class);
+                    callBack.success(meeting);
+                }
+            }
+        });
+    }
+
     private void addMeetingPostEventListener(DatabaseReference mPostReference, String mid) {
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Meeting meeting = dataSnapshot.getValue(Meeting.class);
-                participatedMeetings.put(mid, meeting);
-                if(participatedMeetings.get(mid).members.contains(uid) == false) {
-                    participatedMeetings.get(mid).members.add(uid);
-                    UpdateMeeting(mid);
-                }
+                CheckValidMeetingId(mid, new DBCallBack() {
+                    @Override
+                    public void success(Object data) {
+                        participatedMeetings.put(mid, meeting);
+                        if (participatedMeetings.get(mid).members.contains(uid) == false) {
+                            participatedMeetings.get(mid).members.add(uid);
+                            UpdateMeeting(mid);
+                        }
+                    }
+
+                    @Override
+                    public void fail(String errorMessage) {
+
+                    }
+                });
             }
 
             @Override
@@ -212,6 +359,7 @@ public class DBManager {
                 Log.w("loadPost:onCancelled", databaseError.toException());
             }
         };
+        participatedMeetingsListeners.put(mid, postListener);
         mPostReference.addValueEventListener(postListener);
     }
 }

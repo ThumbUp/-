@@ -55,7 +55,7 @@ public class MeetingFragment extends Fragment {
 
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     User my = dbManager.userData;
-    boolean scheIn = false;
+    boolean scheIn = false; //
 
     public MeetingFragment(String _meetingId) {
         meetingId = _meetingId;
@@ -77,7 +77,7 @@ public class MeetingFragment extends Fragment {
             meetingIdList.add(key);
             Log.e("LIST","KEY " + key + "   meetingIdList " + dbUserMeetingList);
         }
-        for (int i = dbUserMeetingList.size() - 1; i > 0; i--) {
+        for (int i = dbUserMeetingList.size() - 1; i >= 0; i--) {
             meetingMenu.add(0, i,0, (CharSequence) dbUserMeetingList.get(i).title);
         }
         Log.d("menu", "meetingMenu.size(): " + meetingMenu.size() + "dbUserMeetingList.size()" + dbUserMeetingList.size());
@@ -101,7 +101,7 @@ public class MeetingFragment extends Fragment {
         Log.d("meetingIdNotice", "meetingId: " + meetingId);
         noticeList = dbManager.participatedMeetings.get(meetingId).notices;
         meetingNoticeList.clear();
-        for (int i = noticeList.size() - 1; i > 0; i--) {
+        for (int i = noticeList.size() - 1; i >= 0; i--) {
             meetingNoticeList.add(noticeList.get(i));
         }
         Log.d("meetingNoticeList", "meetingNoticeList: " + meetingNoticeList);
