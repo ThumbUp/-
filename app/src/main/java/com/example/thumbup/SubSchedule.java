@@ -36,6 +36,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +69,7 @@ public class SubSchedule extends AppCompatActivity {
 
     List<Schedule> schedule = new ArrayList<>(); //일정
 
+    TextView name;
     String DBmeetTitle;
     String DBtitle; //DB 일정명
     String DBdate; //날짜
@@ -90,6 +93,7 @@ public class SubSchedule extends AppCompatActivity {
         String index_sche = outIntent.getStringExtra("ListID");
         clickedIndex_sche = Integer.parseInt(index_sche); //선택 일정 인덱스
         String clickedId_meet = outIntent.getStringExtra("MeetID"); //선택 미팅 아이디
+        name = (TextView) findViewById(R.id.name);
 
         //DB에서 모임명 가져올 것
         context = this;
@@ -127,6 +131,8 @@ public class SubSchedule extends AppCompatActivity {
 
         DatabaseReference mdb;
         mdb = dbManager.returnMDB();
+        //모임 제목 세팅
+        name.setText(DBmeetTitle);
 
         //내 유저 정보 가져오기
         User my = dbManager.userData;
