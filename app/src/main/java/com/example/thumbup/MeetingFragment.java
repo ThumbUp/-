@@ -42,7 +42,6 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class MeetingFragment extends Fragment {
     String meetingId = ""; //선택된 모임의 아이디(=코드)
     TextView meetingName; //선택된 모임의 이름 넣을 공간
-    LinearLayout meetingUserMeetingList;
     ListView meetingNoticeListView;
     ListView meetingListView;
     TextView meetingAddNotice;
@@ -68,7 +67,7 @@ public class MeetingFragment extends Fragment {
     //유저가 가입한 모임 팝업메뉴 생성
 
     void showMeeting() {
-        PopupMenu meetingPopup = new PopupMenu(getActivity(), meetingUserMeetingList);
+        PopupMenu meetingPopup = new PopupMenu(getActivity(), meetingName);
         Menu meetingMenu = meetingPopup.getMenu();
         dbUserMeetingList.clear();
         for( String key : dbManager.participatedMeetings.keySet() ){
@@ -78,17 +77,17 @@ public class MeetingFragment extends Fragment {
             meetingIdList.add(key);
             Log.e("LIST","KEY " + key + "   meetingIdList " + dbUserMeetingList);
         }
-        for (int i = 0; i < dbUserMeetingList.size(); i++) {
+        for (int i = dbUserMeetingList.size() - 1; i > 0; i--) {
             meetingMenu.add(0, i,0, (CharSequence) dbUserMeetingList.get(i).title);
         }
         Log.d("menu", "meetingMenu.size(): " + meetingMenu.size() + "dbUserMeetingList.size()" + dbUserMeetingList.size());
         meetingPopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Log.d("meetingIndex", "meetingIndex" + item.getItemId());
+                Log.e("meetingIndex", "meetingIndex" + item.getItemId());
                 int meetingIndex = item.getItemId();
                 meetingId = meetingIdList.get(item.getItemId());
-                Log.d("meetingId", "meetingId: " + meetingId);
+                Log.e("meetingId", "meetingId: " + meetingId);
                 meetingName.setText(item.getTitle().toString());
                 showNotice();
                 showSchedule();
@@ -102,7 +101,7 @@ public class MeetingFragment extends Fragment {
         Log.d("meetingIdNotice", "meetingId: " + meetingId);
         noticeList = dbManager.participatedMeetings.get(meetingId).notices;
         meetingNoticeList.clear();
-        for (int i = 0; i < noticeList.size(); i++) {
+        for (int i = noticeList.size() - 1; i > 0; i--) {
             meetingNoticeList.add(noticeList.get(i));
         }
         Log.d("meetingNoticeList", "meetingNoticeList: " + meetingNoticeList);
@@ -124,11 +123,11 @@ public class MeetingFragment extends Fragment {
             //item.MeetingListViewItem_place = dbMeetingListViewItem.get(i).place;
 
             scheIn = false;
-            int i_size = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(i).members.size();
+            int i_size = dbManager.participatedMeetings.get(meetingId).schedules.get(i).members.size();
             Log.e("I SIZE", i_size+"  ");
             for(int i2 = 0; i2 < i_size; i2++){
                 Log.e("I / I2", i+"  "+i2);
-                List<User> users = dbManager.participatedMeetings.get("-MaZIcU6ZjxsYF_iX-6k").schedules.get(i).members;
+                List<User> users = dbManager.participatedMeetings.get(meetingId).schedules.get(i).members;
                 if(users.get(i2).email.equals(my.email) == true) {
                     scheIn = true;
                 }
@@ -142,7 +141,7 @@ public class MeetingFragment extends Fragment {
 
             meetingListViewItem.add(item);
         }
-        MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem);
+        MeetingAdapter meetingAdapter = new MeetingAdapter(meetingListViewItem, meetingId);
         meetingListView.setAdapter(meetingAdapter);
     }
 
@@ -152,7 +151,6 @@ public class MeetingFragment extends Fragment {
         View meetingView = inflater.inflate(R.layout.meeting, container, false);
 
         meetingName = (TextView) meetingView.findViewById(R.id.meeting_name);
-        meetingUserMeetingList = (LinearLayout) meetingView.findViewById(R.id.meeting_userMeetingList);
         meetingNoticeListView = (ListView) meetingView.findViewById(R.id.meeting_noticeList);
         meetingListView = (ListView) meetingView.findViewById(R.id.meeting_list);
         meetingAddNotice = (TextView) meetingView.findViewById(R.id.meeting_addNotice);
@@ -165,7 +163,7 @@ public class MeetingFragment extends Fragment {
             showSchedule();
         }
 
-        meetingUserMeetingList.setOnClickListener(new View.OnClickListener() {
+        meetingName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showMeeting();
@@ -206,6 +204,14 @@ public class MeetingFragment extends Fragment {
             }
         });
 
+//        meetingListView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(), SubSchedule.class);
+//                intent.putExtra("meetingId", meetingId);
+//                getApplicationContext().startActivity(intent);
+//            }
+//        });
         return meetingView;
     }
 }

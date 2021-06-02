@@ -89,7 +89,6 @@ public class MainActivity_ListAdapter extends BaseAdapter {
         // listview 생성 및 adapter 지정.
         final ListView listview = (ListView) view.findViewById(R.id.main_listView);
 
-
         // "listview_item" Layout을 inflate하여 convertView 참조 획득.
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
