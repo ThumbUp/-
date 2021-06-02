@@ -83,23 +83,27 @@ public class ModifyMeetingActivity extends AppCompatActivity {
                     simage = byteArrayToBinaryString(byteImage);
                 }
 
+                dbManager.Lock(context);
                 mDatabase.child("Meetings").child(meetingId).child("title").setValue(title);
                 mDatabase.child("Meetings").child(meetingId).child("info").setValue(info);
                 mDatabase.child("Meetings").child(meetingId).child("image").setValue(simage);
-                dbManager.UpdateMeeting(meetingId);
 
                 AlertDialog.Builder dlg4 = new AlertDialog.Builder(ModifyMeetingActivity.this);
                 dlg4.setTitle("모임이 수정되었습니다");
                 dlg4.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        startActivity(intent);
+
                         dialog.dismiss();
                     }
                 });
-
                 AlertDialog alertDialog = dlg4.create();
-
                 alertDialog.show();
+
+                dbManager.UnLock();
             }
         });
 
