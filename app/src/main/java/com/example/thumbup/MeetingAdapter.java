@@ -13,17 +13,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.thumbup.DataBase.DBCallBack;
+
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class MeetingAdapter extends BaseAdapter {
+public class MeetingAdapter extends BaseAdapter implements Serializable  {
     LayoutInflater meetingAdapterInflater = null;
     private ArrayList<MeetingListViewItem> meetingListViewItem = null;
     private int meetingListViewItemCount = 0;
     String meetID = "";
+    public MeetingAdapter adapter = this;
 
     public MeetingAdapter(ArrayList<MeetingListViewItem> _meetingListViewItem, String meetingid) {
         meetingListViewItem = _meetingListViewItem;
@@ -77,6 +81,7 @@ public class MeetingAdapter extends BaseAdapter {
                 intent.putExtra("MeetID", meetID);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getApplicationContext().startActivity(intent);
+
             }
         });
         return convertView;

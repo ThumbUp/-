@@ -2,9 +2,11 @@ package com.example.thumbup;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -88,7 +91,6 @@ public class SubSchedule extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_schedule);
-
         Intent outIntent = getIntent();
         String index_sche = outIntent.getStringExtra("ListID");
         clickedIndex_sche = Integer.parseInt(index_sche); //선택 일정 인덱스
@@ -155,7 +157,6 @@ public class SubSchedule extends AppCompatActivity {
                     //Log.e("CHILD GET KEY", myKey_sw);
 
                     List<User> users = dbManager.participatedMeetings.get(clickedId_meet).schedules.get(clickedIndex_sche).members;
-
                     // 예외인덱스 오류 발생 지점
                     if(users.get(myKey2_sw).email.equals(my.email) == true) {
                         switchView.setChecked(true);

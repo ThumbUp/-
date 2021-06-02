@@ -121,13 +121,12 @@ public class DBManager {
             public void onSuccess(Void aVoid) {
                 callBack.success(true);
             }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        callBack.fail(e.getMessage());
-                    }
-                });
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callBack.fail(e.getMessage());
+            }
+        });
     }
 
     public void CheckValidMeetingId(String mid, DBCallBack callback) {
@@ -152,7 +151,7 @@ public class DBManager {
     }
 
     public void UpdateMeeting(String mid) {
-        Map<String, Object> map = new HashMap<>();
+         Map<String, Object> map = new HashMap<>();
         map.put(mid, participatedMeetings.get(mid));
         mDatabase.child("Meetings").updateChildren(map);
     }
@@ -191,13 +190,13 @@ public class DBManager {
                 UpdateUser(new DBCallBack() {
                     @Override
                     public void success(Object data) {
+                        Meeting m = participatedMeetings.remove(mid);
                         if (memberCount == 1) {
                             mDatabase.child("Meetings").child(mid).setValue(null);
                         }
                         else {
-                            UpdateMeeting(mid);
+                            mDatabase.child("Meetings").child(mid).setValue(m);
                         }
-                        participatedMeetings.remove(mid);
                         callBack.success(true);
                     }
 
@@ -234,20 +233,40 @@ public class DBManager {
                 callBack.success(true);
             }
         })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        callBack.fail(e.getMessage());
-                    }
-                });
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callBack.fail(e.getMessage());
+            }
+        });
     }
 
-    public void JoinMeeting(String mid) {
+    public void JoinMeeting(String mid, DBCallBack callBack) {
         Map<String, Object> map = new HashMap<>();
         if (userData.meetings.contains(mid))
             return;
         userData.meetings.add(mid);
-        UpdateUser();
+        UpdateUser(new DBCallBack() {
+            @Override
+            public void success(Object data) {
+                GetMyMeetingData(new DBCallBack() {
+                    @Override
+                    public void success(Object data) {
+                        callBack.success(true);
+                    }
+
+                    @Override
+                    public void fail(String errorMessage) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void fail(String errorMessage) {
+
+            }
+        });
     }
 
     public String AddMeeting() {

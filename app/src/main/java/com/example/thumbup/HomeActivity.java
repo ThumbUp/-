@@ -66,26 +66,25 @@ public class HomeActivity extends AppCompatActivity {
 
     private void FragmentView(int fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
         switch (fragment) {
             case 1:
                 MainFragment mainFragment = new MainFragment();
-                transaction.replace(R.id.main_frame, mainFragment);
+                transaction.replace(R.id.main_frame, mainFragment, "mainFragment");
                 transaction.commit();
                 break;
             case 2:
                 MeetingFragment meetingFragment = new MeetingFragment();
-                transaction.replace(R.id.main_frame, meetingFragment);
+                transaction.replace(R.id.main_frame, meetingFragment, "meetingFragment");
                 transaction.commit();
                 break;
             case 3:
                 MoneyAddFragment moneyaddFragment = new MoneyAddFragment();
-                transaction.replace(R.id.main_frame, moneyaddFragment);
+                transaction.replace(R.id.main_frame, moneyaddFragment, "moneyaddFragment");
                 transaction.commit();
                 break;
             case 4:
                 AfterLoginFragment afterLoginFragment = new AfterLoginFragment();
-                transaction.replace(R.id.main_frame, afterLoginFragment);
+                transaction.replace(R.id.main_frame, afterLoginFragment, "afterLoginFragment");
                 transaction.commit();
                 break;
         }

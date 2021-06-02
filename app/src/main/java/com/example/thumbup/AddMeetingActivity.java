@@ -73,7 +73,7 @@ public class AddMeetingActivity extends AppCompatActivity {
             }
         });
 
-        //확인 버튼 클릭 //사진안하고 한번해주세요
+        //확인 버튼 클릭
         addAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +82,7 @@ public class AddMeetingActivity extends AppCompatActivity {
                 Drawable image = addMeetingImg.getDrawable();
                 key = "";
                 String simage = "";
-                //이미지 바이트 변환 하셧나요??
+
                 if(isImageChange == true) {
                     Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -110,11 +110,20 @@ public class AddMeetingActivity extends AppCompatActivity {
                                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                                 startActivity(intent);
 
-                                dialog.dismiss();
+                                dbManager.JoinMeeting(key, new DBCallBack() {
+                                    @Override
+                                    public void success(Object data) {
+                                        dbManager.UnLock();
+                                        dialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void fail(String errorMessage) {
+
+                                    }
+                                });
                             }
                         }).show();
-                        dbManager.JoinMeeting(key);
-                        dbManager.UnLock();
                     }
 
                     @Override

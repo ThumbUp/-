@@ -104,10 +104,25 @@ public class MainFragment extends Fragment {
                                     dbManager.CheckValidMeetingId(meeting_key, new DBCallBack() {
                                         @Override
                                         public void success(Object data) {
-                                            dbManager.JoinMeeting(meeting_key);
-                                            dbManager.UnLock();
-                                            adapter.notifyDataSetChanged();
-                                            dialog.dismiss();
+                                            dbManager.JoinMeeting(meeting_key, new DBCallBack() {
+                                                @Override
+                                                public void success(Object data) {
+                                                    dbManager.UnLock();
+                                                    Meeting m = dbManager.participatedMeetings.get(meeting_key);
+                                                    byte[] b = binaryStringToByteArray(m.image);
+                                                    ByteArrayInputStream is = new ByteArrayInputStream(b);
+                                                    Drawable profile = Drawable.createFromStream(is, "profile");
+
+                                                    adapter.addItem(profile, m.title, m.info, meeting_key);
+                                                    adapter.notifyDataSetChanged();
+                                                    dialog.dismiss();
+                                                }
+
+                                                @Override
+                                                public void fail(String errorMessage) {
+
+                                                }
+                                            });
                                         }
 
                                         @Override
@@ -143,7 +158,6 @@ public class MainFragment extends Fragment {
             }
         });
         return mainView;
-
     }
 
     // 스트링을 바이너리 바이트 배열로
