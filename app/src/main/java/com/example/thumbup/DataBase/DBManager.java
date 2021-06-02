@@ -378,7 +378,9 @@ public class DBManager {
                 Log.w("loadPost:onCancelled", databaseError.toException());
             }
         };
-        participatedMeetingsListeners.put(mid, postListener);
-        mPostReference.addValueEventListener(postListener);
+        if(participatedMeetingsListeners.containsKey(mid) == false) {
+            participatedMeetingsListeners.put(mid, postListener);
+            mPostReference.addValueEventListener(postListener);
+        }
     }
 }
