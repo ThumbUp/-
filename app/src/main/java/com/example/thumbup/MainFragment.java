@@ -3,6 +3,7 @@ package com.example.thumbup;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,9 +24,13 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.thumbup.DataBase.DBCallBack;
 import com.example.thumbup.DataBase.DBManager;
 import com.example.thumbup.DataBase.Meeting;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,10 +39,10 @@ public class MainFragment extends Fragment {
     ImageButton btn_addMeeting;
     private Context mContext;
     DBManager dbManager = DBManager.getInstance();
-    //유정 수정
-    String meetingId; //선택된 모임의 아이디(=코드)
-    List<String> meetingIdList = new ArrayList<>(); //유저가 가입된 모임의 코드들(= 모임의 키 값)들
+    Context context;
 
+    String meetingId;
+    List<String> meetingIdList = new ArrayList<>();
 
     @Override
     public void onAttach(Context context){
@@ -50,13 +55,13 @@ public class MainFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View mainView = inflater.inflate(R.layout.fragment_main, container, false);
-
+        context = getContext();
         btn_addMeeting = (ImageButton) mainView.findViewById(R.id.btn_addMeeting);
 
         MainActivity_ListAdapter adapter;
         ArrayList<MainActivity_ItemData> items = new ArrayList<MainActivity_ItemData>() ;
 
-        adapter = new MainActivity_ListAdapter();
+        adapter = new MainActivity_ListAdapter(mainView);
 
         main_listView = (ListView) mainView.findViewById(R.id.main_listView);
         main_listView.setAdapter(adapter);
@@ -64,8 +69,11 @@ public class MainFragment extends Fragment {
         for(String key : dbManager.participatedMeetings.keySet())
         {
             Meeting meeting = dbManager.participatedMeetings.get(key);
-            adapter.addItem(ContextCompat.getDrawable(getContext(), R.drawable.ic_profile), meeting.title, meeting.info, key);
-            //유정 수정
+            byte[] b = binaryStringToByteArray(meeting.image);
+            ByteArrayInputStream is = new ByteArrayInputStream(b);
+            Drawable profile = Drawable.createFromStream(is, "profile");
+
+            adapter.addItem(profile, meeting.title, meeting.info, key);
             meetingIdList.add(key);
         }
 
@@ -92,18 +100,33 @@ public class MainFragment extends Fragment {
                                     EditText meetingKey = (EditText) linear.findViewById(R.id.meetingKey);
                                     String meeting_key = meetingKey.getText().toString();
 
-                                    dbManager.JoinMeeting(meeting_key);
+                                    dbManager.Lock(context);
+                                    dbManager.CheckValidMeetingId(meeting_key, new DBCallBack() {
+                                        @Override
+                                        public void success(Object data) {
+                                            dbManager.JoinMeeting(meeting_key);
+                                            dbManager.UnLock();
+                                            adapter.notifyDataSetChanged();
+                                            dialog.dismiss();
+                                        }
+
+                                        @Override
+                                        public void fail(String errorMessage) {
+                                            Toast.makeText(getContext(), "존재하지 않는 모임입니다", Toast.LENGTH_SHORT).show();
+                                            dbManager.UnLock();
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int whichButton) {
                                     dialog.dismiss();
                                 }
                             })
-                                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            dialog.dismiss();
-                                        }
-                                    })
-                                    .show();
-                                }
+                            .show();
+                        }
 
                         return false;
                     }
@@ -112,7 +135,6 @@ public class MainFragment extends Fragment {
             }
         });
 
-        //유정 수정
         main_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -121,5 +143,26 @@ public class MainFragment extends Fragment {
             }
         });
         return mainView;
+
+    }
+
+    // 스트링을 바이너리 바이트 배열로
+    private byte[] binaryStringToByteArray (String s){
+        int count = s.length() / 8;
+        byte[] b = new byte[count];
+        for (int i = 1; i < count; ++i) {
+            String t = s.substring((i - 1) * 8, i * 8);
+            b[i - 1] = binaryStringToByte(t);
+        }
+        return b;
+    }
+    // 스트링을 바이너리 바이트로
+    private byte binaryStringToByte (String s){
+        byte ret = 0, total = 0;
+        for (int i = 0; i < 8; ++i) {
+            ret = (s.charAt(7 - i) == '1') ? (byte) (1 << i) : 0;
+            total = (byte) (ret | total);
+        }
+        return total;
     }
 }

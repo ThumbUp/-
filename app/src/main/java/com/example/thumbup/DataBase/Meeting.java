@@ -22,11 +22,11 @@ public class Meeting {
         moneyHistories = new ArrayList<>();
     }
 
-    public Meeting(String title, String info)
+    public Meeting(String title, String info, String image)
     {
         this.title = title;
         this.info = info;
-        image = "";
+        this.image = image;
         notices = new ArrayList<>();
         schedules = new ArrayList<>();
         members = new ArrayList<>();

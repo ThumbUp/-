@@ -1,5 +1,6 @@
 package com.example.thumbup;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,18 +19,30 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
 
+import com.example.thumbup.DataBase.DBCallBack;
 import com.example.thumbup.DataBase.DBManager;
+import com.example.thumbup.DataBase.Meeting;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.List;
 
+import static com.example.thumbup.AfterLoginFragment.binaryStringToByte;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class MainActivity_ListAdapter extends BaseAdapter{
+public class MainActivity_ListAdapter extends BaseAdapter {
 
     private View view;
     DBManager dbManager = DBManager.getInstance();
+    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    String meetingId;
 
     // 생성자로부터 전달된 resource id 값을 저장.
     int resourceId;
@@ -42,15 +55,19 @@ public class MainActivity_ListAdapter extends BaseAdapter{
         this.resourceId = resource;
     }
 
-    private ArrayList<MainActivity_ItemData> listViewItemList = new ArrayList<MainActivity_ItemData>() ;
+    private ArrayList<MainActivity_ItemData> listViewItemList = new ArrayList<MainActivity_ItemData>();
 
     public MainActivity_ListAdapter() {
 
     }
 
+    public MainActivity_ListAdapter(View view) {
+        this.view = view;
+    }
+
     @Override
     public int getCount() {
-        return listViewItemList.size() ;
+        return listViewItemList.size();
     }
 
     @Override
@@ -66,13 +83,11 @@ public class MainActivity_ListAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final int pos = position;
-        final Context context = parent.getContext();
-        MainActivity_ListAdapter adapter;
-        adapter = new MainActivity_ListAdapter();
+        final Context context = parent.getContext();//헉 됐어요!! 그 삭제는 원래 댓는데..
+        MainActivity_ListAdapter adapter = this;
 
         // listview 생성 및 adapter 지정.
         final ListView listview = (ListView) view.findViewById(R.id.main_listView);
-        listview.setAdapter(adapter);
 
         // "listview_item" Layout을 inflate하여 convertView 참조 획득.
         if (convertView == null) {
@@ -81,9 +96,9 @@ public class MainActivity_ListAdapter extends BaseAdapter{
         }
 
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
-        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.main_meetingIcon) ;
-        TextView titleTextView = (TextView) convertView.findViewById(R.id.main_meetingTitle) ;
-        TextView infoTextView = (TextView) convertView.findViewById(R.id.main_meetingInfo) ;
+        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.main_meetingIcon);
+        TextView titleTextView = (TextView) convertView.findViewById(R.id.main_meetingTitle);
+        TextView infoTextView = (TextView) convertView.findViewById(R.id.main_meetingInfo);
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         MainActivity_ItemData listViewItem = listViewItemList.get(position);
@@ -98,53 +113,74 @@ public class MainActivity_ListAdapter extends BaseAdapter{
             @Override
             public void onClick(final View view) {
                 final PopupMenu popupMenu = new PopupMenu(getApplicationContext(), view);
-                popupMenu.getMenuInflater().inflate(R.menu.popup,popupMenu.getMenu());
+                popupMenu.getMenuInflater().inflate(R.menu.popup, popupMenu.getMenu());
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        if (menuItem.getItemId() == R.id.action_menu1){
-                            final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
-                                    R.layout.dialog_main_delete_meeting, null);
-
-                            new AlertDialog.Builder(getApplicationContext())
-                                    .setView(linear)
-                                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        if (menuItem.getItemId() == R.id.action_delete) {
+                            //모임 나가기
+                            AlertDialog.Builder dlg1 = new AlertDialog.Builder(context);
+                            dlg1.setMessage("모임에서 나가시겠습니까?");
+                            dlg1.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    meetingId = listViewItem.getData_meetingId();
+                                    // 아이템 삭제
+                                    for (int i = 0; i < listViewItemList.size(); i++) {
+                                        if (listViewItemList.get(i).getData_meetingId().equals(meetingId) == true) {
+                                            listViewItemList.remove(i);
+                                            break;
+                                        }
+                                    }
+                                    dbManager.Lock(context);
+                                    dbManager.WithdrawMeeting(meetingId, new DBCallBack() {
                                         @Override
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            int count, checked ;
-                                            count = adapter.getCount() ;
-
-                                            if (count > 0) {
-                                                // 현재 선택된 아이템의 position 획득.
-                                                checked = listview.getCheckedItemPosition();
-
-                                                if (checked > -1 && checked < count) {
-                                                    // 아이템 삭제
-                                                    listViewItemList.remove(checked);
-
-                                                    // listview 선택 초기화.
-                                                    listview.clearChoices();
-
-                                                    // listview 갱신.
-                                                    adapter.notifyDataSetChanged();
-                                                }
-                                            }
+                                        public void success(Object data) {
+                                            // listview 갱신.
+                                            dbManager.UnLock();
+                                            adapter.notifyDataSetChanged();
                                             dialog.dismiss();
                                         }
-                                    })
-                                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+
                                         @Override
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            dialog.dismiss();
+                                        public void fail(String errorMessage) {
+
                                         }
-                                    })
-                                    .show();
-                        }else if (menuItem.getItemId() == R.id.action_menu2){
+                                    });
+                                }
+                            });
+                            dlg1.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            dlg1.create().show();
+                        } else if (menuItem.getItemId() == R.id.action_modify) {
                             // 모임 수정
-                            Intent intent = new Intent(getApplicationContext(), ModifyMeetingActivity.class);
-                            //startActivity(intent);
-                        }else {
-                            //모임원 추가
+                            meetingId = listViewItem.getData_meetingId();
+                            Intent intent = new Intent(view.getContext(), ModifyMeetingActivity.class);
+                            intent.putExtra("meetingId", meetingId);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            view.getContext().startActivity(intent);
+                        } else {
+                            //모임 코드 복사
+                            final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
+                                    R.layout.dialog_main_copy_key, null);
+
+                            meetingId = listViewItem.getData_meetingId();
+
+                            AlertDialog.Builder dlg3 = new AlertDialog.Builder(context);
+                            dlg3.setView(linear);
+                            TextView k_meetingKey;
+                            k_meetingKey = (TextView)linear.findViewById(R.id.k_meetingKey);
+                            k_meetingKey.setText(meetingId);
+                            dlg3.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
                         }
 
                         return false;
@@ -167,6 +203,5 @@ public class MainActivity_ListAdapter extends BaseAdapter{
 
         listViewItemList.add(item);
     }
-
 
 }

@@ -1,6 +1,7 @@
 package com.example.thumbup;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -27,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.example.thumbup.DataBase.DBCallBack;
 import com.example.thumbup.DataBase.DBManager;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -37,12 +39,15 @@ import java.io.InputStream;
 public class AddMeetingActivity extends AppCompatActivity {
     DBManager dbManager = DBManager.getInstance();
     private final int GET_GALLERY_IMAGE = 200;
-    ImageView meetingImg;
-    TextView addMeetingImg;
+    ImageView addMeetingImg;
+    TextView addMeetingText;
     EditText addMeetingTitle;
     EditText addMeetingInfo;
     Button addAccept;
     Button addCancel;
+    boolean isImageChange = false;
+    Context context;
+    String key;
 
 
     @Override
@@ -50,63 +55,83 @@ public class AddMeetingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_main_add_meeting);
 
-        meetingImg = findViewById(R.id.meetingImg);
-        addMeetingImg = findViewById(R.id.addMeeting_text);
+        context = this;
+        addMeetingImg = findViewById(R.id.meetingImg);
+        addMeetingText = findViewById(R.id.addMeeting_text);
         addMeetingTitle = findViewById(R.id.add_meetingTitle);
         addMeetingInfo = findViewById(R.id.add_meetingInfo);
         addAccept = findViewById(R.id.add_accept);
         addCancel = findViewById(R.id.add_cancel);
 
-        addMeetingImg.setOnClickListener(new View.OnClickListener() {
+        //모임 사진 추가
+        addMeetingText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
-                intent. setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
                 startActivityForResult(intent, GET_GALLERY_IMAGE);
             }
         });
 
+        //확인 버튼 클릭 //사진안하고 한번해주세요
         addAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String title = addMeetingTitle.getText().toString();
                 String info = addMeetingInfo.getText().toString();
+                Drawable image = addMeetingImg.getDrawable();
+                key = "";
+                String simage = "";
+                //이미지 바이트 변환 하셧나요??
+                if(isImageChange == true) {
+                    Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] byteImage = stream.toByteArray();
+                    simage = byteArrayToBinaryString(byteImage);
+                }
 
-                Drawable image = meetingImg.getDrawable();
-                Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                byte[] reviewImage = stream.toByteArray();
-                String simage = byteArrayToBinaryString(reviewImage);
-
-                String key = dbManager.AddMeeting(title, info);
-                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                firebaseDatabase.getReference("reviews/").child("image").setValue(simage);
-
-                final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
-                        R.layout.dialog_main_meeting_key, null);
-
-                AlertDialog.Builder dlg3 = new AlertDialog.Builder(AddMeetingActivity.this);
-                dlg3.setView(linear);
-                TextView k_meetingKey;
-                k_meetingKey = (TextView)linear.findViewById(R.id.k_meetingKey);
-                k_meetingKey.setText(key);
-                dlg3.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                dbManager.Lock(context);
+                key = dbManager.AddMeeting(title, info, simage, new DBCallBack() {
                     @Override
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
+                    public void success(Object data) {
+                        String sKey = key;
+                        final LinearLayout linear = (LinearLayout) View.inflate(getApplicationContext(),
+                                R.layout.dialog_main_meeting_key, null);
 
-                        dialog.dismiss();
+                        AlertDialog.Builder dlg3 = new AlertDialog.Builder(AddMeetingActivity.this);
+                        dlg3.setView(linear);
+                        TextView k_meetingKey;
+                        k_meetingKey = (TextView)linear.findViewById(R.id.k_meetingKey);
+                        k_meetingKey.setText(key);
+                        dlg3.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                startActivity(intent);
+
+                                dialog.dismiss();
+                            }
+                        }).show();
+                        dbManager.JoinMeeting(key);
+                        dbManager.UnLock();
                     }
-                }).show();
+
+                    @Override
+                    public void fail(String errorMessage) {
+
+                    }
+                });
+
+                //모임 생성 완료 다이얼로그
+
             }
         });
 
         addCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
             }
         });
@@ -119,8 +144,8 @@ public class AddMeetingActivity extends AppCompatActivity {
         if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             Uri selectedImageUri = data.getData();
-            meetingImg.setImageURI(selectedImageUri);
-
+            addMeetingImg.setImageURI(selectedImageUri);
+            isImageChange = true;
         }
     }
 

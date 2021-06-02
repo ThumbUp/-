@@ -12,9 +12,4 @@ public class ProgressDialog extends Dialog
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_progress);
     }
-//
-//    public void SetContext(Context context)
-//    {
-//        super(context);
-//    }
 }

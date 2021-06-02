@@ -135,7 +135,7 @@ public class SubSchedule extends AppCompatActivity {
 
         // 일정 멤버에 내가 있으면 스위치 ON, 없으면 OFF
         DatabaseReference databaseReference =
-                mdb.child("Meetings").child(clickedId_meet+"").child("schedules").child(clickedIndex_sche+"").child("members");
+            mdb.child("Meetings").child(clickedId_meet+"").child("schedules").child(clickedIndex_sche+"").child("members");
         switchView.setChecked(false);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -147,7 +147,9 @@ public class SubSchedule extends AppCompatActivity {
                     int myKey2_sw = Integer.parseInt(myKey_sw);
                     //long si = postSnapshot.getChildrenCount();
                     //Log.e("CHILD GET KEY", myKey_sw);
+
                     List<User> users = dbManager.participatedMeetings.get(clickedId_meet).schedules.get(clickedIndex_sche).members;
+
                     // 예외인덱스 오류 발생 지점
                     if(users.get(myKey2_sw).email.equals(my.email) == true) {
                         switchView.setChecked(true);
@@ -204,7 +206,9 @@ public class SubSchedule extends AppCompatActivity {
                     }
                     if(meetingIn == false){
                         Log.e("MY placeName ", my.placeName);
+
                         dbManager.participatedMeetings.get(clickedId_meet).schedules.get(clickedIndex_sche).members.add(my);
+
                     }
                     // 로딩 Wait
                     dbManager.Lock(context);
@@ -292,10 +296,12 @@ public class SubSchedule extends AppCompatActivity {
             public void onClick(View view) {
                 PopupMenu meetingPopup = new PopupMenu(getApplicationContext(), view);
                 Menu meetingMenu = meetingPopup.getMenu();
+
                 int person_size = dbManager.participatedMeetings.get(clickedId_meet).schedules.get(clickedIndex_sche).members.size();
                 for (int i = 0; i < person_size; i++) {
                     meetingMenu.add(0, i,0,
                             (CharSequence) dbManager.participatedMeetings.get(clickedId_meet).schedules.get(clickedIndex_sche).members.get(i).name);
+
                 }
                 meetingPopup.show();
             }
@@ -331,6 +337,7 @@ public class SubSchedule extends AppCompatActivity {
                 for(int i=0; i<DBpersonal; i++){
                     lati_sum += dbManager.participatedMeetings.get(clickedId_meet).schedules.get(clickedIndex_sche).members.get(i).latitude;
                     longi_sum += dbManager.participatedMeetings.get(clickedId_meet).schedules.get(clickedIndex_sche).members.get(i).longitude;
+
                 }
                 double lati_ev = lati_sum / (double)DBpersonal;
                 double longi_ev = longi_sum / (double)DBpersonal;
@@ -349,8 +356,10 @@ public class SubSchedule extends AppCompatActivity {
                 double lati_sum = 0;
                 double longi_sum = 0;
                 for(int i=0; i<DBpersonal; i++){
+
                     lati_sum += dbManager.participatedMeetings.get(clickedId_meet).schedules.get(clickedIndex_sche).members.get(i).latitude;
                     longi_sum += dbManager.participatedMeetings.get(clickedId_meet).schedules.get(clickedIndex_sche).members.get(i).longitude;
+
                 }
                 double lati_ev = lati_sum / (double)DBpersonal;
                 double longi_ev = longi_sum / (double)DBpersonal;
