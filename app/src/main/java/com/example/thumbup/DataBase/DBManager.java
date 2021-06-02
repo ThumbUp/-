@@ -191,12 +191,13 @@ public class DBManager {
                 UpdateUser(new DBCallBack() {
                     @Override
                     public void success(Object data) {
-                        if (memberCount == 0) {
+                        if (memberCount == 1) {
                             mDatabase.child("Meetings").child(mid).setValue(null);
                         }
                         else {
                             UpdateMeeting(mid);
                         }
+                        participatedMeetings.remove(mid);
                         callBack.success(true);
                     }
 
