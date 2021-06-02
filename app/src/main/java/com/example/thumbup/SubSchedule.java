@@ -318,6 +318,7 @@ public class SubSchedule extends AppCompatActivity {
         back_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dbManager.meetingFrament.showSchedule();
                 finish();
             }
         });

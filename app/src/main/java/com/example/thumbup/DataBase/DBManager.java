@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 
+import com.example.thumbup.MeetingFragment;
 import com.example.thumbup.ProgressDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -16,9 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
@@ -33,7 +32,7 @@ public class DBManager {
     private Map<String, ValueEventListener> participatedMeetingsListeners = new HashMap<>();
 
     private ProgressDialog customProgressDialog;
-
+    public MeetingFragment meetingFrament;
     public DatabaseReference returnMDB() {
         return mDatabase;
     }

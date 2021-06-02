@@ -8,12 +8,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.thumbup.DataBase.DBCallBack;
+import com.example.thumbup.DataBase.DBManager;
 
 import org.w3c.dom.Text;
 
@@ -27,13 +29,13 @@ public class MeetingAdapter extends BaseAdapter implements Serializable  {
     private ArrayList<MeetingListViewItem> meetingListViewItem = null;
     private int meetingListViewItemCount = 0;
     String meetID = "";
-    public MeetingAdapter adapter = this;
 
     public MeetingAdapter(ArrayList<MeetingListViewItem> _meetingListViewItem, String meetingid) {
         meetingListViewItem = _meetingListViewItem;
         meetingListViewItemCount = _meetingListViewItem.size();
         meetID = meetingid;
     }
+
     @Override
     public int getCount() {
         return meetingListViewItemCount;
@@ -58,7 +60,6 @@ public class MeetingAdapter extends BaseAdapter implements Serializable  {
             }
             convertView = meetingAdapterInflater.inflate(R.layout.activity_meeting_listview, parent, false);
         }
-
         TextView meetingListViewItem_date = (TextView) convertView.findViewById(R.id.meeting_listview_date);
         TextView meetingListViewItem_name = (TextView) convertView.findViewById(R.id.meeting_listview_name);
         TextView meetingListViewItem_time = (TextView) convertView.findViewById(R.id.meeting_listview_time);

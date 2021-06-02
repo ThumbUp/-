@@ -52,7 +52,6 @@ public class MeetingFragment extends Fragment {
     ArrayList<String> meetingNoticeList = new ArrayList<>();
     DBManager dbManager = DBManager.getInstance();
     ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
-
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     User my = dbManager.userData;
     boolean scheIn = false; //
@@ -110,7 +109,7 @@ public class MeetingFragment extends Fragment {
 
     }
 
-    void showSchedule(){
+    public void showSchedule(){
         ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
         List<Schedule> dbMeetingListViewItem = new ArrayList<>();
         dbMeetingListViewItem = dbManager.participatedMeetings.get(meetingId).schedules;
@@ -156,6 +155,7 @@ public class MeetingFragment extends Fragment {
         meetingAddNotice = (TextView) meetingView.findViewById(R.id.meeting_addNotice);
         meetingAddSchedule = (TextView) meetingView.findViewById(R.id.meeting_addSchedule);
         ArrayList<MeetingListViewItem> meetingListViewItem = new ArrayList<>();
+        dbManager.meetingFrament = this;
 
         //처음 화면 로드시 존재하는 공지/일정 목록 띄우기
         if (meetingId != "") {
