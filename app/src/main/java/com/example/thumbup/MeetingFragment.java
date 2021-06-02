@@ -77,7 +77,7 @@ public class MeetingFragment extends Fragment {
             meetingIdList.add(key);
             Log.e("LIST","KEY " + key + "   meetingIdList " + dbUserMeetingList);
         }
-        for (int i = dbUserMeetingList.size() - 1; i > 0; i--) {
+        for (int i = dbUserMeetingList.size() - 1; i >= 0; i--) {
             meetingMenu.add(0, i,0, (CharSequence) dbUserMeetingList.get(i).title);
         }
         Log.d("menu", "meetingMenu.size(): " + meetingMenu.size() + "dbUserMeetingList.size()" + dbUserMeetingList.size());
