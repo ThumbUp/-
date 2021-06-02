@@ -1,49 +1,32 @@
 package com.example.thumbup;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 
-import com.example.thumbup.DataBase.DBCallBack;
 import com.example.thumbup.DataBase.DBManager;
 import com.example.thumbup.DataBase.Meeting;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ModifyMeetingActivity extends AppCompatActivity {
     DBManager dbManager = DBManager.getInstance();
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-
     private final int GET_GALLERY_IMAGE = 200;
     ImageView mMeetingImg;
     TextView mMeetingText;
@@ -51,7 +34,9 @@ public class ModifyMeetingActivity extends AppCompatActivity {
     EditText mMeetingInfo;
     Button mAccept;
     Button mCancel;
-    String meetingId; //선택된 모임의 아이디(=코드)
+    boolean isImageChange = false;
+    Context context;
+    String meetingId;
 
 
     @Override
@@ -59,6 +44,7 @@ public class ModifyMeetingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_main_modify_meeting);
 
+        context = this;
         mMeetingImg = findViewById(R.id.m_meetingImg);
         mMeetingText = findViewById(R.id.mMeeting_text);
         mMeetingTitle = findViewById(R.id.m_meetingTitle);
@@ -75,9 +61,12 @@ public class ModifyMeetingActivity extends AppCompatActivity {
             }
         });
 
+        //확인 버튼 클릭
         mAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent secondIntent = getIntent();
+                meetingId = secondIntent.getStringExtra("meetingId");
                 String title = mMeetingTitle.getText().toString();
                 String info = mMeetingInfo.getText().toString();
                 mMeetingImg.getDrawable().getCurrent();
@@ -85,17 +74,28 @@ public class ModifyMeetingActivity extends AppCompatActivity {
                 Drawable dImage = getResources().getDrawable(R.drawable.ic_profile);
                 String simage = "";
 
-                if(image.equals(dImage) == true) {
+                //이미지 바이트 변환
+                if(isImageChange == true) {
                     Bitmap bitmap = ((BitmapDrawable) image).getBitmap();
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                     byte[] byteImage = stream.toByteArray();
                     simage = byteArrayToBinaryString(byteImage);
                 }
+
+                mDatabase.child("Meetings").child(meetingId).child("title").setValue(title);
+                mDatabase.child("Meetings").child(meetingId).child("info").setValue(info);
+                mDatabase.child("Meetings").child(meetingId).child("image").setValue(simage);
                 dbManager.UpdateMeeting(meetingId);
 
                 AlertDialog.Builder dlg4 = new AlertDialog.Builder(ModifyMeetingActivity.this);
                 dlg4.setTitle("모임이 수정되었습니다");
+                dlg4.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
 
                 AlertDialog alertDialog = dlg4.create();
 
@@ -120,7 +120,7 @@ public class ModifyMeetingActivity extends AppCompatActivity {
 
             Uri selectedImageUri = data.getData();
             mMeetingImg.setImageURI(selectedImageUri);
-
+            isImageChange = true;
         }
     }
 

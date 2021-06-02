@@ -159,7 +159,9 @@ public class MainActivity_ListAdapter extends BaseAdapter {
                             dlg1.create().show();
                         } else if (menuItem.getItemId() == R.id.action_modify) {
                             // 모임 수정
+                            meetingId = listViewItem.getData_meetingId();
                             Intent intent = new Intent(view.getContext(), ModifyMeetingActivity.class);
+                            intent.putExtra("meetingId", meetingId);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             view.getContext().startActivity(intent);
                         } else {
