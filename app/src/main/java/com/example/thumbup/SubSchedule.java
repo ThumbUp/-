@@ -180,6 +180,7 @@ public class SubSchedule extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         dbManager.participatedMeetings.get(clickedId_meet).schedules.remove(clickedIndex_sche);
                         dbManager.UpdateMeeting(clickedId_meet);
+                        dbManager.meetingFrament.showSchedule();
                         finish();
                     }
                 })

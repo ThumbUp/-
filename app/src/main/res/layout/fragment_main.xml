@@ -12,39 +12,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/btn_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_search"
-            app:layout_constraintBottom_toBottomOf="@+id/search_bar"
-            app:layout_constraintEnd_toEndOf="@+id/search_bar"
-            app:layout_constraintHorizontal_bias="0.96"
-            app:layout_constraintStart_toStartOf="@+id/search_bar"
-            app:layout_constraintTop_toTopOf="@+id/search_bar"
-            tools:ignore="MissingConstraints" />
-
-        <EditText
+        <TextView
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:visibility="invisible"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="85dp"
+            android:paddingLeft="30dp"
+            android:layout_marginTop="38dp"
+            android:layout_marginRight="0dp"
             android:layout_marginBottom="30dp"
-            android:background="@drawable/ic_search_bar"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:maxLines="1"
-            android:textColor="@color/black"
+            android:textSize="16dp"
+            android:textColor="#888"
+            android:text="+ 버튼을 눌러 모임을 추가해 보세요"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
+            android:layout_marginEnd="66dp"
+            android:gravity="left"/>
 
         <ImageButton
             android:id="@+id/btn_addMeeting"
