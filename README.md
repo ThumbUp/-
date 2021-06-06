@@ -9,7 +9,7 @@
 * 김유정 (팀장, 디자인, 일정 페이지)        
 * 김지수 (팀원, 구글 로그인,비용 계산 페이지 ,마이페이지)     
 * 나승연 (팀원, 페이스북 로그인, 데이터베이스 설계 및 구현)        
-* 심송은 (팀원, 디자인, 일정 상세 페이지)     
+* 심송은 (팀원, 디자인, 일정 상세 페이지, 장소 추천 페이지)     
 * 임세윤 (팀원, 모임 페이지)      
          
 ### 🗓 프로젝트 기간
@@ -24,3 +24,8 @@
 ### 🧾 프로젝트 관리
 * 슬랙
 * git & github
+
+### 페이지 상세
+
+### 📷 스크린샷
+<kbd><img width = "200" alt = "로그인 페이지" src = "https://user-images.githubusercontent.com/68562176/120925728-d3b41580-c714-11eb-982e-7e945169a200.jpeg"></kbd> <kbd><img width = "200" alt = "모임 페이지" src = "https://user-images.githubusercontent.com/68562176/120925735-d7e03300-c714-11eb-9049-f4cc518f0dc7.jpeg"></kbd> <kbd><img width = "200" alt = "모임 참가 창" src = "https://user-images.githubusercontent.com/68562176/120925734-d7479c80-c714-11eb-984d-b4f69d7a00dc.jpeg"></kbd> </kbd><kbd><img width = "200" alt = "일정 페이지" src = "https://user-images.githubusercontent.com/68562176/120925742-dc0c5080-c714-11eb-8a2f-3ff504e3754c.jpeg"></kbd> <kbd><img width = "200" alt = "일정 추가 창" src = "https://user-images.githubusercontent.com/68562176/120925740-dadb2380-c714-11eb-9e81-245992a74032.jpeg"></kbd> <kbd><img width = "200" alt = "일정 상세 페이지" src = "https://user-images.githubusercontent.com/68562176/120925738-d9116000-c714-11eb-811f-4bd15cb43ca8.jpeg"></kbd> <kbd><img width = "200" alt = "장소 추천 페이지" src = "https://user-images.githubusercontent.com/68562176/120926079-6bfeca00-c716-11eb-9c18-c2128795b39c.jpeg"></kbd> <kbd><img width = "200" alt = "비용 계산 페이지" src = "https://user-images.githubusercontent.com/68562176/120925736-d878c980-c714-11eb-97c1-4e92a38db469.jpeg"></kbd> <kbd><img width = "200" alt = "마이페이지" src = "https://user-images.githubusercontent.com/68562176/120925732-d6166f80-c714-11eb-8d8e-3dfcfc34026b.jpeg"></kbd>
