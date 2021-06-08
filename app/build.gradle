@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.example.thumbup"
+        applicationId "com.thumbUpB.thumbup"
         minSdkVersion 16
         targetSdkVersion 30
         versionCode 1

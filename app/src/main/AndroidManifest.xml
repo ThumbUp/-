@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.thumbup">
+    package="com.thumbUpB.thumbup">
 
     <permission
-        android:name="com.example.thumbup.permission.MAPS_RECEIVE"
+        android:name="com.thumbUpB.thumbup.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="com.example.thumbup.permission.MAPS_RECEIVE" />
@@ -29,28 +29,28 @@
         android:supportsRtl="true"
         android:theme="@style/InputTheme">
 
-        <activity android:name=".StartLocationActivity" />
-        <activity android:name=".RecommendPlaceActivity" />
-        <activity android:name=".RecommendPlace2Activity" />
+        <activity android:name="com.thumbUpB.thumbup.StartLocationActivity" />
+        <activity android:name="com.thumbUpB.thumbup.RecommendPlaceActivity" />
+        <activity android:name="com.thumbUpB.thumbup.RecommendPlace2Activity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCxKA49sPjrLo0hvNDkgcBt3VVwQuiQ94s" />
 
 <!--        <activity android:name=".MoneyAddActivity" />-->
-        <activity android:name=".SubSchedule" />
-        <activity android:name=".MainActivity" >
+        <activity android:name="com.thumbUpB.thumbup.SubSchedule" />
+        <activity android:name="com.thumbUpB.thumbup.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HomeActivity">
+        <activity android:name="com.thumbUpB.thumbup.HomeActivity">
         </activity>
 
-        <activity android:name=".AddMeetingActivity" />
-        <activity android:name=".ModifyMeetingActivity" />
+        <activity android:name="com.thumbUpB.thumbup.AddMeetingActivity" />
+        <activity android:name="com.thumbUpB.thumbup.ModifyMeetingActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
